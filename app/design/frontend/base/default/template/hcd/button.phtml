@@ -1,0 +1,49 @@
+<?php 
+
+
+if (Mage::getStoreConfig('payment/hcdmpa/active') == 1 and  Mage::getSingleton('checkout/session')->getQuote()->isAllowedGuestCheckout()):?>
+<style>
+button.btn-hcdmpa {
+	border: 0;
+	height: 42px;
+	width:	180px;
+	background: url(	<?php
+	$url = 'https://www.mastercard.com/mc_us/wallet/img/';
+	$url_end = '/mcpp_wllt_btn_chk_180x042px.png';
+	$lang = Mage::app()->getLocale()->getLocaleCode();
+	switch ($lang) {
+		case 'de_DE':
+		case 'de_AT':
+		case 'de_CH':
+				echo $url.'de/DE'.$url_end;
+				break;
+		case 'fr_FR':
+				echo $url.'fr/FR'.$url_end;
+				break;
+		case 'en_GB':
+		case 'en_US':
+		default:
+				echo $url.'en/US'.$url_end;
+				break;
+	}
+	?> ) 0 0 no-repeat;
+	padding: 0 0 0 9px;
+	font: bold 15px/40px Arial, Helvetica, sans-serif;
+	color: #fff;
+	cursor: pointer;
+	
+}
+.masterpass-please-wait { 
+    line-height: 24px;
+    white-space: nowrap;
+}
+
+</style>
+<button type="button" title="MasterPass"
+	class="btn-hcdmpa" id="btn-hcdmpa"
+	onclick="Heidelpay.toggle.getInstance().button('<?php echo Mage::getUrl('hcd/index/wallet',array('_secure'=>true, '_wallet' =>'hcdmpa')); ?>')"
+	></button>
+	<span class="masterpass-please-wait" style="display: none;">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Redirect to MasterPass ...') ?>" title="<?php echo $this->__('Redirect to MasterPass ...') ?>" class="v-middle" /> <?php echo $this->__('Redirect to MasterPass ...') ?>
+	</span>
+<?php endif ?>

@@ -1,0 +1,38 @@
+<?php 
+$payment = '';
+
+$_code=$this->getMethodCode();
+$payment = $this->getMethod() ;
+
+	$data = $payment->getHeidelpayUrl(true);
+		if ($data['PROCESSING_RESULT'] == 'NOK') $userData = array();
+		
+?>
+
+<div class="form-list hcd-payment-info" id="payment_form_<?php echo $_code ?>" style="display: none;">
+	<?php //echo '<pre>Data'.print_r($data,1).'</pre>';
+			if ($data['PROCESSING_RESULT'] == 'NOK') {
+				echo '<div class="hcd-payment-desc hcd-payment-error">'.Mage::helper('hcd/payment')->handleError($data['PROCESSING_RETURN']).'</div>';
+	} else {
+	
+	 ?>
+	<label class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Bank') ?></label>
+      	 <div class="input-box">
+			<select class="input-text required-entry" name="payment[<?php echo $_code ?>_bank]">
+			<?php
+foreach (json_decode($data['CONFIG_BRANDS'], true) AS $value => $brand) { 
+	echo '<option value='.$value.' >'.$brand.'</option>' ; 
+}
+?>
+			</select>
+	</div>
+	<div class="input-box">
+        <label for="<?php echo $_code ?>_holder" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Owner') ?></label>
+        
+            <input type="text" title="<?php echo $this->__('Owner:') ?>" class="input-text required-entry" id="<?php echo $_code ?>_holder" name="payment[<?php echo $_code ?>_holder]" value="<?php echo $this->htmlEscape($this->getMethod()->getCustomerName()) ?>" />
+     </div>
+    <div class="hcd-payment-desc">
+    	<?php echo $this->__('Desc'.$_code);?>
+    </div>
+<?php } ?>    
+</div>

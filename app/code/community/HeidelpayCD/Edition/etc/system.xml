@@ -1,0 +1,1543 @@
+<?xml version="1.0"?>
+<config>
+  <sections>
+    <!--{{{ Global Settings-->
+ 	<hcd translate="label" module="hcd">
+      <label><![CDATA[<img alt="Heidelpay" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAAXNSR0IArs4c6QAAADBQTFRFODg43d3dt7e3KCgoREREU1NTAQEBEhIS////scfeeXl57OzsqKioXV1dk5OTnZ2dfmcBJgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJDgsIBJoD8v4AAABKSURBVAjXY5gJBQwzOsCgE53RCmM0AxknQIwGIMOiOyxBA8TgcFson9YCZIRzdHT0JQAZZSA1y4CMIhCjDaQGxOjtxGkFkAFzBgC9LkKOoh4LJgAAAABJRU5ErkJggg==" /> Heidelpay CD-Edition ]]></label>
+	    <tab>sales</tab>
+	    <frontend_type>text</frontend_type>
+	    <sort_order>405</sort_order>
+	    <show_in_default>1</show_in_default>
+	    <show_in_website>1</show_in_website>
+	    <show_in_store>1</show_in_store>
+      <groups>
+	  <about_us>
+		<label>about Heidelpay</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+	           <comment><![CDATA[<br />
+                        <div class="box">
+                           <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAAA7BAMAAAAEMPCJAAAAAXNSR0IArs4c6QAAABhQTFRFPT09u7u7////k5OTDw8Pa2tr2dnZ7u7uGx/afwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kKFggjGov/KAYAAAJ5SURBVEjH7dW7l6IwFAfgOKK247s1l0PS+rYNy2NbRVxbZUZtncyq//7eCD6QeGYo9pwtlgb55TPkARcCuQ6SB7OXXJz++M//Mt/l4sz+N/npJHV83SWEzHdpzutT1xXz9iNnXZcsBgvDnd1zGrqktCCYyhRnoddSybFuFG6cGl4Lb8e3TbcoE67OPCxeBkjDwoVToxgl6ee5F8XV+dW5Tgdv1E/48C79MJYxdwBM75bjlZBnfvCiu/QgogtX/d0dq4ri3Einw3LCzYc9YUQi3zsPeyRkzIe1h01avSAPH9NG5czZQze4UA6zaSalzpl3gswz0Nja79k0XCveiDINVrkQZtPfBcWLmRyYQ5xsSj3kopJtgND9mQ25gdwNNLyhTYeKR5qGvVvTpO+KS02DJXRpB7mnyfG50aXWM071ncSPmIbr0/x8rGvgv7RpkKtGqk/ZKB3El6z8jE/TQXxJ7S85m+Tilp2v93Yu/s2xv2FZpIsJ8Daw0WQKvDlTPFq3cKWr7dMRbh8T5AQLypBgWfChgUUY9sLoU5vNZ80AXnujgSWBL688rFkVLAargPrck/goTiNqU5tj1Rzg5rIi7QPt342d+lblRH3qm/jGEe5wWcLecaMOn8gG2LUZ3XHmd4Rr2PivF4AudQ0hkOP9zTq+U3XowQZSvXcK1eou5lPqVKvbFD/IXpqj4zUcjK8Gg4WklQzmQw0GzHaQ5szbrSo4VbLbCBhOPp3LVGc4VWCDPqTGjisoIlqGlSgRrOTxQs5HS9jgQuJ85I0fgUf4haslJ9yUtzHwHVsm28TV8G/8ycGWt9/jXJwFubhZ+wafXH8e5Ndcf/wBKDObGG4GKXIAAAAASUVORK5CYII=" alt="Heidelpay" />
+						   <p style="font-size:12px; font-weight: bold;">Heidelberger Payment GmbH - Ihr Full Service Payment Provider - alles aus einer Hand </p>
+						   <p></p> <p style="font-size:12px">Die Heidelberger Payment GmbH kurz: heidelpay bietet als BaFin-zertifizierter Payment Service Provider alles was zum Online-Payment gehört.<br /><br />
+						   <a href="http://testshops.heidelpay.de/contactform/?campaign=MagentoWL&amp;shop=Magento" target="_blank" style="font-size: 12px; color: #000;  font-weight: bold;">&gt;&gt;&gt; Informationen anfordern &lt;&lt;&lt;</a>
+						   <br /></p><p><br /> </p><p style="font-size:12px">Das Leistungsspektrum des PCI DSS zertifizierten Unternehmens reicht von weltweiten e-Payment Lösungen, inklusive eines vollständigen Debitorenmanagement-, Risk- und Fraud- Systems 
+						   bis hin zu einem breiten Angebot alternativer Bezahlverfahren - schnell, sicher, einfach und umfassend - alles aus einer Hand.</p><br /> 
+						   <a href="http://www.heidelpay.de" target="_blank" style="font-size: 12px; color: #000;  font-weight: bold;">www.heidelpay.de</a> 
+						   <br /><br /><p style="font-size:12px;"> Die Plugin wird bei der Installation mit Testdaten aktiviert.</p>
+                        </div>
+                        ]]>
+               </comment>
+	  </about_us>
+	  <settings translate="label">
+        <label>General Settings Heidelpay</label>
+        <frontend_type>text</frontend_type>
+        <sort_order>10</sort_order>
+        <show_in_default>1</show_in_default>
+        <show_in_website>1</show_in_website>
+        <show_in_store>1</show_in_store>
+	        <fields>
+				<transactionmode translate="label">
+              	<label>Use Testsystem</label>
+              	<frontend_type>select</frontend_type>
+              	<source_model>adminhtml/system_config_source_yesno</source_model>
+				<comment>If is set to yes, transactionis use the sandbox system and the TRANSACTION.MODE=CONNECTOR_TEST, otherwise real payment will be used with mode LIVE. For details see integration basisc documentation.</comment>
+              	<sort_order>5</sort_order>
+              	<show_in_default>1</show_in_default>
+              	<show_in_website>1</show_in_website>
+              	<show_in_store>1</show_in_store>
+			  </transactionmode>
+	        	<security_sender translate="label">
+              <label>Security Sender</label>
+             		 <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </security_sender>
+            <user_id translate="label">
+              <label>User Login</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </user_id>
+            <user_pwd translate="label">
+              <label>User Password</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </user_pwd>
+			<returnurl translate="label">
+              	<label>Return in Errorcase</label>
+              	<frontend_type>select</frontend_type>
+              	<source_model>hcd/system_config_source_returnurl</source_model>
+				<comment>Please configurate where your costumer should be redirected to in case of an payment error</comment>
+              	<sort_order>50</sort_order>
+              	<show_in_default>1</show_in_default>
+              	<show_in_website>1</show_in_website>
+              	<show_in_store>1</show_in_store>
+			  </returnurl>
+			<log translate="label">
+              <label>Debug Log</label>
+              <frontend_type>select</frontend_type>
+              	<source_model>adminhtml/system_config_source_yesno</source_model>
+				<comment>If is set to yes, you can controll all neccessary conntetion Data in /var/log/Heidelpay.log</comment>
+              	<sort_order>60</sort_order>
+              	<show_in_default>1</show_in_default>
+              	<show_in_website>1</show_in_website>
+              	<show_in_store>1</show_in_store>
+            </log>
+			<invoicing translate="label">
+              <label>Invoicing over heidelpay</label>
+              <frontend_type>select</frontend_type>
+              	<source_model>adminhtml/system_config_source_yesno</source_model>
+				<comment>Invoicing over heidelpay requires an extra contract. For more information, please contact your key account manager.</comment>
+              	<sort_order>70</sort_order>
+              	<show_in_default>1</show_in_default>
+              	<show_in_website>1</show_in_website>
+              	<show_in_store>1</show_in_store>
+            </invoicing>
+			</fields>
+		</settings>
+	    </groups>
+    </hcd>
+   </sections> 
+  <sections>
+    <payment>
+	    <groups id="hcd" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Heidelpay</label>
+        <hcdcc translate="label">
+          <label>Heidelpay Credit Card (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>50</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<bookingmode translate="label">
+              <label>Bookingmode</label>
+              <frontend_type>select</frontend_type>
+              <source_model>hcd/system_config_source_bookingmode</source_model>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </bookingmode>
+			<recognition translate="label">
+              <label>Recognition</label>
+              <frontend_type>select</frontend_type>
+              <source_model>hcd/system_config_source_recognition</source_model>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </recognition>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+			<!--<capture_on_delivery translate="label">
+              <label>Automatically capture on delivery</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+			  <comment>please note that capture on delivery is only possible, when you set bookingmode to preauthorisation</comment>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </capture_on_delivery>-->
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+		</hcdcc>
+        <hcddc translate="label">
+          <label>Heidelpay Debit Card (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>130</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<bookingmode translate="label">
+              <label>Bookinnmode</label>
+              <frontend_type>select</frontend_type>
+              <source_model>hcd/system_config_source_bookingmode</source_model>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </bookingmode>
+			<recognition translate="label">
+              <label>Recognition</label>
+              <frontend_type>select</frontend_type>
+              <source_model>hcd/system_config_source_recognition</source_model>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </recognition>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+			<!--<capture_on_delivery translate="label">
+              <label>Automatically capture on delivery</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+			  <comment>please note that capture on delivery is only possible, when you set bookingmode to preauthorisation</comment>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </capture_on_delivery>-->
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcddc>
+        <hcddd translate="label">
+          <label>Heidelpay Direct Debit (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>60</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<bookingmode translate="label">
+              <label>Bookingmode</label>
+              <frontend_type>select</frontend_type>
+              <source_model>hcd/system_config_source_bookingmode</source_model>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </bookingmode>
+			<recognition translate="label">
+              <label>Recognition</label>
+              <frontend_type>select</frontend_type>
+              <source_model>hcd/system_config_source_recognition</source_model>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </recognition>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+			<!--<capture_on_delivery translate="label">
+              <label>Automatically capture on delivery</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+			  <comment>please note that capture on delivery is only possible, when you set bookingmode to preauthorisation</comment>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </capture_on_delivery>-->
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcddd>
+        <hcdsu translate="label">
+          <label><![CDATA[Heidelpay SOFORT &Uuml;berweisung (hcd)]]></label>
+          <frontend_type>text</frontend_type>
+          <sort_order>80</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcdsu>
+        <hcdgp translate="label">
+          <label>Heidelpay Giropay (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>90</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<recognition translate="label">
+              <label>Recognition</label>
+              <frontend_type>select</frontend_type>
+              <source_model>hcd/system_config_source_recognition</source_model>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </recognition>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcdgp>
+		<hcdbs translate="label">
+                    <label>Heidelpay Billsafe (hcd)</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <channel translate="label">
+                            <label>Channel ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </channel>
+                        <sort_order translate="label">
+                            <label>Sort order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <min_amount translate="label">
+                            <label>Minimum Amount (CENT)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>120</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_amount>
+                        <max_amount translate="label">
+                            <label>Maximum Amount (CENT)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>130</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_amount>
+                        <allowspecific translate="label">
+                            <label>allow specific countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>140</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>specific countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>150</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </specificcountry>
+                    </fields>
+                </hcdbs>
+                <hcdmk translate="label">
+                    <label>Heidelpay MangirKart (hcd)</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>170</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <channel translate="label">
+                            <label>Channel ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </channel>
+						<invioce translate="label">
+              				<label>Automatically invoiced</label>
+              				<frontend_type>select</frontend_type>
+              				<source_model>adminhtml/system_config_source_yesno</source_model>
+              				<sort_order>70</sort_order>
+              				<show_in_default>1</show_in_default>
+              				<show_in_website>1</show_in_website>
+              				<show_in_store>1</show_in_store>
+            			</invioce>
+                    	  <sort_order translate="label">
+                            <label>Sort order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <min_amount translate="label">
+                            <label>Minimum Amount (CENT)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>120</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_amount>
+                        <max_amount translate="label">
+                            <label>Maximum Amount (CENT)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>130</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_amount>
+                        <allowspecific translate="label">
+                            <label>allow specific countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>140</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>specific countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>150</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </specificcountry>
+                    </fields>
+                </hcdmk>
+        <hcdpal translate="label">
+          <label>Heidelpay Pay Pal (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>70</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+            <bookingmode translate="label">
+              <label>Bookingmode</label>
+              <frontend_type>select</frontend_type>
+              <source_model>hcd/system_config_source_bookingmode</source_model>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </bookingmode>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+			<!--<capture_on_delivery translate="label">
+              <label>Automatically capture on delivery</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+			  <comment>please note that capture on delivery is only possible, when you set bookingmode to preauthorisation</comment>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </capture_on_delivery>-->			
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+		</hcdpal>
+		<!--
+        <hcdeps translate="label">
+          <label>Heidelpay EPS (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>150</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<invioce translate="label">
+            		<label>Automatically invoiced</label>
+            		<frontend_type>select</frontend_type>
+            	    <source_model>adminhtml/system_config_source_yesno</source_model>
+            		<sort_order>70</sort_order>
+            		<show_in_default>1</show_in_default>
+            		<show_in_website>1</show_in_website>
+            		<show_in_store>1</show_in_store>
+            </invioce>
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcdeps>
+		-->
+        <hcdide translate="label">
+          <label>Heidelpay iDeal (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>160</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<invioce translate="label">
+            		<label>Automatically invoiced</label>
+            		<frontend_type>select</frontend_type>
+            	    <source_model>adminhtml/system_config_source_yesno</source_model>
+            		<sort_order>70</sort_order>
+            		<show_in_default>1</show_in_default>
+            		<show_in_website>1</show_in_website>
+            		<show_in_store>1</show_in_store>
+            </invioce>
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcdide>
+        <hcdpp translate="label">
+          <label>Heidelpay Prepayment (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>100</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcdpp>
+        <hcdiv translate="label">
+          <label>Heidelpay Invoice (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>110</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+			<capture_on_delivery translate="label">
+              <label>Send delivery note to Heidelpay</label>
+			  <comment>please note that this is only necessary, when you use purchase on account with payment guarantee.</comment>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </capture_on_delivery>
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcdiv>
+		<hcdpf translate="label">
+          <label>Heidelpay Postfinance (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>140</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcdpf>
+		<hcdyt translate="label">
+          <label>Heidelpay Yapital (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>140</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcdyt>
+		<hcdmpa translate="label">
+          <label>Heidelpay MasterPass (hcd)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>140</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+            <channel translate="label">
+              <label>Channel ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </channel>
+			<bookingmode translate="label">
+              <label>Bookingmode</label>
+              <frontend_type>select</frontend_type>
+              <source_model>hcd/system_config_source_bookingmode</source_model>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </bookingmode>
+			<invioce translate="label">
+              <label>Automatically invoiced</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </invioce>
+			<!--<capture_on_delivery translate="label">
+              <label>Automatically capture on delivery</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+			  <comment>please note that capture on delivery is only possible, when you set bookingmode to preauthorisation</comment>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </capture_on_delivery>-->
+            <sort_order translate="label">
+              <label>Sort order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>110</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </sort_order>
+            <min_amount translate="label">
+              <label>Minimum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </min_amount>
+            <max_amount translate="label">
+              <label>Maximum Amount (CENT)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </max_amount>
+            <allowspecific translate="label">
+	            <label>allow specific countries</label>
+	            <frontend_type>allowspecific</frontend_type>
+	            <sort_order>140</sort_order>
+	            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </allowspecific>
+            <specificcountry translate="label">
+	            <label>specific countries</label>
+	            <frontend_type>multiselect</frontend_type>
+	            <sort_order>150</sort_order>
+	            <source_model>adminhtml/system_config_source_country</source_model>
+	            <show_in_default>1</show_in_default>
+	            <show_in_website>1</show_in_website>
+	            <show_in_store>1</show_in_store>
+            </specificcountry>
+          </fields>
+        </hcdmpa>
+      </groups>
+    </payment>
+  </sections>
+</config>

@@ -1,0 +1,17 @@
+<?php $_code=$this->getMethodCode() ?>
+<div class="form-list hcd-payment-info" id="payment_form_<?php echo $_code ?>" style="display: none;">
+        <div class="input-box">
+        	<input id="<?php echo $_code ?>_pf" class="radio" name="payment[<?php echo $_code ?>_pf]" value="PFEFINANCE" autocomplete="off" type="radio"></input>
+        	<label class="hco-inline-label">Post Finance E-Finance</label>
+        </div>
+        <div class="input-box">
+        	<input id="<?php echo $_code ?>_pf" class="radio" name="payment[<?php echo $_code ?>_pf]" value="PFCARD" autocomplete="off" type="radio"></input>
+        	<label class="hco-inline-label">Post Finance Card</label>
+        	<br style="clean:both;">
+        </div>
+        <div>
+    <div class="hcd-payment-desc">
+    	<?php echo $this->__('Deschcdpf');?>
+    </div>
+    
+</div>

@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<layout>
+	 <checkout_onepage_index>
+        <reference name="head">
+            <action method="addCss"><name>css/heidelpaycd.css</name></action>
+			<action method="addJS"><name>hcd/heidelpaycd.js</name></action>
+        </reference>
+    </checkout_onepage_index>                               
+	<checkout_onepage_success>
+		<reference name="head">
+            <action method="addCss"><name>css/heidelpaycd.css</name></action>
+        </reference>
+		<reference name="content">
+			<block type="hcd/success" name="hcd_success" template="hcd/success.phtml" after="checkout.success" />
+        </reference>
+    </checkout_onepage_success>
+    <hcd_index_index>
+		<remove name="right"/>
+        <remove name="left"/>
+
+		<reference name="content">
+			<block type="hcd/index" name="hcd_index" template="hcd/index.phtml"/>
+        </reference>
+		
+    </hcd_index_index>
+	
+	<checkout_cart_index>
+		<reference name="head">
+			<action method="addJS"><name>hcd/heidelpaycd.js</name></action>
+        </reference>
+		<reference name="checkout.cart.top_methods">
+			<block type="hcd/abstract" name="hcdmpa.checkout.button.top"
+				before="-" template="hcd/button.phtml">
+			</block>
+		</reference>
+
+		<reference name="checkout.cart.methods">
+			<block type="hcd/abstract" name="hcdmpa.checkout.button"
+				after="checkout.cart.methods.onepage" template="hcd/button.phtml">
+			</block>
+		</reference>
+
+		<update handle="SHORTCUT_popup" />
+	</checkout_cart_index>
+	
+	<hcd_checkout_index translate="label">
+        <!--Wallet_Checkout -->
+        <remove name="left"/>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+	    <reference name="head">
+            <action method="addCss"><name>css/heidelpaycd.css</name></action>
+        </reference>
+        <reference name="right">
+            <action method="unsetChildren"></action>
+            <block type="page/html_wrapper" name="checkout.progress.wrapper" translate="label">
+                <label>Checkout Progress Wrapper</label>
+                <action method="setElementId"><value>checkout-progress-wrapper</value></action>
+                <block type="checkout/onepage_progress" name="checkout.progress" before="-" template="hcd/onepage/progress.phtml">
+                    <block type="checkout/onepage_progress" name="billing.progress" template="checkout/onepage/progress/billing.phtml"></block>
+                    <block type="checkout/onepage_progress" name="shipping.progress" template="hcd/onepage/progress/shipping.phtml"></block>
+                    <block type="checkout/onepage_progress" name="shippingmethod.progress" template="checkout/onepage/progress/shipping_method.phtml"></block>
+                    <block type="checkout/onepage_progress" name="payment.progress" template="hcd/onepage/progress/payment.phtml"></block>
+                </block>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="hcd/onepage" name="checkout.onepage" template="hcd/onepage.phtml">
+				 <block type="hcd/onepage_billing" name="checkout.onepage.billing" as="billing" template="hcd/onepage/billing.phtml"/>
+                 <block type="checkout/onepage_shipping_method" name="checkout.onepage.shipping_method" as="shipping_method" template="hcd/onepage/shipping_method.phtml">
+                    <block type="checkout/onepage_shipping_method_available" name="checkout.onepage.shipping_method.available" as="available" template="checkout/onepage/shipping_method/available.phtml"/>
+                    <block type="checkout/onepage_shipping_method_additional" name="checkout.onepage.shipping_method.additional" as="additional" template="checkout/onepage/shipping_method/additional.phtml"/>
+                </block>
+                <block type="checkout/onepage_payment" name="checkout.onepage.payment" as="payment" template="hcd/onepage/payment.phtml">
+                    <block type="checkout/onepage_payment_methods" name="checkout.payment.methods" as="methods" template="checkout/onepage/payment/info.phtml">
+                        <action method="setMethodFormTemplate"><method>purchaseorder</method><template>payment/form/purchaseorder.phtml</template></action>
+                    </block>
+                </block>
+                <block type="checkout/onepage_review" name="checkout.onepage.review" as="review" template="checkout/onepage/review.phtml"/>
+            </block>
+        </reference>
+    </hcd_checkout_index>
+	
+	 <hcd_checkout_paymentmethod>
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <block type="checkout/onepage_payment_methods" name="root" output="toHtml" template="hcd/onepage/payment/methods.phtml">
+            <action method="setMethodFormTemplate"><method>purchaseorder</method><template>payment/form/purchaseorder.phtml</template></action>
+        </block>
+    </hcd_checkout_paymentmethod>
+	
+	  <!-- Individual blocks for Progress steps begins -->
+    <hcd_checkout_progress_billing>
+        <!-- Mage_Checkout -->
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <block type="checkout/onepage_progress" name="root" output="toHtml" template="checkout/onepage/progress/billing.phtml">
+            <action method="setInfoTemplate"><method></method><template></template></action>
+        </block>
+    </hcd_checkout_progress_billing>
+
+
+    <hcd_checkout_progress_shipping>
+        <!-- Mage_Checkout -->
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <block type="checkout/onepage_progress" name="root" output="toHtml" template="hcd/onepage/progress/shipping.phtml">
+            <action method="setInfoTemplate"><method></method><template></template></action>
+        </block>
+    </hcd_checkout_progress_shipping>
+
+
+    <hcd_checkout_progress_shipping_method>
+        <!-- Mage_Checkout -->
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <block type="checkout/onepage_progress" name="root" output="toHtml" template="checkout/onepage/progress/shipping_method.phtml">
+            <action method="setInfoTemplate"><method></method><template></template></action>
+        </block>
+    </hcd_checkout_progress_shipping_method>
+
+    <hcd_checkout_progress_payment>
+    <!-- Mage_Checkout -->
+    <remove name="right"/>
+    <remove name="left"/>
+
+    <block type="checkout/onepage_progress" name="root" output="toHtml" template="hcd/onepage/progress/payment.phtml">
+        <block type="checkout/onepage_payment_info" name="payment_info">
+            <action method="setInfoTemplate"><method></method><template></template></action>
+        </block>
+        <action method="setInfoTemplate"><method></method><template></template></action>
+    </block>
+    </hcd_checkout_progress_payment>
+	
+</layout>

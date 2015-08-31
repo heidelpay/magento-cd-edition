@@ -1,0 +1,23 @@
+<?php 
+	$paymentInfo = false;
+	$paymentInfo = $this->showPaymentInfo(); 
+	if ($paymentInfo !== false) {
+?>
+<!-- Heidelpay success payment informations -->
+<div class="block block-list block-compare">
+<div class="block-title">
+		<strong>
+			<span>
+			<?php 
+				echo $this->__('payment informations');
+				echo $paymentInfo['Title'];
+			?>
+			</span>
+		</strong>
+	</div>
+	<div class="block-hcd-payment-info">
+		<?php echo $paymentInfo['Message'] ?>
+	</div>
+</div>
+<!-- End Heidelpay success payment informations -->
+<?php } ?>

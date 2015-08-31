@@ -1,0 +1,102 @@
+<?php 
+$data = array();
+$userData = array();
+$payment = '';
+
+$_code=$this->getMethodCode();
+$payment = $this->getMethod() ;
+
+$path = "payment/".$_code."/";
+$storeId =  Mage::app()->getStore()->getId();
+$recognation = Mage::getStoreConfig($path.'recognition', $storeId);
+?>
+<div class="form-list hcd-payment-info" id="payment_form_<?php echo $_code ?>" style="display: none;">
+
+<?php
+	$cId = $this->getMethod()->getCustomerId();
+	
+	if ( $recognation == 1 and $cId != 0 ) {  // only if shipping address is unchanged
+		$hash = $this->getMethod()->getShippingHash();
+		$userData = $this->getMethod()->getCustomerData();
+		if (isset($userData['payment_data'])) {
+			if ( $userData['payment_data']['SHIPPPING_HASH'] != $hash)
+				$userData = array();
+		}
+	} elseif ($recognation == 2 and $cId != 0 ) // allways
+	$userData = $this->getMethod()->getCustomerData();
+	
+	
+	if ($recognation != 0) {  $data = $payment->getHeidelpayUrl(true);
+			if ($data['PROCESSING_RESULT'] == 'NOK') $userData = array();
+	}
+		
+	?>
+	<label class="hcd-singleline-label" <?php echo (isset($userData['payment_data'])) ? '': 'style="display: none"'; ?>><?php if (isset($userData['payment_data'])) echo str_replace('%CARD%',$userData['payment_data']['ACCOUNT_NUMBER'],$this->__('You have used the card %CARD% befor, would you like to use this again?')) ?></label>
+	<div class="input-box" <?php echo (isset($userData['payment_data'])) ? '': 'style="display: none"'; ?>>
+		<input type="radio" onClick="Heidelpay.toggle.getInstance().hpform('<?php echo $_code ?>','false')" class="radio hcd-use_again" id="<?php echo $_code ?>_use_again" name="<?php echo $_code ?>_use_again" value="0" <?php echo (isset($userData['payment_data']) or $recognation == 0) ? 'checked' : ''; ?>><?php echo $this->__('Yes') ?>
+		<input type="radio" onClick="Heidelpay.toggle.getInstance().hpform('<?php echo $_code ?>','true')" class="radio hcd-use_again" id="<?php echo $_code ?>_use_again" name="<?php echo $_code ?>_use_again" value="1" <?php echo (empty($userData['payment_data']) and $recognation > 0) ? 'checked' : ''; ?>><?php echo $this->__('No') ?>
+	</div>
+	
+	<?php
+		if ($recognation != 0 and $data['PROCESSING_RESULT'] == 'NOK') {
+			echo '<div class="hcd-payment-desc hcd-payment-error">'.Mage::helper('hcd/payment')->handleError($data['PROCESSING_RETURN']).'</div>';
+	} else {
+	
+	if ($recognation != 0) { 
+		
+	?>	
+	<div id="<?php echo $_code ?>_hpform" <?php echo (isset($userData['payment_data']['ACCOUNT_NUMBER'])) ? 'style="display: none"': ''; ?>>
+	<input type="hidden" name="<?php echo $_code ?>_URL" id="<?php echo $_code ?>_URL" value="<?php echo $data['FRONTEND_REDIRECT_URL'] ?>"/>
+	  	<label class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Card brand') ?></label>
+      	 <div class="input-box">
+			<select class="input-text <?php echo $_code ?>_ACCOUNT_BRAND" id="cardBrand" style="width: 250px">
+			<?php
+foreach (json_decode($data['CONFIG_BRANDS'], true) AS $value => $brand) { 
+	echo '<option value='.$value.' >'.$brand.'</option>' ; 
+}
+?>
+			</select>
+		</div>
+		
+
+
+		<label class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Card number') ?></label>
+		<div class="input-box">
+			<input type="text" class="input-text <?php echo $_code ?>_ACCOUNT_NUMBER required-entry" value="<?php echo (isset($userData['payment_data']['ACCOUNT_NUMBER'])) ? '*****' : ''; ?>" id="cardNumber" />
+		</div>
+		<label class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Card holder') ?></label>
+		<div class="input-box">	
+			<input type="text" class="input-text <?php echo $_code ?>_ACCOUNT_HOLDER required-entry" id="cardHolder" value="<?php echo $data['NAME_GIVEN'].' '.$data['NAME_FAMILY'] ;?>" /><br />
+		</div>
+		<label class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Card expiry') ?></label>
+		<div class="input-box">	
+			
+			<select class="input-text <?php echo $_code ?>_ACCOUNT_EXPIRY_MONTH" id="accountExpiryMonth" style="width: 150px" >
+					<option><?php echo $this->__('month') ?></option>
+					<?php for ($i = 1; $i <=12 ; $i++ ) {
+						echo '<option value="'.$i.'">'.$i.'</option>';
+					}
+					?>
+			</select>			
+			<select class="input-text <?php echo $_code ?>_ACCOUNT_EXPIRY_YEAR" id="accountExpiryYear" style="width: 150px">
+				<option><?php echo $this->__('year') ?></option>
+				<?php $year = date('Y');
+				$to = $year + 10;
+				for ($k = $year; $k <=$to; $k++ ) {
+						echo '<option value="'.$k.'">'.$k.'</option>';
+				}
+				?>
+			</select>
+			</div>
+		<label class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Verification number') ?></label>
+		<div class="input-box">	
+			<input type="text" class="input-text <?php echo $_code ?>_ACCOUNT_VERIFICATION required-entry" id="verification" value="<?php echo (isset($userData['payment_data']['ACCOUNT_NUMBER'])) ? '*****' : ''; ?>"/>
+	 	</div>
+		</div>
+
+<?php } ?>
+    <div class="hcd-payment-desc">
+    	<?php echo $this->__('Desc'.$_code);?>
+    </div>
+<?php } ?>    
+</div>

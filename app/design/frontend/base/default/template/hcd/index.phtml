@@ -1,0 +1,68 @@
+<div class="block block-list block-compare">
+<div class="block-title"><strong><span><?php echo $this->__('Please confirm your payment:')?></span></strong></div>
+	<div style="margin: 10px" class="block-hcd-payment ">
+<?php if ($this->getHcdUrl() !== false) { ?>
+		<form method="post" action="<?php echo trim($this->getHcdUrl()) ?>" id="hcd" autocomplete="off">
+		<p>
+		<?php /* Only for creditcard and debitcard */
+				
+				if ($this->getHcdCode() == "hcdcc" or
+					$this->getHcdCode() == "hcddc") {
+		?>
+		<span class="input-box">
+			<label class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Card brand') ?></label><br />
+			<select id="cardBrand" class="input-text validate-select" name="ACCOUNT.BRAND">
+			<?php
+				foreach (json_decode($this->getHcdBrands(), true) AS $value => $brand) 
+					echo '<option value='.$value.' >'.$brand.'</option>' ; 
+			?>
+			</select><br />
+		</span>
+		<span class="input-box">
+
+			<label  class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Card number') ?></label><br />
+			<input type="text" class="input-text required-entry" value="" id="cardNumber" name="ACCOUNT.NUMBER"><br />
+	  	</span>
+		<span class="input-box">	
+			<label  class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Card holder') ?></label><br />
+			<input type="input" class="input-text required-entry" value="<?php echo $this->htmlEscape($this->getHcdHolder()) ?>" id="cardHolder" name="ACCOUNT.HOLDER"><br />
+	  	</span>
+		<span class="input-box">			
+			<label  class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Card expiry') ?></label><br />
+			<select class="input-text validate-select" name="ACCOUNT.EXPIRY_MONTH">
+					<option><?php echo $this->__('month') ?></option>
+					<?php for ($i = 1; $i <=12 ; $i++ )
+						echo '<option>'.$i.'</option>';
+					?>
+			</select>			
+			<select class="input-text validate-select" name="ACCOUNT.EXPIRY_YEAR">
+				<option><?php echo $this->__('year') ?></option>
+				<?php $year = date('Y');
+					  $to = $year + 10 ;
+					  echo $year . ' ' .$to ;
+				 	 for ($k = $year; $k <=$to; $k++ )
+				 		echo '<option>'.$k.'</option>';
+				?>
+			</select><br />
+		</span>
+		<span class="input-box">
+			<label><?php echo $this->__('Verification number') ?></label><br />
+			<input type="text" class="input-text validate-cc-cvn" value="" id="verification" name="ACCOUNT.VERIFICATION" style="width: 150px"><br />
+		</span>
+		<?php }; /* end creditcard and debitcard  */ ?>
+			<br /><br />
+			<button id="button_hcd" class="button" title="<?php echo $this->__('pay now') ?>" type="submit">
+				<span>
+						<span><?php echo $this->__('pay now') ?></span>
+				</span>
+			</button>
+		</p>
+		</form>
+		<script type="text/javascript">
+   			 //< ![CDATA[
+        var customForm = new VarienForm('hcd');
+		    //]]>
+		</script>
+	<?php }; ?>
+	</div>
+</div>

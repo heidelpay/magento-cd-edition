@@ -1,0 +1,45 @@
+<?php $_code=$this->getMethodCode();
+
+		$path = "payment/".$_code."/";
+		$storeId =  Mage::app()->getStore()->getId();
+		$recognation = Mage::getStoreConfig($path.'recognition', $storeId);
+	/*
+	 * Look for customer recognation
+	 */
+		
+	$hash = $this->getMethod()->getShippingHash();
+	$userData = array();
+	$cId = $this->getMethod()->getCustomerId();
+	
+	if ( $recognation == 1 and $cId != 0 ) {  // only if shipping address is unchanged
+		$hash = $this->getMethod()->getShippingHash();
+		$userData = $this->getMethod()->getCustomerData();
+		if (array_key_exists('payment_data', $userData)) {
+			if ( $userData['payment_data']['SHIPPPING_HASH'] != $hash)
+				$userData = array();
+		}
+	} elseif ($recognation == 2 and $cId != 0 ) // allways
+		$userData = $this->getMethod()->getCustomerData();
+		
+?>
+
+<div class="form-list hcd-payment-info" id="payment_form_<?php echo $_code ?>" style="display: none;">
+	<div class="input-box">
+        <label for="<?php echo $_code ?>_holder" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Owner') ?></label>
+        
+            <input type="text" title="<?php echo $this->__('Owner:') ?>" class="input-text required-entry" id="<?php echo $_code ?>_holder" name="payment[<?php echo $_code ?>_holder]" value="<?php echo $this->htmlEscape((isset( $userData['payment_data']['ACCOUNT.HOLDER'])) ? $userData['payment_data']['ACCOUNT.HOLDER']  :$this->getMethod()->getCustomerName()) ?>" />
+        </div>
+      <div class="input-box" >
+        		<label for="<?php echo $_code ?>_iban" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Account number or iban') ?></label>
+	
+            		<input type="text" title="<?php echo $this->__('Account number or iban') ?>" class="input-text required-entry validate-alphanum" id="<?php echo $_code ?>_iban" name="payment[<?php echo $_code ?>_iban]" value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']) ; if (isset($userData['payment_data']['ACCOUNT.NUMBER'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.NUMBER']) ;  ?>" size="25">
+       </div>
+       <div class="input-box">
+        		<label for="<?php echo $_code ?>_bic" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Bank code or bic') ?></label>
+            	<input type="text" title="<?php echo $this->__('Bank code or bic:') ?>" class="input-text required-entry validate-alphanum" id="<?php echo $_code ?>_bic" name="payment[<?php echo $_code ?>_bic]" value="<?php if (isset($userData['payment_data']['ACCOUNT.BIC'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.BIC']) ; if (isset($userData['payment_data']['ACCOUNT.BANK'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.BANK']) ;  ?>" size="25"/>
+        </div>
+    <div class="hcd-payment-desc">
+    	<?php echo $this->__('Desc'.$_code);?>
+    </div>
+    
+</div>

@@ -1,0 +1,90 @@
+
+.hcd-input-fields-small {
+	float: left ;
+	padding-right:	5px ;
+}
+.hcd-payment-info input  {
+	border-radius: 3px ; 
+    background-color: #F4F4F4 ;
+}
+
+.block-hcd-payment-info {
+	text-align: left;
+	margin: auto;
+	width: 50%;
+	padding: 20px;
+	border-left: 2px dashed #CCC;
+	border-right: 2px dashed #CCC;
+}
+
+.hcd-singleline-label {
+	display: block ;
+}
+
+.hcd-payment-info {
+	border: 2px solid #E7E7E7 ; 
+	padding: 10px;
+	/* border-radius: 8px ; */ 
+}
+
+.hcd-payment-desc  {
+	border-left: 1px dashed #000;
+	margin-right: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 5px;
+	font-style: italic;
+	font-size: 11px;
+}
+
+.hcd-payment-error {
+	color: #f00;
+	font-weight:bold
+	
+}
+
+
+.hco-inline-label {
+	display: inline-block;
+}
+
+.hcd-use_again {
+	margin-right: 5px;
+	
+}
+
+button.btn-hcdmpa-payment-data {
+	border: 0;
+	height: 46px;
+	width:	80px;
+	background: url('https://www.mastercard.com/mc_us/wallet/img/en/FR/mp_acc_046px_gif.gif'
+    ) 0 0 no-repeat;
+	padding: 0 0 0 9px;
+	font: bold 15px/40px Arial, Helvetica, sans-serif;
+	color: #fff;
+	cursor: pointer;
+	position: absolute;
+}
+
+
+button.btn-hcdmpa-info {
+	border: 0;
+	width:            100px;
+	height:           28px;
+	padding: 0 0 0 9px;
+	font: bold 15px/40px Arial, Helvetica, sans-serif;
+	color: #fff;
+	cursor: pointer;
+}
+
+
+.hcd-masterpass-payment-data {
+		margin-left: 85px;
+		padding-left: 5px;
+		height: 46px;
+}
+
+.hcd-masterpass-payment-data-info {
+	margin-top: 5px;
+	font-size: 12px;	
+}
