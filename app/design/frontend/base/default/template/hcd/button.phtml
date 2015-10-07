@@ -46,4 +46,20 @@ button.btn-hcdmpa {
 	<span class="masterpass-please-wait" style="display: none;">
             <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Redirect to MasterPass ...') ?>" title="<?php echo $this->__('Redirect to MasterPass ...') ?>" class="v-middle" /> <?php echo $this->__('Redirect to MasterPass ...') ?>
 	</span>
+	<p><a href="https://www.mastercard.com/mc_us/wallet/learnmore/<?php
+	switch ($lang) {
+		case 'de_DE':
+		case 'de_AT':
+		case 'de_CH':
+				echo 'de/DE';
+				break;
+		case 'fr_FR':
+				echo 'fr/FR';
+				break;
+		case 'en_GB':
+		case 'en_US':
+		default:
+				echo 'en/US';
+				break;
+	}?>" target="_blank"><?php echo $this->__('about MasterPass') ?></a></p>
 <?php endif ?>

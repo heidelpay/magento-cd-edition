@@ -17,9 +17,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
 	protected $_infoBlockType = 'hcd/info_masterpass';
 	
 	
+	/**
 	public function isAvailable($quote=null) {
 		return true;
 	}
+	*/
 	
 	function getPaymentData($code=false, $customerId=false, $storeId=false ) {
 		$session = Mage::getSingleton('checkout/session');
