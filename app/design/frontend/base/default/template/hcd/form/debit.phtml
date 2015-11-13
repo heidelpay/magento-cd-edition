@@ -33,9 +33,18 @@
       <div class="input-box" >
         		<label for="<?php echo $_code ?>_iban" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Account number or iban') ?></label>
 	
-            		<input type="text" title="<?php echo $this->__('Account number or iban') ?>" class="input-text required-entry validate-alphanum" id="<?php echo $_code ?>_iban" name="payment[<?php echo $_code ?>_iban]" value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']) ; if (isset($userData['payment_data']['ACCOUNT.NUMBER'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.NUMBER']) ;  ?>" size="25">
+            		<input onkeyup="Heidelpay.checkIban.getInstance().check(this);" type="text" title="<?php echo $this->__('Account number or iban') ?>" class="input-text required-entry validate-alphanum" id="<?php echo $_code ?>_iban" name="payment[<?php echo $_code ?>_iban]" value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']) ; if (isset($userData['payment_data']['ACCOUNT.NUMBER'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.NUMBER']) ;  ?>" size="25">
        </div>
-       <div class="input-box">
+	   <?php
+			if(isset($userData['payment_data']['ACCOUNT.IBAN'])){
+				if(preg_match('/^(D|d)(E|e)/', $userData['payment_data']['ACCOUNT.IBAN'])){
+					$display = 'style="display: none;"';
+				}else{
+					$display = '';
+				}
+			}
+		?>
+       <div class="input-box" <?php print $display; ?>>
         		<label for="<?php echo $_code ?>_bic" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Bank code or bic') ?></label>
             	<input type="text" title="<?php echo $this->__('Bank code or bic:') ?>" class="input-text required-entry validate-alphanum" id="<?php echo $_code ?>_bic" name="payment[<?php echo $_code ?>_bic]" value="<?php if (isset($userData['payment_data']['ACCOUNT.BIC'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.BIC']) ; if (isset($userData['payment_data']['ACCOUNT.BANK'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.BANK']) ;  ?>" size="25"/>
         </div>
