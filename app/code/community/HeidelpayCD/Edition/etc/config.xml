@@ -2,7 +2,7 @@
 <config>
   <modules>
     <HeidelpayCD_Edition>
-            <version>15.10.7</version>
+            <version>15.11.13</version>
     </HeidelpayCD_Edition>
   </modules>
   <global>
@@ -27,13 +27,13 @@
                     </customer>
                 </entities>
         </hcd_resource>
-		<!--
+	<!--
 		<sales>
 			<rewrite>
                 <order_pdf_invoice>HeidelpayCD_Edition_Model_Order_Pdf_Invoice</order_pdf_invoice>
 	      	</rewrite>
-      </sales>
-	  -->
+		</sales>
+	-->
   </models>
     <blocks>
 	    <hcd>

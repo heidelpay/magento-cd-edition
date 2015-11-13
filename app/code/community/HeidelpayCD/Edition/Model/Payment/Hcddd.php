@@ -23,31 +23,32 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
 			       Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
 			if(empty($payment[$this->_code.'_iban']))
 			       Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
-			if(empty($payment[$this->_code.'_bic']))
+			if(empty($payment[$this->_code.'_bic'])){
+				if(!preg_match('/^(D|d)(E|e)/', $payment[$this->_code.'_iban'])){
 			       Mage::throwException($this->_getHelper()->__('Please specify a bic or bank code'));
+				}
+			}
 		
-		$params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
+			$params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
+				
+			if (preg_match('#^[\d]#',$payment[$this->_code.'_iban'])) {
+					$params['ACCOUNT.NUMBER'] = $payment[$this->_code.'_iban'];
+			} else {
+					$params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
+			};
 			
-		if (preg_match('#^[\d]#',$payment[$this->_code.'_iban'])) {
-				$params['ACCOUNT.NUMBER'] = $payment[$this->_code.'_iban'];
-		} else {
-				$params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
-		};
-		
-		if (preg_match('#^[\d]#',$payment[$this->_code.'_bic'])) {
-				$params['ACCOUNT.BANK'] = $payment[$this->_code.'_bic'];
-				$params['ACCOUNT.COUNTRY'] = $this->getQuote()->getBillingAddress()->getCountry();
-		} else {
-				$params['ACCOUNT.BIC'] = $payment[$this->_code.'_bic'];
-		};
-			
-			
+			if (preg_match('#^[\d]#',$payment[$this->_code.'_bic'])) {
+					$params['ACCOUNT.BANK'] = $payment[$this->_code.'_bic'];
+					$params['ACCOUNT.COUNTRY'] = $this->getQuote()->getBillingAddress()->getCountry();
+			} else {
+					$params['ACCOUNT.BIC'] = $payment[$this->_code.'_bic'];
+			}
 			$this->saveCustomerData($params);
 			
             return $this;
         }
         
-	return $this;
+		return $this;
 	}
 	
 	public function showPaymentInfo($payment_data) {
