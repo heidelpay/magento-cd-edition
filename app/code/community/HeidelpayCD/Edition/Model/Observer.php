@@ -31,10 +31,22 @@ class HeidelpayCD_Edition_Model_Observer {
 		
 	}
 	
+	public function saveInvoice($observer) {
+		
+		$this->log('saveInvoice '.print_r($observer->debug(),1));
+		
+		$this->log('saveInvoice '.print_r($observer->getOrder()->debug(),1));
+		
+	}
+	
 	public function reportShippingToHeidelpay($observer) {
 		$shipment = $observer->getEvent()->getShipment();
 		$orderIncrementId =  Mage::app()->getRequest()->getParam('order_id');
-		Mage::log('$orderIncrementId '.$orderIncrementId);
+		
+		if (empty($orderIncrementId)) return $this; 
+		
+		$this->log('$orderIncrementId '.$orderIncrementId);
+		
 		$order = Mage::getModel('sales/order');
 		$order->loadByAttribute('entity_id', (int)$orderIncrementId);
 		
@@ -101,22 +113,11 @@ class HeidelpayCD_Edition_Model_Observer {
 				Mage::getSingleton('core/session')->addSuccess(Mage::helper('hcd')->__('Successfully report delivery to Heidelpay.'));
 			}
         		
-        		
-        	
-        	
         	};
 			
         }
         	
-        	
-        /*	
-        Mage::getSingleton('core/session')->addError('Versand nicht möglich 123');
-        $shipment->_dataSaveAllowed = false;
-        Mage::app()->getResponse()->setRedirect($_SERVER['HTTP_REFERER']);
-        Mage::app()->getResponse()->sendResponse();
-        exit();
-        */
-        
+                        
 	}
 	
 	

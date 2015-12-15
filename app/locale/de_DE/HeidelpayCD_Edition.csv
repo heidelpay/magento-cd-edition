@@ -127,6 +127,8 @@
 "Bankcode","BLZ"
 "IBAN","IBAN"
 "BIC","BIC"
+"Holder","Kontoinhaber"
+"Identification","Verwendungszweck"
 "Owner","Inhaber"
 "Change at MasterPass","&Auml;ndern bei MasterPass"
 "Please enter account no.","Bitte Konto angeben."
@@ -174,4 +176,6 @@
 "HPError-800.100.168","Bitte w&auml;hlen Sie eine andere Zahlart"
 "HPError-800.100.171","Bitte w&auml;hlen Sie eine andere Zahlart"
 "HPError-800.300.101","Bitte w&auml;hlen Sie eine andere Zahlart"
+
+
 

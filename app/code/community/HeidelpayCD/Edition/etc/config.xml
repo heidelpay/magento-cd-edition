@@ -87,6 +87,16 @@
                     	</reportShippingToHeidelpay>
 					</observers>
 			</sales_order_shipment_save_before>
+			<!-- 
+			<sales_order_invoice_save_after>
+					<observers>
+                    	<saveInvoice>
+                        	<class>hcd/observer</class>
+                        	<method>saveInvoice</method>
+                    	</saveInvoice>
+					</observers>
+			</sales_order_invoice_save_after>
+			 -->
         </events>
     <template>
         <email>
@@ -223,7 +233,8 @@
         <sort_order>1</sort_order>
         <min_amount>0</min_amount>
         <max_amount>0</max_amount>
-        <allowspecific>0</allowspecific>
+        <allowspecific>1</allowspecific>
+        <specificcountry>BE,DE,IT,NL,AT,SI,ES</specificcountry>
       </hcdsu>
 	  <hcdgp>
 		<group>hcd</group>

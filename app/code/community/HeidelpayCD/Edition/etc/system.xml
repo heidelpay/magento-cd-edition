@@ -112,8 +112,7 @@
   <sections>
     <payment>
 	    <groups id="hcd" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-		<label>Heidelpay</label>
-        <hcdcc translate="label">
+		<hcdcc translate="label">
           <label>Heidelpay Credit Card (hcd)</label>
           <frontend_type>text</frontend_type>
           <sort_order>50</sort_order>

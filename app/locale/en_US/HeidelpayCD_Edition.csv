@@ -126,6 +126,8 @@
 "Bankcode","Bankcode"
 "IBAN","IBAN"
 "BIC","BIC"
+"Holder","Holder"
+"Identification","Please use the descriptor"
 "Owner","Owner"
 "Change at MasterPass":"Change at MasterPass"
 "Please enter account no.","Please enter account no."
