@@ -41,17 +41,8 @@ class HeidelpayCD_Edition_Model_Observer {
 	
 	public function reportShippingToHeidelpay($observer) {
 		$shipment = $observer->getEvent()->getShipment();
-		$orderIncrementId =  Mage::app()->getRequest()->getParam('order_id');
-		
-		if (empty($orderIncrementId)) return $this; 
-		
-		$this->log('$orderIncrementId '.$orderIncrementId);
-		
-		$order = Mage::getModel('sales/order');
-		$order->loadByAttribute('entity_id', (int)$orderIncrementId);
-		
-		$this->log('save shipping');
-		
+		$order    = $shipment->getOrder();
+		if (empty($order)) return $this;
 		$payment = $order->getPayment()->getMethodInstance();
 		
 		$paymentCode = $payment->getCode();
