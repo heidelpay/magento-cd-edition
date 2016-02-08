@@ -15,7 +15,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 	protected $_canCapturePartial = false;
 	protected $_canRefund = true;
 	protected $_canRefundInvoicePartial = true;
-	protected $_canVoid = false;
+	protected $_canVoid = true;
 	protected $_canUseInternal = false;
 	protected $_canUseCheckout = true;
 	protected $_canUseForMultishipping = false;
@@ -182,6 +182,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 		$this->log("Heidelpay Payment Code : ".$this->_code);
 		$config = $this->getMainConfig($this->_code);
 		if ($isRegistration === true)$config['PAYMENT.TYPE'] = 'RG'; 
+		if ($isRegistration === true)$basketData['PRESENTATION.CURRENCY'] = $this->getQuote()->getQuoteCurrencyCode();
 		
 		// add parameters for pci 3 iframe 
 		
