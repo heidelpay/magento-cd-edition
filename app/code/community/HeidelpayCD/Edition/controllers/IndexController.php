@@ -300,7 +300,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 			
 		}
 		
-		
+		/*
 		// if order status is cancel redirect to cancel page 
 		if ($order->getStatus() == $payment->getStatusError()) {
 				$this->_redirect('hcd/index/error', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true));
@@ -312,7 +312,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 			$this->_redirect('hcd/index/success', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true,'no_mail' => true));
 			return;
 		}
-   
+   		*/
 			
 		
 		$data = $payment->getHeidelpayUrl(false , $BasketId, $RefId);
@@ -341,12 +341,10 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 				$this->_redirectUrl($data['FRONTEND_REDIRECT_URL']);
 			} 
 			$this->loadLayout();
-			$this->log('RedirectUrl ' .$data['FRONTEND_REDIRECT_URL'] );
+			$this->log('RedirectUrl ' .$data['FRONTEND_PAYMENT_FRAME_URL'] );
 			$this->log('CCHolder ' .$payment->getCustomerName() );
-			$this->getLayout()->getBlock('hcd_index')->setHcdUrl($data['FRONTEND_REDIRECT_URL']);
+			$this->getLayout()->getBlock('hcd_index')->setHcdUrl($data['FRONTEND_PAYMENT_FRAME_URL']);
 			$this->getLayout()->getBlock('hcd_index')->setHcdCode($payment->getCode());
-			$this->getLayout()->getBlock('hcd_index')->setHcdBrands($data['CONFIG_BRANDS']);
-			$this->getLayout()->getBlock('hcd_index')->setHcdHolder($payment->getCustomerName(true));
 		} else {
 			Mage::getModel('hcd/transaction')->saveTransactionData($data);		
 			Mage::getSingleton('core/session')->setHcdError($data['PROCESSING_RETURN']);
@@ -511,6 +509,8 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 		
 		if ($PaymentCode[1] == 'RG') {
 			if ($data['PROCESSING_RESULT'] == 'NOK'){
+				$message = Mage::helper('hcd/payment')->handleError($data['PROCESSING_RETURN'],$data['PROCESSING_RETURN_CODE']);
+				$checkout = $this->getCheckout()->addError($message);
 				$url = Mage::getUrl('hcd/index/error', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true, 'HPError' => $data['PROCESSING_RETURN_CODE']));
 			}else {
 				
@@ -695,7 +695,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 		$this->log('PaymentCode '.$paymentCode);
 		
 		$this->log($type ." ". $methode);
-		if ($methode == 'RC' or $methode == 'CP' or	$methode == 'DB' or ($methode == 'FI' and $paymentCode == 'hcdbs' )) {
+		if ($methode == 'CB' or $methode == 'RC' or $methode == 'CP' or	$methode == 'DB' or ($methode == 'FI' and $paymentCode == 'hcdbs' )) {
 			Mage::helper('hcd/payment')->mapStatus (
 				$xmlData,
 				$order

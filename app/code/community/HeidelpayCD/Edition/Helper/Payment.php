@@ -222,10 +222,60 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 			Mage::getSingleton('core/translate')->setLocale($locale)->init('frontend', true);
 		};
 		
+		// handle chageback notifications for cc, dc and dd
+		if ($PaymentCode[1] == 'CB') {
+			
+			$this->log('Chargeback');
+			
+			if ($PaymentCode[0] == 'DD') {
+					// message block for direct debit chargebacks
+					$message = Mage::helper('hcd')->__('debit failed');
+			} else {
+				// message block for credit and debit cart chargebacks
+					$message = Mage::helper('hcd')->__('chargeback');
+			}
+			if ($order->hasInvoices()) {
+    				$invIncrementIDs = array();
+    					foreach ($order->getInvoiceCollection() as $inv) {
+    						$this->log('Invoice Number '.(string)$inv->getIncrementId());
+        					$inv->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
+        					$inv->setIsPaid(false);
+        					$inv->save();
+    					}
+    			$order->setIsInProcess(false);
+			}
+			
+			$order->setState( $order->getPayment()->getMethodInstance()->getStatusPendig(false),
+					true,
+					$message );
+			
+			Mage::dispatchEvent('heidelpay_after_map_status_chargeback', array('order' => $order));
+			$this->log('Is this order protected ? '.(string)$order->isStateProtected() );
+			$order->save();
+			return;
+		}
+		
 		
 		$message = (!empty($message))  ? $message : $data['PROCESSING_RETURN'];
 		
 		$quoteID = ($order->getLastQuoteId() === false) ? $order->getQuoteId() : $order->getLastQuoteId() ; // last_quote_id workaround for trusted shop buyerprotection
+		
+		/**
+		 * Do nothing if status is allready successfull
+		 */
+		if ($order->getStatus() == $order->getPayment()->getMethodInstance()->getStatusSuccess() ) return ;
+		/**
+		 * If an order has been canceled, cloesed or complete do not change order status
+		 */
+		if ($order->getStatus() == Mage_Sales_Model_Order::STATE_CANCELED or 
+			$order->getStatus() == Mage_Sales_Model_Order::STATE_CLOSED   or
+			$order->getStatus() == Mage_Sales_Model_Order::STATE_COMPLETE
+			) {
+				
+			// you can use this event for example to get a notification when a canceled order has been paid  
+			Mage::dispatchEvent('heidelpay_map_status_cancel', array('order' => $order, 'data' => $data));
+			return ;
+		}
 		
 		if ($data['PROCESSING_RESULT'] == 'NOK'){
 			if ($order->canCancel()) {
@@ -239,10 +289,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 		}	elseif (	( $PaymentCode[1] == 'CP' or	$PaymentCode[1] == 'DB' or $PaymentCode[1] == 'FI' or $PaymentCode[1] == 'RC')
 			and	( $data['PROCESSING_RESULT'] == 'ACK' and $data['PROCESSING_STATUS_CODE'] != 80 )) {
 			
-			/**
-			 * Do nothing if status is allready successfull
-			 */
-			if ($order->getStatus() == $order->getPayment()->getMethodInstance()->getStatusSuccess() ) return ;
+			
 			
 			
 			$message = (isset($data['ACCOUNT_BRAND']) and $data['ACCOUNT_BRAND'] == 'BILLSAFE') ? 'BillSafe Id: '.$data['CRITERION_BILLSAFE_REFERENCE'] : 'Heidelpay ShortID: '.$data['IDENTIFICATION_SHORTID'];

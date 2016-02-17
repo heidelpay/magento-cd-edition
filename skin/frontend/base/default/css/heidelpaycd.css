@@ -88,3 +88,26 @@ button.btn-hcdmpa-info {
 	margin-top: 5px;
 	font-size: 12px;	
 }
+
+.hcdcc_payment_frame {
+	border: 0px solid black !important;
+	width: 200px;
+	height: 200px;
+	margin-top: 10px;
+}
+
+.hcddc_payment_frame {
+	border: 0px solid black !important;
+	width: 200px;
+	height: 190px;
+	margin-top: 10px;
+}
+
+button_hcd { 
+	float: right;
+}
+
+#heidelpay-please-wait img {
+	display: inline;
+	width: 25px;
+}
