@@ -15,7 +15,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 	protected $_canCapturePartial = false;
 	protected $_canRefund = true;
 	protected $_canRefundInvoicePartial = true;
-	protected $_canVoid = false;
+	protected $_canVoid = true;
 	protected $_canUseInternal = false;
 	protected $_canUseCheckout = true;
 	protected $_canUseForMultishipping = false;
@@ -182,6 +182,18 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 		$this->log("Heidelpay Payment Code : ".$this->_code);
 		$config = $this->getMainConfig($this->_code);
 		if ($isRegistration === true)$config['PAYMENT.TYPE'] = 'RG'; 
+		if ($isRegistration === true)$basketData['PRESENTATION.CURRENCY'] = $this->getQuote()->getQuoteCurrencyCode();
+		
+		// add parameters for pci 3 iframe 
+		
+		if ($this->_code == 'hcdcc'  or $this->_code == 'hcddc' )	{
+			$url = explode( '/', Mage::getUrl('/', array('_secure' => true)));
+			$criterion['FRONTEND.PAYMENT_FRAME_ORIGIN'] 	=  $url[0].'//'.$url[2];
+			$criterion['FRONTEND.CSS_PATH'] 				=  Mage::getDesign()->getSkinUrl('css/'.$this->_code.'_payment_frame.css', array('_secure' => true));
+			// set frame to sync modus if frame is used in bevor order mode (this is the registration case) 
+			$criterion['FRONTEND.PREVENT_ASYNC_REDIRECT'] = ($isRegistration === true) ? 'TRUE' : 'FALSE';
+		}
+			
 		$frontend = $this->getFrontend($ordernr);
 		if ($isRegistration === true) $frontend['FRONTEND.SUCCESS_URL'] = Mage::getUrl('hcd/', array('_secure' => true));
 		if ($isRegistration === true) $frontend['CRITERION.SHIPPPING_HASH'] =  $this->getShippingHash();
@@ -273,9 +285,12 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 				if($this->getCustomerData($this->_code, $billing->getCustomerId())) {
 					$paymentData = $this->getCustomerData($this->_code, $billing->getCustomerId());
 					
+					
 					$this->log('getUser Customer: '. print_r($paymentData,1), 'DEBUG');
 					
-					
+					if (isset($paymentData['payment_data']['ACCOUNT.IBAN'])) {
+						$paymentData['payment_data']['ACCOUNT.IBAN'] = strtoupper($paymentData['payment_data']['ACCOUNT.IBAN']);
+					}
 					
 					// remove SHIPPPING_HASH from parameters
 					if (isset($paymentData['payment_data']['SHIPPPING_HASH']))

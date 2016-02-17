@@ -21,6 +21,10 @@
 		<reference name="content">
 			<block type="hcd/index" name="hcd_index" template="hcd/index.phtml"/>
         </reference>
+        <reference name="head">
+            <action method="addCss"><name>css/heidelpaycd.css</name></action>
+			<action method="addJS"><name>hcd/heidelpaypci3.js</name></action>
+        </reference>
 		
     </hcd_index_index>
 	
