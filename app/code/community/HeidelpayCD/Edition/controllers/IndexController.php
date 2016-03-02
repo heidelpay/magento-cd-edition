@@ -300,7 +300,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 			
 		}
 		
-		/*
+		
 		// if order status is cancel redirect to cancel page 
 		if ($order->getStatus() == $payment->getStatusError()) {
 				$this->_redirect('hcd/index/error', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true));
@@ -312,7 +312,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 			$this->_redirect('hcd/index/success', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true,'no_mail' => true));
 			return;
 		}
-   		*/
+   		
 			
 		
 		$data = $payment->getHeidelpayUrl(false , $BasketId, $RefId);
@@ -339,6 +339,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 			
 			if ( $payment->activRedirct() === true ) {
 				$this->_redirectUrl($data['FRONTEND_REDIRECT_URL']);
+				return;
 			} 
 			$this->loadLayout();
 			$this->log('RedirectUrl ' .$data['FRONTEND_PAYMENT_FRAME_URL'] );
