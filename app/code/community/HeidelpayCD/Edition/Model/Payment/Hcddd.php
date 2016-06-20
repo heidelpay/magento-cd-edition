@@ -11,13 +11,57 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
 		return $this->_formBlockType;
 	}
 	
+	public function isAvailable($quote = null) {
+		
+		$path = "payment/" . $this->_code . "/";
+		$storeId = Mage::app ()->getStore ()->getId ();
+		$insurence = Mage::getStoreConfig ( $path . 'insurence', $storeId );
+		
+		// in case if insurence billing and shipping adress 
+		if ($insurence > 0) {
+		
+			$billing = $this->getQuote ()->getBillingAddress ();
+			$shipping = $this->getQuote ()->getShippingAddress ();
+			
+			if (($billing->getFirstname () != $shipping->getFirstname ()) or ($billing->getLastname () != $shipping->getLastname ()) or ($billing->getStreet () != $shipping->getStreet ()) or ($billing->getPostcode () != $shipping->getPostcode ()) or ($billing->getCity () != $shipping->getCity ()) or ($billing->getCountry () != $shipping->getCountry ())) {
+				$this->log('direct debit with insurence not allowed with diffrend adresses');
+				return false;
+			}
+		}
+		return parent::isAvailable ( $quote );
+	}
+	
+	
 	public function validate(){
 		parent::validate();
 		$payment = array();
 		$params = array();
 		$payment = Mage::app()->getRequest()->getPOST('payment');
 		
+		//Mage::throwException(print_r($payment,1));
+		
 		if(isset($payment['method']) and $payment['method'] == $this->_code) {
+			
+			if (array_key_exists($this->_code.'_salut', $payment)) {
+				$params['NAME.SALUTATION'] = (preg_match('/[A-z]{2}/', $payment[$this->_code.'_salut'])) ? $payment[$this->_code.'_salut'] : '';
+			}
+			
+			if (array_key_exists($this->_code.'_dobday', $payment) && 
+				array_key_exists($this->_code.'_dobmonth', $payment) &&
+				array_key_exists($this->_code.'_dobyear', $payment)
+				) {
+				
+				$day 	= (int)$payment[$this->_code.'_dobday'];
+				$mounth = (int)$payment[$this->_code.'_dobmonth'];
+				$year 	= (int)$payment[$this->_code.'_dobyear'];
+				
+				if($this->validateDateOfBirth( $day, $mounth, $year)) {
+					$params['NAME.BIRTHDATE'] = $year.'-'.sprintf("%02d",$mounth).'-'.sprintf("%02d",$day) ;
+				} else {
+					Mage::throwException($this->_getHelper()->__('The minimum age is 18 years for this payment methode.'));
+				}
+				
+			}
 		
 			if(empty($payment[$this->_code.'_holder']))
 			       Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
@@ -71,35 +115,4 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
 		
 	}
 	
-	/*
-	public function getUser($order) {
-		$account = array();
-		$params = array();
-		$params = parent::getUser($order);
-		
-		
-		$usersession = $this->getCheckout();
-		
-		$account  = $usersession->getHcddata();
-		
-		$params['ACCOUNT.HOLDER'] = $account['hgwdd_holder'];
-		
-		if (is_int($account['hgwdd_iban'])) {
-				$params['ACCOUNT.NUMBER'] = $account['hgwdd_iban'];
-		} else {
-				$params['ACCOUNT.IBAN'] = $account['hgwdd_iban'];
-		};
-		
-		if (is_int($account['hgwdd_bic'])) {
-				$params['ACCOUNT.BANK'] = $account['hgwdd_iban'];
-		} else {
-				$params['ACCOUNT.BIC'] = $account['hgwdd_iban'];
-		};
-		
-		parent::log('Account data : '. print_r($account,1), 'DEBUG');
-		
-		return $params ;
-		
-	}
-	*/
 }

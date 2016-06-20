@@ -681,5 +681,15 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 		
 		return false;
 	}
+	
+	public function validateDateOfBirth($day, $mount, $year) {
+		if( strtotime("$year/$mount/$day") < (time() - (18 * 60 * 60 * 24 * 365))) {
+			return  true;
+		} else {
+			return  false;
+		}
+		
+		
+	}
 }
 

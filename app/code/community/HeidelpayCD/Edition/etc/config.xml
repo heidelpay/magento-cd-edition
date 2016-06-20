@@ -215,6 +215,7 @@
         <active>0</active>
         <channel>31HA07BC8142C5A171749A60D979B6E4</channel>
         <bookingmode>DB</bookingmode>
+        <insurence>0</insurence>
 		<invioce>1</invioce>
 		<capture_on_delivery>0</capture_on_delivery>
         <model>hcd/payment_hcddd</model>

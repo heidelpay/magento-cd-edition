@@ -147,12 +147,19 @@
 		<strong>{IDENTIFICATION_SHORTID}</strong>"
 
 "Bank code or bic","Bankleitzahl oder Bic"
-"Account number or iban","Kontonummer oder Iban"
+"Account number or iban","Kontonr. oder Iban"
 "IBAN & BIC","IBAN & BIC"
 
 "Account information","Kontoinformationen"
 "Account no. & Bank no.","Kontonummer & Bankleitzahl"
 "IBAN & BIC","IBAN & BIC"
+
+"Insurence provider","Versicherer"
+"direct debit with insurence requires an extra contract. For more information, please contact your key account manager.","F&uuml;r Lastschrift mit Versicherung ben&ouml;tigen Sie einen extra Vertrag. Bitte kontakieren Sie Ihren Key Account Ansprechpartner."
+"Salutation","Anrede"
+"ms","Frau"
+"mr","Herr"
+"Date of birth","Geburtsdatum"
 
 "Canceled by user","Bezahlprozess vom Benutzer abgebrochen."
 "Redirect to MasterPass ...","Weiterleitung zu MasterPass ..."

@@ -1,55 +1,140 @@
-<?php $_code=$this->getMethodCode();
+<?php
 
-		$path = "payment/".$_code."/";
-		$storeId =  Mage::app()->getStore()->getId();
-		$recognation = Mage::getStoreConfig($path.'recognition', $storeId);
-	/*
-	 * Look for customer recognation
-	 */
-		
-	$hash = $this->getMethod()->getShippingHash();
-	$userData = array();
+$_code = $this->getMethodCode ();
 
-	$cId = $this->getMethod()->getCustomerId();	
+$path = "payment/" . $_code . "/";
+$storeId = Mage::app ()->getStore ()->getId ();
+$recognation = Mage::getStoreConfig ( $path . 'recognition', $storeId );
+$insurence = Mage::getStoreConfig ( $path . 'insurence', $storeId );
+/*
+ * Look for customer recognation
+ */
+
+$hash = $this->getMethod ()->getShippingHash ();
+$userData = array ();
+
+$cId = $this->getMethod ()->getCustomerId ();
+
+if ($recognation == 1 and $cId != 0) { // only if shipping address is unchanged
+	$hash = $this->getMethod ()->getShippingHash ();
+	$userData = $this->getMethod ()->getCustomerData ();
+	if (array_key_exists ( 'payment_data', $userData )) {
+		if ($userData ['payment_data'] ['SHIPPPING_HASH'] != $hash)
+			$userData = array ();
+	}
+} elseif ($recognation == 2 and $cId != 0) // allways
+	$userData = $this->getMethod ()->getCustomerData ();
 	
-	if ( $recognation == 1  and $cId != 0) {  // only if shipping address is unchanged
-		$hash = $this->getMethod()->getShippingHash();
-		$userData = $this->getMethod()->getCustomerData();
-		if (array_key_exists('payment_data', $userData)) {
-			if ( $userData['payment_data']['SHIPPPING_HASH'] != $hash)
-				$userData = array();
-		}
-	} elseif ($recognation == 2 and $cId != 0) // allways
-		$userData = $this->getMethod()->getCustomerData();
-		
+	
+	
 ?>
-
-<div class="form-list hcd-payment-info" id="payment_form_<?php echo $_code ?>" style="display: none;">
+<div class="form-list hcd-payment-info"	id="payment_form_<?php echo $_code ?>" style="display: none;">
+<?php 
+	// direct debit with insurence
+	if ($insurence > 0) {?>
 	<div class="input-box">
-        <label for="<?php echo $_code ?>_holder" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Owner') ?></label>
-        
-            <input type="text" title="<?php echo $this->__('Owner:') ?>" class="input-text required-entry" id="<?php echo $_code ?>_holder" name="payment[<?php echo $_code ?>_holder]" value="<?php echo $this->htmlEscape((isset( $userData['payment_data']['ACCOUNT.HOLDER'])) ? $userData['payment_data']['ACCOUNT.HOLDER']  :$this->getMethod()->getCustomerName()) ?>" />
-        </div>
-      <div class="input-box" >
-        		<label for="<?php echo $_code ?>_iban" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Account number or iban') ?></label>
-	
-            		<input onkeyup="Heidelpay.checkIban.getInstance().check(this);" type="text" title="<?php echo $this->__('Account number or iban') ?>" class="input-text required-entry validate-alphanum" id="<?php echo $_code ?>_iban" name="payment[<?php echo $_code ?>_iban]" value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']) ; if (isset($userData['payment_data']['ACCOUNT.NUMBER'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.NUMBER']) ;  ?>" size="25">
-       </div>
-	   <?php
-			if(isset($userData['payment_data']['ACCOUNT.IBAN'])){
-				if(preg_match('/^(D|d)(E|e)/', $userData['payment_data']['ACCOUNT.IBAN'])){
-					$display = 'style="display: none;"';
-				}else{
-					$display = '';
+		<label for="<?php echo $_code ?>_salut"
+			class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Salutation') ?></label>
+
+		<select title="<?php echo $this->__('Salutation') ?>"
+			name="payment[<?php echo $_code ?>_salut]" style="width: 50px">
+			<?php 
+				$salutation = 'mr' ; 
+				if (array_key_exists('NAME.SALUTATION', $userData ['payment_data'])) 
+							$salutation = $userData ['payment_data']['NAME.SALUTATION'] ;	?>
+			<option value="mr" ><?php echo $this->__('mr') ?></option>
+			<option value="ms" <?php if ($salutation == 'ms' ) echo 'selected="selected"'; ?>><?php echo $this->__('ms') ?></option>
+		</select>
+	</div>
+<?php };
+	// END direct debit with insurence ?>				
+	<div class="input-box">
+		<label for="<?php echo $_code ?>_holder"
+			class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Owner') ?></label>
+
+		<input type="text" title="<?php echo $this->__('Owner:') ?>"
+			class="input-text required-entry" id="<?php echo $_code ?>_holder"
+			name="payment[<?php echo $_code ?>_holder]"
+			value="<?php echo $this->htmlEscape((isset( $userData['payment_data']['ACCOUNT.HOLDER'])) ? $userData['payment_data']['ACCOUNT.HOLDER']  :$this->getMethod()->getCustomerName()) ?>" />
+	</div>
+
+  <?php 
+    // direct debit with insurence
+  	if ($insurence > 0) {
+  		$dobyear = $dobmounth = $dobday = 0;
+  		if (array_key_exists('NAME.BIRTHDATE', $userData ['payment_data']))
+  						list($dobyear, $dobmounth, $dobday) = preg_split('/-/', $userData ['payment_data']['NAME.BIRTHDATE'])  ;
+  		
+  		?>
+   <div class="input-box">  
+	<label for="<?php echo $_code ?>_dob" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Date of birth') ?></label>
+	<select title="<?php echo $this->__('DOBDay') ?>"
+		name="payment[<?php echo $_code ?>_dobday]" style="width: 50px">
+			<?php
+				$i = 0;
+				for($i = 1; $i <= 31; $i ++) {
+					$v = sprintf("%02d",$i);
+					$selected = ($dobday === $v) ? 'selected="selected"' : '';
+					echo '<option value="'.$v.'" '.$selected.'>'.$v.'</option>';
 				}
-			}
-		?>
-       <div class="input-box" <?php print $display; ?>>
-        		<label for="<?php echo $_code ?>_bic" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Bank code or bic') ?></label>
-            	<input type="text" title="<?php echo $this->__('Bank code or bic:') ?>" class="input-text required-entry validate-alphanum" id="<?php echo $_code ?>_bic" name="payment[<?php echo $_code ?>_bic]" value="<?php if (isset($userData['payment_data']['ACCOUNT.BIC'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.BIC']) ; if (isset($userData['payment_data']['ACCOUNT.BANK'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.BANK']) ;  ?>" size="25"/>
-        </div>
-    <div class="hcd-payment-desc">
+			?>
+	</select> 
+	<select title="<?php echo $this->__('DOBMonth') ?>"
+		name="payment[<?php echo $_code ?>_dobmonth]" style="width: 50px">
+			<?php
+				$i = 0;
+				for($i = 1; $i <= 12; $i ++) {
+					$v = sprintf("%02d",$i);
+					$selected = ($dobmounth == $v) ? 'selected="selected"' : '';
+					echo '<option value="'.$v.'" '.$selected.'>'.$v.'</option>';
+				}
+			?>
+	</select> 
+	<select title="<?php echo $this->__('DOBYear') ?>" name="payment[<?php echo $_code ?>_dobyear]" style="width: 75px">
+			<?php
+				$i = 0;
+				for($i = 17; $i <= 80; $i ++) {
+					$year = date ( 'Y', strtotime ( "last day of -$i year" ) );
+					$selected = ($dobyear === $year) ? 'selected="selected"' : '';
+					echo '<option value="'.$year.'" '.$selected.'>'.$year.'</option>';
+				}
+			?>
+	</select>
+   </div>
+  <?php };
+  // End direct debit with insurence  ?>	
+	   <?php
+				if (isset ( $userData ['payment_data'] ['ACCOUNT.IBAN'] )) {
+					if (preg_match ( '/^(D|d)(E|e)/', $userData ['payment_data'] ['ACCOUNT.IBAN'] )) {
+						$display = 'style="display: none;"';
+					} else {
+						$display = '';
+					}
+				}
+				?>
+	<div class="input-box">
+		<label for="<?php echo $_code ?>_iban"
+			class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Account number or iban') ?></label>
+
+		<input onkeyup="Heidelpay.checkIban.getInstance().check(this);"
+			type="text" title="<?php echo $this->__('Account number or iban') ?>"
+			class="input-text required-entry validate-alphanum"
+			id="<?php echo $_code ?>_iban"
+			name="payment[<?php echo $_code ?>_iban]"
+			value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']) ; if (isset($userData['payment_data']['ACCOUNT.NUMBER'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.NUMBER']) ;  ?>"
+			size="25">
+	</div>
+<div class="input-box" <?php print $display; ?>>
+	<label for="<?php echo $_code ?>_bic"
+		class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Bank code or bic') ?></label>
+	<input type="text" title="<?php echo $this->__('Bank code or bic:') ?>"
+		class="input-text required-entry validate-alphanum"
+		id="<?php echo $_code ?>_bic" name="payment[<?php echo $_code ?>_bic]"
+		value="<?php if (isset($userData['payment_data']['ACCOUNT.BIC'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.BIC']) ; if (isset($userData['payment_data']['ACCOUNT.BANK'])) echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.BANK']) ;  ?>"
+		size="25" />
+</div>
+<div class="hcd-payment-desc">
     	<?php echo $this->__('Desc'.$_code);?>
     </div>
-    
+
 </div>

@@ -31,6 +31,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 			$adapter = new Zend_Http_Client_Adapter_Curl();
 			$adapter->setCurlOption(CURLOPT_SSL_VERIFYPEER, true);
 			$adapter->setCurlOption(CURLOPT_SSL_VERIFYHOST, 2);
+			$adapter->setCurlOption(CURLOPT_SSLVERSION, 6);
 			$client->setAdapter($adapter);
 		}
 		$response = $client->request('POST');

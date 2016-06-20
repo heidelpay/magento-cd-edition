@@ -338,7 +338,8 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 			$session->clear();
 			
 			if ( $payment->activRedirct() === true ) {
-				$this->_redirectUrl($data['FRONTEND_REDIRECT_URL']);
+				return $this->_redirectUrl($data['FRONTEND_REDIRECT_URL']);
+				
 			} 
 			$this->loadLayout();
 			$this->log('RedirectUrl ' .$data['FRONTEND_PAYMENT_FRAME_URL'] );

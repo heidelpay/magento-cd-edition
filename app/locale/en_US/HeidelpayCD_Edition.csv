@@ -151,7 +151,12 @@
         und NICHTS ANDERES an."
 "HP_LEGALNOTE_BILLSAFE","Bitte überweisen Sie den ausstehenden Betrag {DAYS} Tage nach dem Sie über den Versand informiert wurden."
 
-
+"Insurence provider","Insurence provider"
+"direct debit with insurence requires an extra contract. For more information, please contact your key account manager.","direct debit with insurence requires an extra contract. For more information, please contact your key account manager."
+"Salutation","Salutation"
+"ms","Ms"
+"mr","Mr"
+"Date of birth","Date of birth"
 
 "Bank code or bic","Bank code or bic"
 "Account number or iban","Account number or iban"
