@@ -103,7 +103,8 @@ Heidelpay.checkIban = Class.create({
 		var bic_id = prefix[0] + '_bic';
 
 		if($(bic_id) != undefined){		
-			if(value.match(/^(D|d)(E|e)/)){
+
+			if(value.match(/^[A-Za-z]{2}/)){
 				$(bic_id).up().hide();
 				$(bic_id).disable();
 			}else{

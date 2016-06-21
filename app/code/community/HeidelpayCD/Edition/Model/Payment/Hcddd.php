@@ -68,8 +68,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
 			if(empty($payment[$this->_code.'_iban']))
 			       Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
 			if(empty($payment[$this->_code.'_bic'])){
-				if(!preg_match('/^(D|d)(E|e)/', $payment[$this->_code.'_iban'])){
-			       Mage::throwException($this->_getHelper()->__('Please specify a bic or bank code'));
+
+				if(!preg_match('/^[A-Za-z]{2}/', $payment[$this->_code.'_iban'])){
+
+					Mage::throwException($this->_getHelper()->__('Please specify a bank code'));
 				}
 			}
 		
