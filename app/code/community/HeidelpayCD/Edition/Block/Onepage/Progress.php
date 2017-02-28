@@ -1,29 +1,35 @@
 <?php
 
-class HeidelpayCD_Edition_Block_Onepage_Progress extends Mage_Checkout_Block_Onepage_Progress {
-
-    public function getBilling() {
-    	Mage::log(' getBillingAddress '.$this->getQuote()->getBillingAddress());
+class HeidelpayCD_Edition_Block_Onepage_Progress extends Mage_Checkout_Block_Onepage_Progress
+{
+    public function getBilling()
+    {
+        Mage::log(' getBillingAddress '.$this->getQuote()->getBillingAddress());
         return $this->getQuote()->getBillingAddress();
     }
 
-    public function getShipping() {
+    public function getShipping()
+    {
         return $this->getQuote()->getShippingAddress();
     }
 
-    public function getShippingMethod() {
+    public function getShippingMethod()
+    {
         return $this->getQuote()->getShippingAddress()->getShippingMethod();
     }
 
-    public function getShippingDescription() {
+    public function getShippingDescription()
+    {
         return $this->getQuote()->getShippingAddress()->getShippingDescription();
     }
 
-    public function getShippingAmount() {
+    public function getShippingAmount()
+    {
         return $this->getQuote()->getShippingAddress()->getShippingAmount();
     }
 
-    public function getPaymentHtml() {
+    public function getPaymentHtml()
+    {
         return $this->getChildHtml('payment_info');
     }
 
@@ -31,26 +37,29 @@ class HeidelpayCD_Edition_Block_Onepage_Progress extends Mage_Checkout_Block_One
      * Get is step completed.
      * if is set 'toStep' then all steps after him is not completed.
      *
-     * @param string $currentStep        	
+     * @param string $currentStep
+     *
      * @see : Mage_Checkout_Block_Onepage_Abstract::_getStepCodes() for allowed values
+     *
      * @return bool
      */
-    public function isStepComplete($currentStep) {
+    public function isStepComplete($currentStep)
+    {
         $autho = Mage::getSingleton('core/session');
 
         if (!empty(Mage::getSingleton('checkout/session')->getHcdWallet())) {
-        	Mage::log('isStepComplete yes');
+            Mage::log('isStepComplete yes');
             return true;
         } else {
             $stepsRevertIndex = array_flip($this->_getStepCodes());
 
             $toStep = $this->getRequest()->getParam('toStep');
 
-            if (empty($toStep) || !isset($stepsRevertIndex [$currentStep])) {
+            if (empty($toStep) || !isset($stepsRevertIndex[$currentStep])) {
                 return $this->getCheckout()->getStepData($currentStep, 'complete');
             }
 
-            if ($stepsRevertIndex [$currentStep] > $stepsRevertIndex [$toStep]) {
+            if ($stepsRevertIndex[$currentStep] > $stepsRevertIndex[$toStep]) {
                 return false;
             }
 
@@ -60,20 +69,22 @@ class HeidelpayCD_Edition_Block_Onepage_Progress extends Mage_Checkout_Block_One
 
     /**
      * Get quote shipping price including tax
-     * 
+     *
      * @return float
      */
-    public function getShippingPriceInclTax() {
+    public function getShippingPriceInclTax()
+    {
         $inclTax = $this->getQuote()->getShippingAddress()->getShippingInclTax();
         return $this->formatPrice($inclTax);
     }
 
-    public function getShippingPriceExclTax() {
+    public function getShippingPriceExclTax()
+    {
         return $this->formatPrice($this->getQuote()->getShippingAddress()->getShippingAmount());
     }
 
-    public function formatPrice($price) {
+    public function formatPrice($price)
+    {
         return $this->getQuote()->getStore()->formatPrice($price);
     }
-
 }
