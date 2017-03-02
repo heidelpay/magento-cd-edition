@@ -1,28 +1,10 @@
 <?php
-namespace Heidelpay\Magento\Model\Payment;
-/**
- * heidelpay payment method direct debit
- *
- * @license Use of this software requires acceptance of the License Agreement.
- * See LICENSE file.
- * @copyright Copyright © 2016-present Heidelberger Payment GmbH.
- * All rights reserved.
- *
- * @link https://dev.heidelpay.de/magento2
- *
- * @author Jens Richter
- *
- * @package heidelpay
- * @subpackage magento
- * @category magento
- *
- */
-class HeidelpayCD_Edition_Model_Payment_Hcddd
-    extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcddd';
     protected $_canCapture = true;
     protected $_canCapturePartial = true;
+    // protected $_infoBlockType = 'hcd/info_debit';
     protected $_formBlockType = 'hcd/form_debit';
     
     public function getFormBlockType()
@@ -41,19 +23,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd
             $billing = $this->getQuote()->getBillingAddress();
             $shipping = $this->getQuote()->getShippingAddress();
             
-            if (($billing->getFirstname() != $shipping->getFirstname()) or
-                ($billing->getLastname() != $shipping->getLastname()) or
-                ($billing->getStreet() != $shipping->getStreet()) or
-                ($billing->getPostcode() != $shipping->getPostcode())
-                or ($billing->getCity() != $shipping->getCity())
-                or ($billing->getCountry() != $shipping->getCountry())) {
-                $this->log(
-                    'direct debit with insurence not allowed with diffrend adresses'
-                );
+            if (($billing->getFirstname() != $shipping->getFirstname()) or ($billing->getLastname() != $shipping->getLastname()) or ($billing->getStreet() != $shipping->getStreet()) or ($billing->getPostcode() != $shipping->getPostcode()) or ($billing->getCity() != $shipping->getCity()) or ($billing->getCountry() != $shipping->getCountry())) {
+                $this->log('direct debit with insurence not allowed with diffrend adresses');
                 return false;
             }
         }
-
         return parent::isAvailable($quote);
     }
     
@@ -64,84 +38,78 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd
         $params = array();
         $payment = Mage::app()->getRequest()->getPOST('payment');
         
+        //Mage::throwException(print_r($payment,1));
+        
         if (isset($payment['method']) and $payment['method'] == $this->_code) {
             if (array_key_exists($this->_code.'_salut', $payment)) {
-                $params['NAME.SALUTATION'] = (
-                    preg_match('/[A-z]{2}/', $payment[$this->_code.'_salut'])
-                )
-                    ? $payment[$this->_code.'_salut'] : '';
+                $params['NAME.SALUTATION'] = (preg_match('/[A-z]{2}/', $payment[$this->_code.'_salut'])) ? $payment[$this->_code.'_salut'] : '';
             }
             
             if (array_key_exists($this->_code.'_dobday', $payment) &&
                 array_key_exists($this->_code.'_dobmonth', $payment) &&
                 array_key_exists($this->_code.'_dobyear', $payment)
                 ) {
-                $day     = (int)$payment[$this->_code.'_dobday'];
+                $day    = (int)$payment[$this->_code.'_dobday'];
                 $mounth = (int)$payment[$this->_code.'_dobmonth'];
-                $year     = (int)$payment[$this->_code.'_dobyear'];
+                $year    = (int)$payment[$this->_code.'_dobyear'];
                 
                 if ($this->validateDateOfBirth($day, $mounth, $year)) {
-                    $params['NAME.BIRTHDATE'] =
-                        $year.'-'.sprintf("%02d", $mounth).
-                        '-'.sprintf("%02d", $day);
+                    $params['NAME.BIRTHDATE'] = $year.'-'.sprintf("%02d", $mounth).'-'.sprintf("%02d", $day) ;
                 } else {
-                    Mage::throwException(
-                        $this
-                        ->_getHelper()
-                        ->__(
-                            'The minimum age is 18 years for this payment methode.'
-                        )
-                    );
+                    Mage::throwException($this->_getHelper()->__('The minimum age is 18 years for this payment methode.'));
                 }
             }
         
             if (empty($payment[$this->_code.'_holder'])) {
-                Mage::throwException(
-                    $this->_getHelper()->__('Please specify a account holder')
-                );
+                Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
-
             if (empty($payment[$this->_code.'_iban'])) {
-                Mage::throwException(
-                    $this->_getHelper()->__('Please specify a iban or account')
-                );
+                Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
-
             if (empty($payment[$this->_code.'_bic'])) {
                 if (!preg_match('/^[A-Za-z]{2}/', $payment[$this->_code.'_iban'])) {
-                    Mage::throwException(
-                        $this->_getHelper()
-                        ->__('Please specify a bank code')
-                    );
+                    Mage::throwException($this->_getHelper()->__('Please specify a bank code'));
                 }
             }
-
+        
             $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
                 
-            $params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
-
+            if (preg_match('#^[\d]#', $payment[$this->_code.'_iban'])) {
+                $params['ACCOUNT.NUMBER'] = $payment[$this->_code.'_iban'];
+            } else {
+                $params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
+            }
+            
+            if (preg_match('#^[\d]#', $payment[$this->_code.'_bic'])) {
+                $params['ACCOUNT.BANK'] = $payment[$this->_code.'_bic'];
+                $params['ACCOUNT.COUNTRY'] = $this->getQuote()->getBillingAddress()->getCountry();
+            } else {
+                $params['ACCOUNT.BIC'] = $payment[$this->_code.'_bic'];
+            }
             $this->saveCustomerData($params);
-        };
+            
+            return $this;
+        }
         
         return $this;
     }
     
-    public function showPaymentInfo($paymentData)
+    public function showPaymentInfo($payment_data)
     {
-        $loadSnippet = $this->_getHelper()->__("Direct Debit Info Text");
+        $load_snippet = $this->_getHelper()->__("Direct Debit Info Text");
         
         $repl = array(
-                    '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
-                    '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
-                    '{Iban}' => $paymentData['ACCOUNT_IBAN'],
-                    '{Bic}'=> $paymentData['ACCOUNT_BIC'],
-                    '{Ident}' => $paymentData['ACCOUNT_IDENTIFICATION'],
-                    '{CreditorId}' => $paymentData['IDENTIFICATION_CREDITOR_ID'],
+                    '{AMOUNT}'                    => $payment_data['CLEARING_AMOUNT'],
+                    '{CURRENCY}'                  => $payment_data['CLEARING_CURRENCY'],
+                    '{Iban}'         => $payment_data['ACCOUNT_IBAN'],
+                    '{Bic}'          => $payment_data['ACCOUNT_BIC'],
+                    '{Ident}'         => $payment_data['ACCOUNT_IDENTIFICATION'],
+                    '{CreditorId}'   => $payment_data['IDENTIFICATION_CREDITOR_ID'],
                 );
-
-        $loadSnippet= strtr($loadSnippet, $repl);
+                
+        $load_snippet= strtr($load_snippet, $repl);
                 
         
-        return $loadSnippet;
+        return $load_snippet;
     }
 }

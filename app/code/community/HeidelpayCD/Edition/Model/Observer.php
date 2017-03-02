@@ -13,7 +13,6 @@ class HeidelpayCD_Edition_Model_Observer
         if ($session = Mage::getSingleton('checkout/session')) {
             $session->unsHcdWallet();
         }
-
         //Mage::log('remove masterpass');
     }
     
@@ -50,7 +49,6 @@ class HeidelpayCD_Edition_Model_Observer
         if (empty($order)) {
             return $this;
         }
-
         $payment = $order->getPayment()->getMethodInstance();
         
         $paymentCode = $payment->getCode();
@@ -79,8 +77,8 @@ class HeidelpayCD_Edition_Model_Observer
             
             
                 $frontend = $payment->getFrontend($order->getRealOrderId(), $Autorisation['CRITERION_STOREID']);
-                $frontend['FRONTEND.MODE']         = 'DEFAULT';
-                $frontend['FRONTEND.ENABLED']     = 'false';
+                $frontend['FRONTEND.MODE']        = 'DEFAULT';
+                $frontend['FRONTEND.ENABLED']    = 'false';
             
                 $user = $payment->getUser($order, true);
                 
@@ -88,10 +86,8 @@ class HeidelpayCD_Edition_Model_Observer
             
                 $basketData['IDENTIFICATION.REFERENCEID'] = $Autorisation['IDENTIFICATION_UNIQUEID'];
                 Mage::dispatchEvent('heidelpay_reportShippingToHeidelpay_bevor_preparePostData', array('payment' => $payment, 'config' => $config, 'frontend' => $frontend, 'user' => $user, 'basketData' => $basketData, 'criterion' => $criterion ));
-                $params = Mage::helper('hcd/payment')->preparePostData(
-                    $config, $frontend, $user, $basketData,
-                    $criterion
-                );
+                $params = Mage::helper('hcd/payment')->preparePostData($config, $frontend, $user, $basketData,
+                $criterion);
             
             
             

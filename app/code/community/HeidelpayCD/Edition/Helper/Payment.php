@@ -3,8 +3,8 @@
  */
 class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 {
-    protected $_invoiceOrderEmail = true;
-    protected $_debug              = false;
+    protected $_invoiceOrderEmail = true ;
+    protected $_debug              = false ;
     
     protected function _getHelper()
     {
@@ -93,13 +93,13 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             case 'ide':
                 /* eps */
             case 'eps':
-                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "OT.".$type;
+                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'] ;
+                $params['PAYMENT.CODE'] = "OT.".$type ;
                 break;
                 /* postfinace */
             case 'pf':
-                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "OT.".$type;
+                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'] ;
+                $params['PAYMENT.CODE'] = "OT.".$type ;
                 break;
                 /* yapital */
             case 'yt':
@@ -110,57 +110,57 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 break;
                 /* paypal */
             case 'pal':
-            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'];
-            $params['PAYMENT.CODE'] = "VA.".$type;
-            $params['ACCOUNT.BRAND'] = "PAYPAL";
+            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'] ;
+            $params['PAYMENT.CODE'] = "VA.".$type ;
+            $params['ACCOUNT.BRAND'] = "PAYPAL" ;
             $params['FRONTEND.PM.DEFAULT_DISABLE_ALL'] = "true";
             $params['FRONTEND.PM.0.ENABLED'] = "true";
             $params['FRONTEND.PM.0.METHOD'] = "VA";
-            $params['FRONTEND.PM.0.SUBTYPES'] = "PAYPAL";
+            $params['FRONTEND.PM.0.SUBTYPES'] = "PAYPAL" ;
             break;
             /* prepayment */
             case 'pp':
-                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "PP.".$type;
+                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'] ;
+                $params['PAYMENT.CODE'] = "PP.".$type ;
                 break;
                 /* invoce */
             case 'iv':
-                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "IV.".$type;
+                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'] ;
+                $params['PAYMENT.CODE'] = "IV.".$type ;
                 break;
                 /* BillSafe */
             case 'bs':
-            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-            $params['PAYMENT.CODE'] = "IV.".$type;
+            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'] ;
+            $params['PAYMENT.CODE'] = "IV.".$type ;
             $params['ACCOUNT.BRAND']    = "BILLSAFE";
             $params['FRONTEND.ENABLED']            =    "false";
             break;
             /* BarPay */
             case 'bp':
-            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-            $params['PAYMENT.CODE'] = "PP.".$type;
+            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'] ;
+            $params['PAYMENT.CODE'] = "PP.".$type ;
             $params['ACCOUNT.BRAND'] = "BARPAY";
             $params['FRONTEND.ENABLED']            =    "false";
             break;
             /* MangirKart */
             case 'mk':
-            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-            $params['PAYMENT.CODE'] = "PC.".$type;
+            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'] ;
+            $params['PAYMENT.CODE'] = "PC.".$type ;
             $params['ACCOUNT.BRAND'] = "MANGIRKART";
             $params['FRONTEND.ENABLED']            =    "false";
             break;
             /* MasterPass */
             case 'mpa':
-            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'];
+            $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'] ;
             
             // masterpass as a payment methode
             if (!array_key_exists('IDENTIFICATION.REFERENCEID', $userData) and($type == 'DB' or $type == 'PA')) {
                 $params['WALLET.DIRECT_PAYMENT'] = "true";
-                $params['WALLET.DIRECT_PAYMENT_CODE'] = "WT.".$type;
+                $params['WALLET.DIRECT_PAYMENT_CODE'] = "WT.".$type ;
                 $type = 'IN';
             }
             
-            $params['PAYMENT.CODE']    = "WT.".$type;
+            $params['PAYMENT.CODE']    = "WT.".$type ;
             $params['ACCOUNT.BRAND']    = "MASTERPASS";
             break;
             /* default */
@@ -177,10 +177,10 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         }
         
         if (array_key_exists('SHOP.TYPE', $config)) {
-            $params['SHOP.TYPE'] = $config['SHOP.TYPE'];
+            $params['SHOP.TYPE'] = $config['SHOP.TYPE'] ;
         }
         if (array_key_exists('SHOPMODUL.VERSION', $config)) {
-            $params['SHOPMODUL.VERSION'] = $config['SHOPMODUL.VERSION'];
+            $params['SHOPMODUL.VERSION'] = $config['SHOPMODUL.VERSION'] ;
         }
         
         /* frontend configuration */
@@ -214,14 +214,14 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         
         $params['REQUEST.VERSION']            =    "1.0";
         
-        return $params;
+        return $params ;
     }
     
     public function mapStatus($data, $order, $message=false)
     {
         $this->log('mapStatus'.print_r($data, 1));
         $PaymentCode = $this->splitPaymentCode($data['PAYMENT_CODE']);
-        $totalypaid = false;
+        $totalypaid = false ;
         $invoiceMailComment = '';
         
         if (strtoupper($data['CRITERION_LANGUAGE']) == 'DE') {
@@ -265,13 +265,13 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         
         $message = (!empty($message))  ? $message : $data['PROCESSING_RETURN'];
         
-        $quoteID = ($order->getLastQuoteId() === false) ? $order->getQuoteId() : $order->getLastQuoteId(); // last_quote_id workaround for trusted shop buyerprotection
+        $quoteID = ($order->getLastQuoteId() === false) ? $order->getQuoteId() : $order->getLastQuoteId() ; // last_quote_id workaround for trusted shop buyerprotection
         
         /**
          * Do nothing if status is allready successfull
          */
         if ($order->getStatus() == $order->getPayment()->getMethodInstance()->getStatusSuccess()) {
-            return;
+            return ;
         }
         /**
          * If an order has been canceled, cloesed or complete do not change order status
@@ -283,7 +283,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 
             // you can use this event for example to get a notification when a canceled order has been paid
             Mage::dispatchEvent('heidelpay_map_status_cancel', array('order' => $order, 'data' => $data));
-            return;
+            return ;
         }
         
         if ($data['PROCESSING_RESULT'] == 'NOK') {
@@ -310,7 +310,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 $order->setState($order->getPayment()->getMethodInstance()->getStatusSuccess(false),
                     $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
                     $message);
-                $totalypaid = true;
+                $totalypaid = true ;
             } else {
                 /*
                  * in case rc is ack and amount is to low or curreny missmatch
@@ -388,8 +388,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     }
     
     /**
-     * function to format amount
-     *
+     * function to format amount 
      * @param mixed $number
      */
     public function format($number)
@@ -408,7 +407,6 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     
     /**
      * helper to generate customer payment error messages
-     *
      * @param mixed      $errorMsg
      * @param null|mixed $errorCode
      * @param null|mixed $ordernr
@@ -431,7 +429,6 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     
     /**
      * anstracted log function because of backtrace
-     *
      * @param mixed $message
      * @param mixed $level
      * @param mixed $file
@@ -444,7 +441,6 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     
     /**
      * real log function which will becalled from all controllers and models
-     *
      * @param mixed $message
      * @param mixed $level
      * @param mixed $file
@@ -462,7 +458,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 break;
             case "ERR":
             case "ERROR":
-                $lev = Zend_Log::ERR;
+                $lev = Zend_Log::ERR ;
                 break;
             case "WARN":
             $lev = Zend_Log::WARN;
@@ -565,6 +561,6 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             }
         }
         // Return last region if mapping fails
-        return $region['region_id'];
+        return $region['region_id'] ;
     }
 }

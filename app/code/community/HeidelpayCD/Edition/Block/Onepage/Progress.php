@@ -69,7 +69,7 @@ class HeidelpayCD_Edition_Block_Onepage_Progress extends Mage_Checkout_Block_One
 
     /**
      * Get quote shipping price including tax
-     *
+     * 
      * @return float
      */
     public function getShippingPriceInclTax()

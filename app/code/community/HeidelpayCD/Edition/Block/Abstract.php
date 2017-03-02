@@ -17,6 +17,6 @@ class HeidelpayCD_Edition_Block_Abstract extends Mage_Core_Block_Template
         $session = $this->getCheckout();
         $order->loadByIncrementId($session->getLastRealOrderId());
         
-        return $order;
+        return $order ;
     }
 }

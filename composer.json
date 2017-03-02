@@ -12,10 +12,6 @@
 		"name" : "Jens Richter",
 		"email" : "development@heidelpay.de",
 		"homepage" : "https://dev.heidelpay.de/magento"
-	}, {
-		"name" : "Stephano Vogel",
-		"email" : "development@heidelpay.de",
-		"homepage" : "https://dev.heidelpay.de/magento"
 	}
 	],
 	"require": {

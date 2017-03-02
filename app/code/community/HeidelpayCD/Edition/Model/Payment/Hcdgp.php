@@ -1,26 +1,8 @@
 <?php
-namespace Heidelpay\Magento\Model\Payment;
-/**
- * heidelpay payment method giropay
- *
- * @license Use of this software requires acceptance of the License Agreement.
- * See LICENSE file.
- * @copyright Copyright © 2016-present Heidelberger Payment GmbH.
- * All rights reserved.
- *
- * @link https://dev.heidelpay.de/magento2
- *
- * @author Jens Richter
- *
- * @package heidelpay
- * @subpackage magento
- * @category magento
- *
- */
-class HeidelpayCD_Edition_Model_Payment_Hcdgp
-    extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_Hcdgp extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdgp';
+    // protected $_infoBlockType = 'hcd/info_debit';
     protected $_formBlockType = 'hcd/form_giropay';
     
     public function getFormBlockType()
@@ -37,23 +19,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdgp
         
         if ($payment['method'] == $this->_code) {
             if (empty($payment[$this->_code.'_holder'])) {
-                Mage::throwException(
-                    $this->_getHelper()
-                    ->__('Please specify a account holder')
-                );
+                Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
-
             if (empty($payment[$this->_code.'_iban'])) {
-                Mage::throwException(
-                    $this->_getHelper()
-                    ->__('Please specify a iban or account')
-                );
+                Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
-
             if (empty($payment[$this->_code.'_bic'])) {
-                Mage::throwException(
-                    $this->_getHelper()->__('Please specify a bic or bank code')
-                );
+                Mage::throwException($this->_getHelper()->__('Please specify a bic or bank code'));
             }
         
             $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
@@ -66,8 +38,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdgp
         
             if (preg_match('#^[\d]#', $payment[$this->_code.'_bic'])) {
                 $params['ACCOUNT.BANK'] = $payment[$this->_code.'_bic'];
-                $params['ACCOUNT.COUNTRY'] = $this->getQuote()
-                    ->getBillingAddress()->getCountry();
+                $params['ACCOUNT.COUNTRY'] = $this->getQuote()->getBillingAddress()->getCountry();
             } else {
                 $params['ACCOUNT.BIC'] = $payment[$this->_code.'_bic'];
             }
@@ -80,4 +51,36 @@ class HeidelpayCD_Edition_Model_Payment_Hcdgp
         
         return $this;
     }
+    
+    /*
+    public function getUser($order) {
+        $account = array();
+        $params = array();
+        $params = parent::getUser($order);
+        
+        
+        $usersession = $this->getCheckout();
+        
+        $account  = $usersession->getHcddata();
+        
+        $params['ACCOUNT.HOLDER'] = $account['hgwdd_holder'];
+        
+        if (is_int($account['hgwdd_iban'])) {
+                $params['ACCOUNT.NUMBER'] = $account['hgwdd_iban'];
+        } else {
+                $params['ACCOUNT.IBAN'] = $account['hgwdd_iban'];
+        };
+        
+        if (is_int($account['hgwdd_bic'])) {
+                $params['ACCOUNT.BANK'] = $account['hgwdd_iban'];
+        } else {
+                $params['ACCOUNT.BIC'] = $account['hgwdd_iban'];
+        };
+        
+        parent::log('Account data : '. print_r($account,1), 'DEBUG');
+        
+        return $params ;
+        
+    }
+    */
 }

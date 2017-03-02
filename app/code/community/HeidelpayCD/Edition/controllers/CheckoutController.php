@@ -1,21 +1,9 @@
 <?php
-/**
+
+/*
  * Wallet Express Checkout
- *
- * @license Use of this software requires acceptance of the License Agreement.
- * See LICENSE file.
- * @copyright Copyright © 2016-present Heidelberger Payment GmbH.
- * All rights reserved.
- *
- * @link https://dev.heidelpay.de/magento2
- *
- * @author Jens Richter
- *
- * @package heidelpay
- * @subpackage magento
- * @category magento
- *
  */
+ 
 $module_path = Mage::getModuleDir('', 'Mage_Checkout');
 require_once($module_path."/controllers/OnepageController.php");
 
@@ -35,23 +23,15 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         
         $data = false;
         $this->loadLayout();
-        $this->getLayout()->getBlock(
-            'head'
-        )->setTitle($this->__('MasterPass Checkout'));
+        $this->getLayout()->getBlock('head')->setTitle($this->__('MasterPass Checkout'));
         
         $session->setCurrency($quote->getGlobalCurrencyCode());
         $session->setTotalamount($quote->getGrandTotal());
         
-        $data = Mage::getModel('hcd/transaction')
-            ->loadLastTransactionDataByTransactionnr(
-                Mage::getSingleton('checkout/session')
-                ->getQuoteId()
-            );
+        $data = Mage::getModel('hcd/transaction')->loadLastTransactionDataByTransactionnr(Mage::getSingleton('checkout/session')->getQuoteId());
         
         Mage::getSingleton('checkout/session')->setCartWasUpdated(false);
-        Mage::getSingleton('customer/session')->setBeforeAuthUrl(
-            Mage::getUrl('*/*/*', array('_secure' => true))
-        );
+        Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_secure' => true)));
         $this->getOnepage()->initCheckout();
         
         
@@ -59,14 +39,11 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         
         
         
-        $this->getOnepage()->saveCheckoutMethod(
-            Mage_Checkout_Model_Type_Onepage::METHOD_GUEST
-        );
+        $this->getOnepage()->saveCheckoutMethod(Mage_Checkout_Model_Type_Onepage::METHOD_GUEST);
         
         $this->getOnepage()->getCheckout()->setStepData('login', 'complete', true);
         
-        $region = Mage::helper('hcd/payment')
-            ->getRegion($data['ADDRESS_COUNTRY'], $data['ADDRESS_STATE']);
+        $region = Mage::helper('hcd/payment')->getRegion($data['ADDRESS_COUNTRY'], $data['ADDRESS_STATE']);
         
         $billingAddress = array(
             "address_id" => '',
@@ -92,20 +69,14 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         $this->log('adress'.print_r($billingAddress, 1));
         
         $hpdata = array(
-            'code' => 'hcdmpa',
-            'brand' => (array_key_exists('ACCOUNT_BRAND', $data))
-                ? $data['ACCOUNT_BRAND'] : false ,
-            'mail' => (array_key_exists('CONTACT_EMAIL', $data))
-                ? $data['CONTACT_EMAIL'] : false ,
-            'number' => (array_key_exists('ACCOUNT_NUMBER', $data))
-                ? $data['ACCOUNT_NUMBER'] : false ,
-            'expiryMonth' => (array_key_exists('ACCOUNT_EXPIRY_MONTH', $data))
-                ? $data['ACCOUNT_EXPIRY_MONTH'] : false ,
-            'expiryYear' => (array_key_exists('ACCOUNT_EXPIRY_YEAR', $data))
-                ? $data['ACCOUNT_EXPIRY_YEAR'] : false ,
-            'referenceId' => (array_key_exists('IDENTIFICATION_UNIQUEID', $data))
-                ? $data['IDENTIFICATION_UNIQUEID'] : false ,
-            'adress' => $billingAddress
+            'code'            => 'hcdmpa',
+            'brand'            => (array_key_exists('ACCOUNT_BRAND', $data)) ? $data['ACCOUNT_BRAND'] : false ,
+            'mail'            => (array_key_exists('CONTACT_EMAIL', $data)) ? $data['CONTACT_EMAIL'] : false ,
+            'number'        => (array_key_exists('ACCOUNT_NUMBER', $data)) ? $data['ACCOUNT_NUMBER'] : false ,
+            'expiryMonth'    => (array_key_exists('ACCOUNT_EXPIRY_MONTH', $data)) ? $data['ACCOUNT_EXPIRY_MONTH'] : false ,
+            'expiryYear'    => (array_key_exists('ACCOUNT_EXPIRY_YEAR', $data)) ? $data['ACCOUNT_EXPIRY_YEAR'] : false ,
+            'referenceId'    => (array_key_exists('IDENTIFICATION_UNIQUEID', $data)) ? $data['IDENTIFICATION_UNIQUEID'] : false ,
+            'adress'        => $billingAddress
         );
         
         $session->setHcdWallet($hpdata);
@@ -114,15 +85,11 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         $customAddress = Mage::getModel('customer/address');
         $customAddress->setData($billingAddress);
         
-        $quote->setBillingAddress(
-            Mage::getSingleton('sales/quote_address')
-            ->importCustomerAddress($customAddress)
-        );
+        $quote->setBillingAddress(Mage::getSingleton('sales/quote_address')
+            ->importCustomerAddress($customAddress));
         
-        $quote->setShippingAddress(
-            Mage::getSingleton('sales/quote_address')
-            ->importCustomerAddress($customAddress)
-        );
+        $quote->setShippingAddress(Mage::getSingleton('sales/quote_address')
+            ->importCustomerAddress($customAddress));
         
         $this->getOnepage()->getQuote()->collectTotals()->save();
         
@@ -130,8 +97,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         $this->getOnepage()->getCheckout()->setStepData('billing', 'complete', true);
         $this->getOnepage()->getCheckout()->setStepData('shipping', 'allow', true);
         
-        $this->getOnepage()->getCheckout()
-            ->setStepData('shipping', 'complete', true);
+        $this->getOnepage()->getCheckout()->setStepData('shipping', 'complete', true);
         $this->getOnepage()->getCheckout()->setStepData('payment', 'allow', true);
         $this->getOnepage()->savePayment(array('method'=>'hcdmpa'));
         
@@ -145,16 +111,13 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         if ($this->_expireAjax()) {
             return;
         }
-
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost('billing', array());
-            $customerAddressId = $this->getRequest()
-                ->getPost('billing_address_id', false);
+            $customerAddressId = $this->getRequest()->getPost('billing_address_id', false);
             
             if (isset($data['email'])) {
                 $data['email'] = trim($data['email']);
             }
-
             $result = $this->getOnepage()->saveBilling($data, $customerAddressId);
                     
             
@@ -168,11 +131,9 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
                 } else {
                     $wallet = Mage::getSingleton('checkout/session')->getHcdWallet();
                     
-                    $result = $this->getOnepage()
-                        ->saveShipping($wallet['adress'], false);
-                    $this->getOnepage()->getCheckout()
-                        ->setStepData('shipping', 'allow', true)
-                        ->setStepData('shipping', 'complete', true);
+                    $result = $this->getOnepage()->saveShipping($wallet['adress'], false);
+                    $this->getOnepage()->getCheckout()->setStepData('shipping', 'allow', true)
+                                                      ->setStepData('shipping', 'complete', true);
                     
                     if (!isset($result['error'])) {
                         $result['goto_section'] = 'shipping_method';
@@ -194,8 +155,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             $result = $this->getOnepage()->savePayment($data);
             
             
-            $redirectUrl = $this->getOnepage()
-                ->getQuote()->getPayment()->getCheckoutRedirectUrl();
+            $redirectUrl = $this->getOnepage()->getQuote()->getPayment()->getCheckoutRedirectUrl();
             if (empty($result['error']) && !$redirectUrl) {
                 $this->loadLayout('checkout_onepage_review');
                 $result['goto_section'] = 'review';
@@ -204,7 +164,6 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
                     'html' => $this->_getReviewHtml()
                 );
             }
-
             if ($redirectUrl) {
                 $result['redirect'] = $redirectUrl;
             }
@@ -212,7 +171,6 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             if ($e->getFields()) {
                 $result['fields'] = $e->getFields();
             }
-
             $result['error'] = $e->getMessage();
         } catch (Mage_Core_Exception $e) {
             $result['error'] = $e->getMessage();
@@ -220,9 +178,8 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             Mage::logException($e);
             $result['error'] = $this->__('Unable to set Payment Method.');
         }
-
         $this->getOnepage()->getCheckout()->setStepData('payment', 'complete', true);
-        return $result;
+        return $result ;
     }
     
     public function savePaymentAction()
@@ -230,7 +187,6 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         if ($this->_expireAjax()) {
             return;
         }
-
         $result = $this->savePayment(array('method'=>'hcdmpa'));
 
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
@@ -252,7 +208,6 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         if ($this->_expireAjax()) {
             return;
         }
-
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost('shipping_method', '');
             $result = $this->getOnepage()->saveShippingMethod($data);
@@ -260,13 +215,11 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             if (!$result) {
                 Mage::dispatchEvent(
                     'checkout_controller_onepage_save_shipping_method',
-                    array(
+                     array(
                           'request' => $this->getRequest(),
-                    'quote'   => $this->getOnepage()->getQuote())
-                );
+                          'quote'   => $this->getOnepage()->getQuote()));
                 $this->getOnepage()->getQuote()->collectTotals();
-                $this->getResponse()
-                    ->setBody(Mage::helper('core')->jsonEncode($result));
+                $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
 
                 $result['goto_section'] = 'payment';
                 $result['update_section'] = array(
@@ -274,7 +227,6 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
                     'html' => $this->_getPaymentMethodsHtml()
                 );
             }
-
             $this->getOnepage()->getQuote()->collectTotals()->save();
             $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
         }
@@ -282,10 +234,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
     
     public function progressAction()
     {
-        /*
-         *  previous step should never be null.
-         *  We always start with billing and go forward
-         */
+        // previous step should never be null. We always start with billing and go forward
         $prevStep = $this->getRequest()->getParam('prevStep', false);
 
         if ($this->_expireAjax() || !$prevStep) {
@@ -306,7 +255,6 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
     private function log($message, $level="DEBUG", $file=false)
     {
         $callers=debug_backtrace();
-        return  Mage::helper('hcd/payment')
-            ->realLog($callers[1]['function'].' '.$message, $level, $file);
+        return  Mage::helper('hcd/payment')->realLog($callers[1]['function'].' '.$message, $level, $file);
     }
 }

@@ -1,25 +1,11 @@
 <?php
-namespace Heidelpay\Magento\Model\Payment;
-/**
- * heidelpay payment method eps
- *
- * @license Use of this software requires acceptance of the License Agreement.
- * See LICENSE file.
- * @copyright Copyright © 2016-present Heidelberger Payment GmbH.
- * All rights reserved.
- *
- * @link https://dev.heidelpay.de/magento2
- *
- * @author Jens Richter
- *
- * @package heidelpay
- * @subpackage magento
- * @category magento
- *
- */
-class HeidelpayCD_Edition_Model_Payment_Hcdeps
-    extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
+    /**
+    * unique internal payment method identifier
+    *    
+    * @var string [a-z0-9_]   
+    **/
     protected $_code = 'hcdeps';
     protected $_canRefund = false;
     protected $_canRefundInvoicePartial = false;
@@ -40,17 +26,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdeps
         
         if ($payment['method'] == $this->_code) {
             if (empty($payment[$this->_code.'_holder'])) {
-                Mage::throwException(
-                    $this->_getHelper()
-                    ->__('Please specify a account holder')
-                );
+                Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
         
             $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
             
             $params['ACCOUNT.BANKNAME'] = $payment[$this->_code.'_bank'];
-            $params['ACCOUNT.COUNTRY'] = $this->getQuote()
-                ->getBillingAddress()->getCountry();
+            $params['ACCOUNT.COUNTRY'] = $this->getQuote()->getBillingAddress()->getCountry();
             
             
             $this->saveCustomerData($params);

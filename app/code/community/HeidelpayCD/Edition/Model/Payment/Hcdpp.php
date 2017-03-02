@@ -1,43 +1,23 @@
 <?php
-namespace Heidelpay\Magento\Model\Payment;
-
-/**
- * heidelpay payment method prepayment
- *
- * @license Use of this software requires acceptance of the License Agreement.
- * See LICENSE file.
- * @copyright Copyright © 2016-present Heidelberger Payment GmbH.
- * All rights reserved.
- *
- * @link https://dev.heidelpay.de/magento2
- *
- * @author Jens Richter
- *
- * @package heidelpay
- * @subpackage magento
- * @category magento
- *
- */
-class HeidelpayCD_Edition_Model_Payment_Hcdpp
-    extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdpp';
-
-    public function showPaymentInfo($paymentData)
+    
+    public function showPaymentInfo($payment_data)
     {
-        $loadSnippet = $this->_getHelper()->__("Prepayment Info Text");
-
+        $load_snippet = $this->_getHelper()->__("Prepayment Info Text");
+        
         $repl = array(
-            '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
-            '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
-            '{CONNECTOR_ACCOUNT_HOLDER}' => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
-            '{CONNECTOR_ACCOUNT_IBAN}' => $paymentData['CONNECTOR_ACCOUNT_IBAN'],
-            '{CONNECTOR_ACCOUNT_BIC}' => $paymentData['CONNECTOR_ACCOUNT_BIC'],
-            '{IDENTIFICATION_SHORTID}' => $paymentData['IDENTIFICATION_SHORTID'],
-        );
-
-        $loadSnippet = strtr($loadSnippet, $repl);
-
-        return $loadSnippet;
+                    '{AMOUNT}'                    => $payment_data['CLEARING_AMOUNT'],
+                    '{CURRENCY}'                  => $payment_data['CLEARING_CURRENCY'],
+                    '{CONNECTOR_ACCOUNT_HOLDER}'  => $payment_data['CONNECTOR_ACCOUNT_HOLDER'],
+                    '{CONNECTOR_ACCOUNT_IBAN}'    => $payment_data['CONNECTOR_ACCOUNT_IBAN'],
+                    '{CONNECTOR_ACCOUNT_BIC}'     => $payment_data['CONNECTOR_ACCOUNT_BIC'],
+                    '{IDENTIFICATION_SHORTID}'    => $payment_data['IDENTIFICATION_SHORTID'],
+                );
+                
+        $load_snippet= strtr($load_snippet, $repl);
+                
+        return $load_snippet;
     }
 }

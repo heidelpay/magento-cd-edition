@@ -1,24 +1,5 @@
 <?php
-namespace Heidelpay\Magento\Model\Payment;
-/**
- * heidelpay payment method Postfinance
- *
- * @license Use of this software requires acceptance of the License Agreement.
- * See LICENSE file.
- * @copyright Copyright © 2016-present Heidelberger Payment GmbH.
- * All rights reserved.
- *
- * @link https://dev.heidelpay.de/magento2
- *
- * @author Jens Richter
- *
- * @package heidelpay
- * @subpackage magento
- * @category magento
- *
- */
-class HeidelpayCD_Edition_Model_Payment_Hcdpf
-    extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_Hcdpf extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdpf';
     protected $_canRefund = false;
@@ -32,11 +13,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpf
     
     public function isAvailable($quote=null)
     {
-        $currencyCode=$this->getQuote()->getQuoteCurrencyCode();
-        if (!empty($currencyCode) && $currencyCode != 'CHF') {
+        $currency_code=$this->getQuote()->getQuoteCurrencyCode();
+        if (!empty($currency_code) && $currency_code != 'CHF') {
             return false;
         }
-
         return parent::isAvailable($quote);
     }
     
@@ -53,9 +33,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpf
             return $this;
         }
         
-        $this->saveCustomerData(
-            array('ACCOUNT.BRAND' => $payment[$this->_code.'_pf'])
-        );
+        $this->saveCustomerData(array('ACCOUNT.BRAND' => $payment[$this->_code.'_pf']));
 
         return $this;
     }
