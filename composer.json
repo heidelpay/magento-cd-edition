@@ -28,6 +28,18 @@
 	}
 	],
 	"extra": {
-		"magento-root-dir": "root"
+		"map": [
+			["app/code/community/HeidelpayCD/*","app/code/community/HeidelpayCD/"],
+			["app/design/frontend/base/default/layout/hcd.xml","app/design/frontend/base/default/layout/hcd.xml"],
+			["app/design/frontend/base/default/template/hcd/*","app/design/frontend/base/default/template/hcd/"],
+			["app/design/adminhtml/default/default/template/hcd/*","app/design/adminhtml/default/default/template/hcd/"],
+			["app/etc/modules/HeidelpayCD_Edition.xml","app/etc/modules/HeidelpayCD_Edition.xml"],
+			["app/locale/de_DE/HeidelpayCD_Edition.csv","app/locale/de_DE/HeidelpayCD_Edition.csv"],
+			["app/locale/en_US/HeidelpayCD_Edition.csv","app/locale/en_US/HeidelpayCD_Edition.csv"],
+			["skin/frontend/base/default/images/hcd/*","skin/frontend/base/default/images/hcd/"],
+			["skin/adminhtml/base/default/images/hcd/*","skin/adminhtml/base/default/images/hcd/"],
+			["skin/frontend/base/default/css/*","skin/frontend/base/default/css/"],
+			["js/hcd/*","js/hcd/"]
+		]
 	}
 }
