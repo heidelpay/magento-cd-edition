@@ -1,4 +1,18 @@
 <?php
+/**
+ * Order pdf invoice
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ *
+ * @link  https://dev.heidelpay.de/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
+ */
 class HeidelpayCD_Edition_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Invoice
 {
     public function getPdf($invoices = array())

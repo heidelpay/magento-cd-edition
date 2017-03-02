@@ -1,4 +1,18 @@
 <?php
+/**
+ * Index controller
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ *
+ * @link  https://dev.heidelpay.de/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
+ */
 class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Action
 {
     protected $_sendNewOrderEmail   = true;
@@ -30,19 +44,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
     public function preDispatch()
     {
         parent::preDispatch();
-        
-        /* Review because of fail behavior in case of gueste buyer TODO
-         $action = $this->getRequest()->getActionName();
-         if ($action != 'response')
-         {
-         if (!Mage::getSingleton('customer/session')->authenticate($this))
-         {
-         $this->getResponse()->setRedirect(Mage::helper('customer')->getLoginUrl());
-         $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-         return $this;
-         }
-         }
-         */
     }
     
     protected function _getHelper()

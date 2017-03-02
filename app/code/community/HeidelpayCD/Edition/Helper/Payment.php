@@ -1,5 +1,17 @@
 <?php
 /**
+ * Payment Helper
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ *
+ * @link  https://dev.heidelpay.de/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
  */
 class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 {

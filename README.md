@@ -9,7 +9,7 @@ Currently supported payment methods are:
 * debit card
 * sepa direct debit
 * Giropay
-* Sofortüberweisung
+* Sofort
 * PayPal
 * prepayment
 * invoice unsecured
@@ -21,7 +21,7 @@ For more information please visit -https://dev.heidelpay.de/magento2/
 
 ## SYSTEM REQUIREMENTS
 
-This extension requires PHP 5.6 
+This extension requires PHP 5.6 or PHP 7.0
  
 
 ## LICENSE
