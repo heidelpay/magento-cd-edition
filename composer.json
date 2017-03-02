@@ -1,17 +1,45 @@
 {
-	"name": "HeidelpayCD/Edition",
-	"description": "Heidelpay CD-Edition",
+	"name": "heidelpay/magento-cd-edition",
+	"description": "heidelpay payment extension for magento >1.8.x",
 	"keywords": ["magento", "heidelpay", "payment"],
-	"homepage": "http://de.magentocommerce.com/magento-connect/heidelpay-cd-edition-2.html",
+	"homepage": "https://dev.heidelpay.de/magento/",
 	"type": "magento-module",
-	"license":"OSL-3.0",
-	"authors": [
-		{
-			"name": "Jens Richter",
-			"email": "development@heidelpay.de"
-		}
+	"license" : "Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.",
+	"support" : {
+		"email" : "support@heidelpay.de"
+	},
+	"authors" : [{
+		"name" : "Jens Richter",
+		"email" : "development@heidelpay.de",
+		"homepage" : "https://dev.heidelpay.de/magento"
+	}
 	],
 	"require": {
 			"magento-hackathon/magento-composer-installer": "*"
+	},
+	"require-dev" : {
+		"magento/marketplace-eqp" : "*",
+		"heidelpay/phpdocumentor" : "2.9.1",
+		"friendsofphp/php-cs-fixer" : "2.1.0"
+	},
+	"repositories" : [{
+		"type" : "composer",
+		"url" : "https://repo.magento.com/"
+	}
+	],
+	"extra": {
+		"map": [
+			["app/code/community/HeidelpayCD/*","app/code/community/HeidelpayCD/"],
+			["app/design/frontend/base/default/layout/hcd.xml","app/design/frontend/base/default/layout/hcd.xml"],
+			["app/design/frontend/base/default/template/hcd/*","app/design/frontend/base/default/template/hcd/"],
+			["app/design/adminhtml/default/default/template/hcd/*","app/design/adminhtml/default/default/template/hcd/"],
+			["app/etc/modules/HeidelpayCD_Edition.xml","app/etc/modules/HeidelpayCD_Edition.xml"],
+			["app/locale/de_DE/HeidelpayCD_Edition.csv","app/locale/de_DE/HeidelpayCD_Edition.csv"],
+			["app/locale/en_US/HeidelpayCD_Edition.csv","app/locale/en_US/HeidelpayCD_Edition.csv"],
+			["skin/frontend/base/default/images/hcd/*","skin/frontend/base/default/images/hcd/"],
+			["skin/adminhtml/base/default/images/hcd/*","skin/adminhtml/base/default/images/hcd/"],
+			["skin/frontend/base/default/css/*","skin/frontend/base/default/css/"],
+			["js/hcd/*","js/hcd/"]
+		]
 	}
 }
