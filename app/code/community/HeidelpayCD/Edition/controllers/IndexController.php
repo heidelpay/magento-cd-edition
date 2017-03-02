@@ -33,13 +33,13 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         
         /* Review because of fail behavior in case of gueste buyer TODO
          $action = $this->getRequest()->getActionName();
-         if ($action != 'response')  
+         if ($action != 'response')
          {
          if (!Mage::getSingleton('customer/session')->authenticate($this))
          {
          $this->getResponse()->setRedirect(Mage::helper('customer')->getLoginUrl());
          $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-         return $this;					
+         return $this;
          }
          }
          */
@@ -120,7 +120,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
     }
     
     /**
-     * successful return from Heidelpay payment 
+     * successful return from Heidelpay payment
      */
     public function successAction()
     {
@@ -462,7 +462,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
     }
     
     /**
-     * response from Heidelpay payment 
+     * response from Heidelpay payment
      */
     public function responseAction()
     {
@@ -703,20 +703,20 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
     }
     
         /*
-    
+
     public function testAction() {
         $data = Mage::getModel('hcd/transaction')->loadLastTransactionDataByTransactionnr('302000092');//->loadTransactionDataByX( );
-        var_dump($data);	
+        var_dump($data);
         foreach($data AS $k) echo "<pre>".print_r($k,1)."</pre>";
-    }  
-    
-    
-    
+    }
+
+
+
     public function orderAction() {
         $orderID = '302000373';
         $order = $this->getOrder();
         $order->loadByIncrementId($orderID);
-        
+
         if (abs($order->getStore()->roundPrice($order->getTotalPaid()) - $order->getTotalRefunded()) < .0001) {
                print 'nicht ok';
         } else

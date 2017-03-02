@@ -388,7 +388,8 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     }
     
     /**
-     * function to format amount 
+     * function to format amount
+     *
      * @param mixed $number
      */
     public function format($number)
@@ -407,6 +408,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     
     /**
      * helper to generate customer payment error messages
+     *
      * @param mixed      $errorMsg
      * @param null|mixed $errorCode
      * @param null|mixed $ordernr
@@ -429,6 +431,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     
     /**
      * anstracted log function because of backtrace
+     *
      * @param mixed $message
      * @param mixed $level
      * @param mixed $file
@@ -441,6 +444,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     
     /**
      * real log function which will becalled from all controllers and models
+     *
      * @param mixed $message
      * @param mixed $level
      * @param mixed $file

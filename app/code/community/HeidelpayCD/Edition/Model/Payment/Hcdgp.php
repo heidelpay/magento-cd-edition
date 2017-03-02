@@ -57,30 +57,30 @@ class HeidelpayCD_Edition_Model_Payment_Hcdgp extends HeidelpayCD_Edition_Model_
         $account = array();
         $params = array();
         $params = parent::getUser($order);
-        
-        
+
+
         $usersession = $this->getCheckout();
-        
+
         $account  = $usersession->getHcddata();
-        
+
         $params['ACCOUNT.HOLDER'] = $account['hgwdd_holder'];
-        
+
         if (is_int($account['hgwdd_iban'])) {
                 $params['ACCOUNT.NUMBER'] = $account['hgwdd_iban'];
         } else {
                 $params['ACCOUNT.IBAN'] = $account['hgwdd_iban'];
         };
-        
+
         if (is_int($account['hgwdd_bic'])) {
                 $params['ACCOUNT.BANK'] = $account['hgwdd_iban'];
         } else {
                 $params['ACCOUNT.BIC'] = $account['hgwdd_iban'];
         };
-        
+
         parent::log('Account data : '. print_r($account,1), 'DEBUG');
-        
+
         return $params ;
-        
+
     }
     */
 }

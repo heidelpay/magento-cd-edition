@@ -3,8 +3,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_
 {
     /**
     * unique internal payment method identifier
-    *    
-    * @var string [a-z0-9_]   
+    *
+    * @var string [a-z0-9_]
     **/
     protected $_code = 'hcddc';
     protected $_canCapture = true;

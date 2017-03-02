@@ -3,15 +3,15 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model
 {
     /**
     * unique internal payment method identifier
-    *    
-    * @var string [a-z0-9_]   
+    *
+    * @var string [a-z0-9_]
     **/
     protected $_code = 'hcdpal';
     protected $_canCapture = true;
     protected $_canCapturePartial = true;
     
     /*
-     * PayPal seller protection, need shipping adress instead of billing (PAYPAL REV 20141215) 
+     * PayPal seller protection, need shipping adress instead of billing (PAYPAL REV 20141215)
      */
     public function getUser($order, $isReg=false)
     {

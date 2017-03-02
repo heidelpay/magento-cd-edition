@@ -4,8 +4,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /*{{{Vars*/
     /**
      * unique internal payment method identifier
-     *    
-     * @var string [a-z0-9_]   
+     *
+     * @var string [a-z0-9_]
      */
     protected $_code = 'abstract';
     protected $_order;
@@ -19,7 +19,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     protected $_canUseInternal = false;
     protected $_canUseCheckout = true;
     protected $_canUseForMultishipping = false;
-    public    $_canBasketApi = false;
+    public $_canBasketApi = false;
     protected $_isInitializeNeeded = true;
     
     
@@ -30,7 +30,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     {
         return true ;
     }
-    
 
     protected $_formBlockType = 'hcd/form_desconly';
     
@@ -44,7 +43,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         return Mage::getSingleton('checkout/session');
     }
 
-/** Get Status Pending*/
     public function getStatusPendig($param=false)
     {
         if ($param == false) {
@@ -54,7 +52,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         return Mage_Sales_Model_Order::STATE_PENDING_PAYMENT; //state
     }
 
-/** Get Status Error/Cancel*/
     public function getStatusError($param=false)
     {
         if ($param == false) {
@@ -64,7 +61,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         return Mage_Sales_Model_Order::STATE_CANCELED; //state
     }
 
-/** Get Status Success*/
     public function getStatusSuccess($param=false)
     {
         if ($param == false) {
@@ -74,7 +70,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         return Mage_Sales_Model_Order::STATE_PROCESSING; //state
     }
 
-/** Get Status PartlyPaid*/
     public function getStatusPartlyPaid($param=false)
     {
         if ($param == false) {
@@ -136,7 +131,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Return true if the method can be used at this time
      *
      * @return bool
-     * @param  null|mixed $quote
+     *
+     * @param null|mixed $quote
      */
     public function isAvailable($quote=null)
     {
@@ -148,7 +144,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         $storeId =  Mage::app()->getStore()->getId();
         
         /*
-         if(Mage::getStoreConfig("hcd/settings/transactionmode", $storeId) != 0) 
+         if(Mage::getStoreConfig("hcd/settings/transactionmode", $storeId) != 0)
          */
         
         $amount = sprintf('%1.2f', $totals['grand_total']->getData('value'));
@@ -704,10 +700,10 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     
     public function showPaymentInfo($payment_data)
     {
-        /* 
+        /*
          * This function should not be modified please overright this function
          * in the class of the used payment methode !!!
-         * 
+         *
          * your function should set $this->getCheckout()->setHcdPaymentInfo($userMessage)
          */
         

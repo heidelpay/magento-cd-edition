@@ -3,8 +3,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model
 {
     /**
     * unique internal payment method identifier
-    *    
-    * @var string [a-z0-9_]   
+    *
+    * @var string [a-z0-9_]
     **/
     protected $_code = 'hcdeps';
     protected $_canRefund = false;

@@ -1,7 +1,7 @@
 <?php
 /**
- * @category	Heidelpay   
- * @package		Heidelpay CD-Editon     
+ * @category	Heidelpay
+ * @package		Heidelpay CD-Editon
  *
  * @author     	Jens Richter
  * @copyright  	Copyright (c) 2014 Heidelberger Payment GmbH
