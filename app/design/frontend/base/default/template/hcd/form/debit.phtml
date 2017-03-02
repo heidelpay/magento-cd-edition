@@ -7,7 +7,7 @@ $storeId = Mage::app ()->getStore ()->getId ();
 $recognition = Mage::getStoreConfig ( $path . 'recognition', $storeId );
 $insurence = Mage::getStoreConfig ( $path . 'insurence', $storeId );
 /*
- * Look for customer recognation
+ * Look for customer recognition
  */
 
 $hash = $this->getMethod ()->getShippingHash ();
@@ -40,5 +40,4 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
 <div class="hcd-payment-desc">
     	<?php echo $this->__('Desc'.$_code);?>
     </div>
-
 </div>
