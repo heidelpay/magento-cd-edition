@@ -24,11 +24,11 @@
 "only if shippping adress is unchanged","only if shippping adress is unchanged"
 "Prepayment Info Text","Please transfer the amount of <strong>{AMOUNT} {CURRENCY}</strong> to the following account<br /><br />
 		Holder: {CONNECTOR_ACCOUNT_HOLDER}<br/>
-		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/>
+		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/><br/>
 		<i>Please use only this identification number as the descriptor :</i><br/>
 		<strong>{IDENTIFICATION_SHORTID}</strong>"
 "Direct Debit Info Text","The amount of <strong>{AMOUNT} {CURRENCY}</strong> will be debited from this account within the next days:<br /><br />
-		IBAN: {Iban}<br />
+		IBAN: {Iban}<br /><br/>
 		<i>The booking contains the mandate reference ID: {Ident}<br >
 		and the creditor identifier: {CreditorId}</i><br />
 		<br />
@@ -36,7 +36,7 @@
 "An unexpected error occurred. Please contact us to get further information.","An unexpected error occurred. Please contact us to get further information."
 "Invoice Info Text","Please transfer the amount of <strong>{AMOUNT} {CURRENCY}</strong> to the following account<br /><br />
 		Holder: {CONNECTOR_ACCOUNT_HOLDER}<br/>
-		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/>
+		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/><br/>
 		<i>Please use only this identification number as the descriptor :</i><br/>
 		<strong>{IDENTIFICATION_SHORTID}</strong>"
 "continue","continue"
