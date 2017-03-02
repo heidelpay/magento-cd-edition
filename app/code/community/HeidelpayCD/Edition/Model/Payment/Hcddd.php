@@ -102,7 +102,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
                     '{AMOUNT}'                    => $payment_data['CLEARING_AMOUNT'],
                     '{CURRENCY}'                  => $payment_data['CLEARING_CURRENCY'],
                     '{Iban}'         => $payment_data['ACCOUNT_IBAN'],
-                    '{Bic}'          => $payment_data['ACCOUNT_BIC'],
                     '{Ident}'         => $payment_data['ACCOUNT_IDENTIFICATION'],
                     '{CreditorId}'   => $payment_data['IDENTIFICATION_CREDITOR_ID'],
                 );
