@@ -22,14 +22,21 @@ $_code=$this->getMethodCode();
 				echo 'fr/FR';
 				break;
 		case 'en_GB':
-		case 'en_US':
 		default:
 				echo 'en/US';
 				break;
 	}?>')"
 	></button>
     	<div class="hcd-masterpass-payment-data">
-    	<?php echo $this->getMethod()->getPaymentData()?>
+    	<?php 
+    	$mpadata = $this->getMethod()->getPaymentData(); 
+    	if (!empty($mpadata))  {
+    			echo $mpadata ;
+    	} else {
+    		echo '<p>'.$this->__('Deschcdmpa').'</p>';
+    	} ?>
     	</div>
+    		
+    	
     </div>
 </div>
