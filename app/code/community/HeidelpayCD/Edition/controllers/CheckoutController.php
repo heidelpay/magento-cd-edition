@@ -95,11 +95,15 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         $customAddress = Mage::getModel('customer/address');
         $customAddress->setData($billingAddress);
         
-        $quote->setBillingAddress(Mage::getSingleton('sales/quote_address')
-            ->importCustomerAddress($customAddress));
+        $quote->setBillingAddress(
+            Mage::getSingleton('sales/quote_address')
+            ->importCustomerAddress($customAddress)
+        );
         
-        $quote->setShippingAddress(Mage::getSingleton('sales/quote_address')
-            ->importCustomerAddress($customAddress));
+        $quote->setShippingAddress(
+            Mage::getSingleton('sales/quote_address')
+            ->importCustomerAddress($customAddress)
+        );
         
         $this->getOnepage()->getQuote()->collectTotals()->save();
         
@@ -121,6 +125,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         if ($this->_expireAjax()) {
             return;
         }
+
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost('billing', array());
             $customerAddressId = $this->getRequest()->getPost('billing_address_id', false);
@@ -128,6 +133,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             if (isset($data['email'])) {
                 $data['email'] = trim($data['email']);
             }
+
             $result = $this->getOnepage()->saveBilling($data, $customerAddressId);
                     
             
@@ -174,6 +180,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
                     'html' => $this->_getReviewHtml()
                 );
             }
+
             if ($redirectUrl) {
                 $result['redirect'] = $redirectUrl;
             }
@@ -181,6 +188,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             if ($e->getFields()) {
                 $result['fields'] = $e->getFields();
             }
+
             $result['error'] = $e->getMessage();
         } catch (Mage_Core_Exception $e) {
             $result['error'] = $e->getMessage();
@@ -188,6 +196,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             Mage::logException($e);
             $result['error'] = $this->__('Unable to set Payment Method.');
         }
+
         $this->getOnepage()->getCheckout()->setStepData('payment', 'complete', true);
         return $result ;
     }
@@ -197,6 +206,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         if ($this->_expireAjax()) {
             return;
         }
+
         $result = $this->savePayment(array('method'=>'hcdmpa'));
 
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
@@ -218,6 +228,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         if ($this->_expireAjax()) {
             return;
         }
+
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost('shipping_method', '');
             $result = $this->getOnepage()->saveShippingMethod($data);
@@ -225,9 +236,10 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             if (!$result) {
                 Mage::dispatchEvent(
                     'checkout_controller_onepage_save_shipping_method',
-                     array(
+                    array(
                           'request' => $this->getRequest(),
-                          'quote'   => $this->getOnepage()->getQuote()));
+                    'quote'   => $this->getOnepage()->getQuote())
+                );
                 $this->getOnepage()->getQuote()->collectTotals();
                 $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
 
@@ -237,6 +249,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
                     'html' => $this->_getPaymentMethodsHtml()
                 );
             }
+
             $this->getOnepage()->getQuote()->collectTotals()->save();
             $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
         }

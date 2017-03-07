@@ -42,6 +42,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
                 return false;
             }
         }
+
         return parent::isAvailable($quote);
     }
     
@@ -68,7 +69,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
                 $year    = (int)$payment[$this->_code.'_dobyear'];
                 
                 if ($this->validateDateOfBirth($day, $mounth, $year)) {
-                    $params['NAME.BIRTHDATE'] = $year.'-'.sprintf("%02d", $mounth).'-'.sprintf("%02d", $day) ;
+                    $params['NAME.BIRTHDATE'] = $year.'-'.sprintf("%02d", $mounth).'-'.sprintf("%02d", $day);
                 } else {
                     Mage::throwException($this->_getHelper()->__('The minimum age is 18 years for this payment methode.'));
                 }
@@ -77,9 +78,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
             if (empty($payment[$this->_code.'_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
+
             if (empty($payment[$this->_code.'_iban'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
+
             if (empty($payment[$this->_code.'_bic'])) {
                 if (!preg_match('/^[A-Za-z]{2}/', $payment[$this->_code.'_iban'])) {
                     Mage::throwException($this->_getHelper()->__('Please specify a bank code'));
@@ -100,6 +103,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
             } else {
                 $params['ACCOUNT.BIC'] = $payment[$this->_code.'_bic'];
             }
+
             $this->saveCustomerData($params);
             
             return $this;

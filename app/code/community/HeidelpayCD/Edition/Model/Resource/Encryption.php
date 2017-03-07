@@ -27,7 +27,8 @@ class HeidelpayCD_Edition_Model_Resource_Encryption extends Mage_Core_Model_Encr
         if ($salt === false) {
             $salt = (string)Mage::getConfig()->getNode('global/crypt/key');
         }
-        return $this->hash($salt.(string)$string) ;
+
+        return $this->hash($salt.(string)$string);
     }
     
     public function validateHash($string, $hash)

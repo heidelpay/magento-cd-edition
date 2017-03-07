@@ -32,7 +32,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model
         $user = array();
         
         $user = parent::getUser($order, $isReg);
-        $adress    = ($order->getShippingAddress() == false) ? $order->getBillingAddress()  : $order->getShippingAddress() ;
+        $adress    = ($order->getShippingAddress() == false) ? $order->getBillingAddress()  : $order->getShippingAddress();
         $email = ($adress->getEmail()) ? $adress->getEmail() : $order->getCustomerEmail();
         
         
@@ -40,6 +40,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model
         if ($adress->getCompany() == true) {
             $user['NAME.COMPANY']    = trim($adress->getCompany());
         }
+
         $user['NAME.GIVEN']            = trim($adress->getFirstname());
         $user['NAME.FAMILY']        = trim($adress->getLastname());
         $user['ADDRESS.STREET']        = $adress->getStreet1()." ".$adress->getStreet2();

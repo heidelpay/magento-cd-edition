@@ -14,7 +14,7 @@
  */
 var Checkout = Class.create();
 Checkout.prototype = {
-    initialize: function(accordion, urls){
+    initialize: function (accordion, urls) {
         this.accordion = accordion;
         this.progressUrl = urls.progress;
         this.reviewUrl = urls.review;
@@ -30,9 +30,11 @@ Checkout.prototype = {
         //We use billing as beginning step since progress bar tracks from billing
         this.currentStep = 'billing';
 
-        this.accordion.sections.each(function(section) {
+        this.accordion.sections.each(
+            function (section) {
             Event.observe($(section).down('.step-title'), 'click', this._onSectionClick.bindAsEventListener(this));
-        }.bind(this));
+            }.bind(this)
+        );
 
         this.accordion.disallowAccessToNextSections = true;
     },
@@ -42,7 +44,7 @@ Checkout.prototype = {
      *
      * @param event
      */
-    _onSectionClick: function(event) {
+    _onSectionClick: function (event) {
         var section = $(Event.element(event).up().up());
         if (section.hasClassName('allow')) {
             Event.stop(event);
@@ -51,11 +53,11 @@ Checkout.prototype = {
         }
     },
 
-    ajaxFailure: function(){
+    ajaxFailure: function () {
         location.href = this.failureUrl;
     },
 
-    reloadProgressBlock: function(toStep) {
+    reloadProgressBlock: function (toStep) {
         this.reloadStep(toStep);
         if (this.syncBillingShipping) {
             this.syncBillingShipping = false;
@@ -63,34 +65,38 @@ Checkout.prototype = {
         }
     },
 
-    reloadStep: function(prevStep) {
-        var updater = new Ajax.Updater(prevStep + '-progress-opcheckout', this.progressUrl, {
+    reloadStep: function (prevStep) {
+        var updater = new Ajax.Updater(
+            prevStep + '-progress-opcheckout', this.progressUrl, {
             method:'get',
             onFailure:this.ajaxFailure.bind(this),
-            onComplete: function(){
+            onComplete: function () {
                 this.checkout.resetPreviousSteps();
             },
             parameters:prevStep ? { prevStep:prevStep } : null
-        });
+            }
+        );
     },
 
-    reloadReviewBlock: function(){
+    reloadReviewBlock: function () {
         var updater = new Ajax.Updater('checkout-review-load', this.reviewUrl, {method: 'get', onFailure: this.ajaxFailure.bind(this)});
     },
 
-    _disableEnableAll: function(element, isDisabled) {
+    _disableEnableAll: function (element, isDisabled) {
         var descendants = element.descendants();
         for (var k in descendants) {
             descendants[k].disabled = isDisabled;
         }
+
         element.disabled = isDisabled;
     },
 
-    setLoadWaiting: function(step, keepDisabled) {
+    setLoadWaiting: function (step, keepDisabled) {
         if (step) {
             if (this.loadWaiting) {
                 this.setLoadWaiting(false);
             }
+
             var container = $(step+'-buttons-container');
             container.addClassName('disabled');
             container.setStyle({opacity:.5});
@@ -104,10 +110,12 @@ Checkout.prototype = {
                     container.removeClassName('disabled');
                     container.setStyle({opacity:1});
                 }
+
                 this._disableEnableAll(container, isDisabled);
                 Element.hide(this.loadWaiting+'-please-wait');
             }
         }
+
         this.loadWaiting = step;
     },
 
@@ -116,6 +124,7 @@ Checkout.prototype = {
         if (reloadProgressBlock) {
             this.reloadProgressBlock(this.currentStep);
         }
+
         this.currentStep = section;
         var sectionElement = $('opc-' + section);
         sectionElement.addClassName('allow');
@@ -134,16 +143,22 @@ Checkout.prototype = {
             var progressDiv = nextStep + '-progress-opcheckout';
             if ($(progressDiv)) {
                 //Remove the link
-                $(progressDiv).select('.changelink').each(function (item) {
+                $(progressDiv).select('.changelink').each(
+                    function (item) {
                     item.remove();
-                });
-                $(progressDiv).select('dt').each(function (item) {
+                    }
+                );
+                $(progressDiv).select('dt').each(
+                    function (item) {
                     item.removeClassName('complete');
-                });
+                    }
+                );
                 //Remove the content
-                $(progressDiv).select('dd.complete').each(function (item) {
+                $(progressDiv).select('dd.complete').each(
+                    function (item) {
                     item.remove();
-                });
+                    }
+                );
             }
         }
     },
@@ -153,7 +168,7 @@ Checkout.prototype = {
         this.gotoSection(changeStep, false);
     },
 
-    setMethod: function(){
+    setMethod: function () {
         if ($('login:guest') && $('login:guest').checked) {
             this.method = 'guest';
             var request = new Ajax.Request(
@@ -176,10 +191,11 @@ Checkout.prototype = {
             alert(Translator.translate('Please choose to register or to checkout as a guest').stripTags());
             return false;
         }
+
         document.body.fire('login:setMethod', {method : this.method});
     },
 
-    setBilling: function() {
+    setBilling: function () {
         if (($('billing:use_for_shipping_yes')) && ($('billing:use_for_shipping_yes').checked)) {
             shipping.syncWithBilling();
             $('opc-shipping').addClassName('allow');
@@ -208,31 +224,31 @@ Checkout.prototype = {
 //        //this.accordion.openNextSection(true);
     },
 
-    setShipping: function() {
+    setShipping: function () {
         //this.nextStep();
         this.gotoSection('shipping_method', true);
         //this.accordion.openNextSection(true);
     },
 
-    setShippingMethod: function() {
+    setShippingMethod: function () {
         //this.nextStep();
         this.gotoSection('payment', true);
         //this.accordion.openNextSection(true);
     },
 
-    setPayment: function() {
+    setPayment: function () {
         //this.nextStep();
         this.gotoSection('review', true);
         //this.accordion.openNextSection(true);
     },
 
-    setReview: function() {
+    setReview: function () {
         this.reloadProgressBlock();
         //this.nextStep();
         //this.accordion.openNextSection(true);
     },
 
-    back: function(){
+    back: function () {
         if (this.loadWaiting) return;
         //Navigate back to the previous available step
         var stepIndex = this.steps.indexOf(this.currentStep);
@@ -245,17 +261,21 @@ Checkout.prototype = {
             section = this.steps[stepIndex];
             sectionElement = $('opc-' + section);
         }
+
         this.changeSection('opc-' + section);
     },
 
-    setStepResponse: function(response){
+    setStepResponse: function (response) {
         if (response.update_section) {
             $('checkout-'+response.update_section.name+'-load').update(response.update_section.html);
         }
+
         if (response.allow_sections) {
-            response.allow_sections.each(function(e){
+            response.allow_sections.each(
+                function (e) {
                 $('opc-'+e).addClassName('allow');
-            });
+                }
+            );
         }
 
         if(response.duplicateBillingInfo)
@@ -268,10 +288,12 @@ Checkout.prototype = {
             this.gotoSection(response.goto_section, true);
             return true;
         }
+
         if (response.redirect) {
             location.href = response.redirect;
             return true;
         }
+
         return false;
     }
 }
@@ -279,11 +301,15 @@ Checkout.prototype = {
 // billing
 var Billing = Class.create();
 Billing.prototype = {
-    initialize: function(form, addressUrl, saveUrl){
+    initialize: function (form, addressUrl, saveUrl) {
         this.form = form;
         if ($(this.form)) {
-            $(this.form).observe('submit', function(event){this.save();Event.stop(event);}.bind(this));
+            $(this.form).observe(
+                'submit', function (event) {
+                this.save();Event.stop(event);}.bind(this)
+            );
         }
+
         this.addressUrl = addressUrl;
         this.saveUrl = saveUrl;
         this.onAddressLoad = this.fillForm.bindAsEventListener(this);
@@ -291,7 +317,7 @@ Billing.prototype = {
         this.onComplete = this.resetLoadWaiting.bindAsEventListener(this);
     },
 
-    setAddress: function(addressId){
+    setAddress: function (addressId) {
         if (addressId) {
             request = new Ajax.Request(
                 this.addressUrl+addressId,
@@ -303,7 +329,7 @@ Billing.prototype = {
         }
     },
 
-    newAddress: function(isNew){
+    newAddress: function (isNew) {
         if (isNew) {
             this.resetSelectedAddress();
             Element.show('billing-new-address-form');
@@ -312,14 +338,14 @@ Billing.prototype = {
         }
     },
 
-    resetSelectedAddress: function(){
+    resetSelectedAddress: function () {
         var selectElement = $('billing-address-select')
         if (selectElement) {
             selectElement.value='';
         }
     },
 
-    fillForm: function(transport){
+    fillForm: function (transport) {
         var elementValues = {};
         if (transport && transport.responseText){
             try{
@@ -332,6 +358,7 @@ Billing.prototype = {
         else{
             this.resetSelectedAddress();
         }
+
         arrElements = Form.getElements(this.form);
         for (var elemIndex in arrElements) {
             if (arrElements[elemIndex].id) {
@@ -344,11 +371,11 @@ Billing.prototype = {
         }
     },
 
-    setUseForShipping: function(flag) {
+    setUseForShipping: function (flag) {
         $('shipping:same_as_billing').checked = flag;
     },
 
-    save: function(){
+    save: function () {
         if (checkout.loadWaiting!=false) return;
 
         var validator = new Validation(this.form);
@@ -372,7 +399,7 @@ Billing.prototype = {
         }
     },
 
-    resetLoadWaiting: function(transport){
+    resetLoadWaiting: function (transport) {
         checkout.setLoadWaiting(false);
         document.body.fire('billing-request:completed', {transport: transport});
     },
@@ -381,7 +408,7 @@ Billing.prototype = {
      This method recieves the AJAX response on success.
      There are 3 options: error, redirect or html with shipping options.
      */
-    nextStep: function(transport){
+    nextStep: function (transport) {
         if (transport && transport.responseText){
             try{
                 response = eval('(' + transport.responseText + ')');
@@ -417,11 +444,15 @@ Billing.prototype = {
 // shipping
 var Shipping = Class.create();
 Shipping.prototype = {
-    initialize: function(form, addressUrl, saveUrl, methodsUrl){
+    initialize: function (form, addressUrl, saveUrl, methodsUrl) {
         this.form = form;
         if ($(this.form)) {
-            $(this.form).observe('submit', function(event){this.save();Event.stop(event);}.bind(this));
+            $(this.form).observe(
+                'submit', function (event) {
+                this.save();Event.stop(event);}.bind(this)
+            );
         }
+
         this.addressUrl = addressUrl;
         this.saveUrl = saveUrl;
         this.methodsUrl = methodsUrl;
@@ -430,7 +461,7 @@ Shipping.prototype = {
         this.onComplete = this.resetLoadWaiting.bindAsEventListener(this);
     },
 
-    setAddress: function(addressId){
+    setAddress: function (addressId) {
         if (addressId) {
             request = new Ajax.Request(
                 this.addressUrl+addressId,
@@ -442,24 +473,25 @@ Shipping.prototype = {
         }
     },
 
-    newAddress: function(isNew){
+    newAddress: function (isNew) {
         if (isNew) {
             this.resetSelectedAddress();
             Element.show('shipping-new-address-form');
         } else {
             Element.hide('shipping-new-address-form');
         }
+
         shipping.setSameAsBilling(false);
     },
 
-    resetSelectedAddress: function(){
+    resetSelectedAddress: function () {
         var selectElement = $('shipping-address-select')
         if (selectElement) {
             selectElement.value='';
         }
     },
 
-    fillForm: function(transport){
+    fillForm: function (transport) {
         var elementValues = {};
         if (transport && transport.responseText){
             try{
@@ -472,6 +504,7 @@ Shipping.prototype = {
         else{
             this.resetSelectedAddress();
         }
+
         arrElements = Form.getElements(this.form);
         for (var elemIndex in arrElements) {
             if (arrElements[elemIndex].id) {
@@ -484,7 +517,7 @@ Shipping.prototype = {
         }
     },
 
-    setSameAsBilling: function(flag) {
+    setSameAsBilling: function (flag) {
         $('shipping:same_as_billing').checked = flag;
 // #5599. Also it hangs up, if the flag is not false
 //        $('billing:use_for_shipping_yes').checked = flag;
@@ -506,6 +539,7 @@ Shipping.prototype = {
                     }
                 }
             }
+
             //$('shipping:country_id').value = $('billing:country_id').value;
             shippingRegionUpdater.update();
             $('shipping:region_id').value = $('billing:region_id').value;
@@ -516,11 +550,11 @@ Shipping.prototype = {
         }
     },
 
-    setRegionValue: function(){
+    setRegionValue: function () {
         $('shipping:region').value = $('billing:region').value;
     },
 
-    save: function(){
+    save: function () {
         if (checkout.loadWaiting!=false) return;
         var validator = new Validation(this.form);
         if (validator.validate()) {
@@ -538,11 +572,11 @@ Shipping.prototype = {
         }
     },
 
-    resetLoadWaiting: function(transport){
+    resetLoadWaiting: function (transport) {
         checkout.setLoadWaiting(false);
     },
 
-    nextStep: function(transport){
+    nextStep: function (transport) {
         if (transport && transport.responseText){
             try{
                 response = eval('(' + transport.responseText + ')');
@@ -551,6 +585,7 @@ Shipping.prototype = {
                 response = {};
             }
         }
+
         if (response.error){
             if ((typeof response.message) == 'string') {
                 alert(response.message);
@@ -558,6 +593,7 @@ Shipping.prototype = {
                 if (window.shippingRegionUpdater) {
                     shippingRegionUpdater.update();
                 }
+
                 alert(response.message.join("\n"));
             }
 
@@ -580,18 +616,22 @@ Shipping.prototype = {
 // shipping method
 var ShippingMethod = Class.create();
 ShippingMethod.prototype = {
-    initialize: function(form, saveUrl){
+    initialize: function (form, saveUrl) {
         this.form = form;
         if ($(this.form)) {
-            $(this.form).observe('submit', function(event){this.save();Event.stop(event);}.bind(this));
+            $(this.form).observe(
+                'submit', function (event) {
+                this.save();Event.stop(event);}.bind(this)
+            );
         }
+
         this.saveUrl = saveUrl;
         this.validator = new Validation(this.form);
         this.onSave = this.nextStep.bindAsEventListener(this);
         this.onComplete = this.resetLoadWaiting.bindAsEventListener(this);
     },
 
-    validate: function() {
+    validate: function () {
         var methods = document.getElementsByName('shipping_method');
         if (methods.length==0) {
             alert(Translator.translate('Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.').stripTags());
@@ -607,11 +647,12 @@ ShippingMethod.prototype = {
                 return true;
             }
         }
+
         alert(Translator.translate('Please specify shipping method.').stripTags());
         return false;
     },
 
-    save: function(){
+    save: function () {
 
         if (checkout.loadWaiting!=false) return;
         if (this.validate()) {
@@ -629,11 +670,11 @@ ShippingMethod.prototype = {
         }
     },
 
-    resetLoadWaiting: function(transport){
+    resetLoadWaiting: function (transport) {
         checkout.setLoadWaiting(false);
     },
 
-    nextStep: function(transport){
+    nextStep: function (transport) {
         if (transport && transport.responseText){
             try{
                 response = eval('(' + transport.responseText + ')');
@@ -676,29 +717,35 @@ Payment.prototype = {
     afterInitFunc:$H({}),
     beforeValidateFunc:$H({}),
     afterValidateFunc:$H({}),
-    initialize: function(form, saveUrl){
+    initialize: function (form, saveUrl) {
         this.form = form;
         this.saveUrl = saveUrl;
         this.onSave = this.nextStep.bindAsEventListener(this);
         this.onComplete = this.resetLoadWaiting.bindAsEventListener(this);
     },
 
-    addBeforeInitFunction : function(code, func) {
+    addBeforeInitFunction : function (code, func) {
         this.beforeInitFunc.set(code, func);
     },
 
-    beforeInit : function() {
-        (this.beforeInitFunc).each(function(init){
+    beforeInit : function () {
+        (this.beforeInitFunc).each(
+            function (init) {
             (init.value)();;
-        });
+            }
+        );
     },
 
     init : function () {
         this.beforeInit();
         var elements = Form.getElements(this.form);
         if ($(this.form)) {
-            $(this.form).observe('submit', function(event){this.save();Event.stop(event);}.bind(this));
+            $(this.form).observe(
+                'submit', function (event) {
+                this.save();Event.stop(event);}.bind(this)
+            );
         }
+
         var method = null;
         for (var i=0; i<elements.length; i++) {
             if (elements[i].name=='payment[method]') {
@@ -708,27 +755,32 @@ Payment.prototype = {
             } else {
                 elements[i].disabled = true;
             }
+
             elements[i].setAttribute('autocomplete','off');
         }
+
         if (method) this.switchMethod(method);
         this.afterInit();
     },
 
-    addAfterInitFunction : function(code, func) {
+    addAfterInitFunction : function (code, func) {
         this.afterInitFunc.set(code, func);
     },
 
-    afterInit : function() {
-        (this.afterInitFunc).each(function(init){
+    afterInit : function () {
+        (this.afterInitFunc).each(
+            function (init) {
             (init.value)();
-        });
+            }
+        );
     },
 
-    switchMethod: function(method){
+    switchMethod: function (method) {
         if (this.currentMethod && $('payment_form_'+this.currentMethod)) {
             this.changeVisible(this.currentMethod, true);
             $('payment_form_'+this.currentMethod).fire('payment-method:switched-off', {method_code : this.currentMethod});
         }
+
         if ($('payment_form_'+method)){
             this.changeVisible(method, false);
             $('payment_form_'+method).fire('payment-method:switched', {method_code : method});
@@ -736,87 +788,103 @@ Payment.prototype = {
             //Event fix for payment methods without form like "Check / Money order"
             document.body.fire('payment-method:switched', {method_code : method});
         }
+
         if (method) {
             this.lastUsedMethod = method;
         }
+
         this.currentMethod = method;
     },
 
-    changeVisible: function(method, mode) {
+    changeVisible: function (method, mode) {
         var block = 'payment_form_' + method;
-        [block + '_before', block, block + '_after'].each(function(el) {
+        [block + '_before', block, block + '_after'].each(
+            function (el) {
             element = $(el);
             if (element) {
                 element.style.display = (mode) ? 'none' : '';
-                element.select('input', 'select', 'textarea', 'button').each(function(field) {
+                element.select('input', 'select', 'textarea', 'button').each(
+                    function (field) {
                     field.disabled = mode;
-                });
+                    }
+                );
             }
-        });
+            }
+        );
     },
 
-    addBeforeValidateFunction : function(code, func) {
+    addBeforeValidateFunction : function (code, func) {
         this.beforeValidateFunc.set(code, func);
     },
 
-    beforeValidate : function() {
+    beforeValidate : function () {
         var validateResult = true;
         var hasValidation = false;
-        (this.beforeValidateFunc).each(function(validate){
+        (this.beforeValidateFunc).each(
+            function (validate) {
             hasValidation = true;
             if ((validate.value)() == false) {
                 validateResult = false;
             }
-        }.bind(this));
+            }.bind(this)
+        );
         if (!hasValidation) {
             validateResult = false;
         }
+
         return validateResult;
     },
 
-    validate: function() {
+    validate: function () {
         var result = this.beforeValidate();
         if (result) {
             return true;
         }
+
         var methods = document.getElementsByName('payment[method]');
         if (methods.length==0) {
             alert(Translator.translate('Your order cannot be completed at this time as there is no payment methods available for it.').stripTags());
             return false;
         }
+
         for (var i=0; i<methods.length; i++) {
             if (methods[i].checked) {
                 return true;
             }
         }
+
         result = this.afterValidate();
         if (result) {
             return true;
         }
+
         alert(Translator.translate('Please specify payment method.').stripTags());
         return false;
     },
 
-    addAfterValidateFunction : function(code, func) {
+    addAfterValidateFunction : function (code, func) {
         this.afterValidateFunc.set(code, func);
     },
 
-    afterValidate : function() {
+    afterValidate : function () {
         var validateResult = true;
         var hasValidation = false;
-        (this.afterValidateFunc).each(function(validate){
+        (this.afterValidateFunc).each(
+            function (validate) {
             hasValidation = true;
             if ((validate.value)() == false) {
                 validateResult = false;
             }
-        }.bind(this));
+            }.bind(this)
+        );
         if (!hasValidation) {
             validateResult = false;
         }
+
         return validateResult;
     },
 
-    save: function(){
+    save: function () {
         if (checkout.loadWaiting!=false) return;
         var validator = new Validation(this.form);
         if (this.validate() && validator.validate()) {
@@ -834,11 +902,11 @@ Payment.prototype = {
         }
     },
 
-    resetLoadWaiting: function(){
+    resetLoadWaiting: function () {
         checkout.setLoadWaiting(false);
     },
 
-    nextStep: function(transport){
+    nextStep: function (transport) {
         if (transport && transport.responseText){
             try{
                 response = eval('(' + transport.responseText + ')');
@@ -847,6 +915,7 @@ Payment.prototype = {
                 response = {};
             }
         }
+
         /*
          * if there is an error in payment, need to show error message
          */
@@ -859,8 +928,10 @@ Payment.prototype = {
                         Validation.ajaxError(field, response.error);
                     }
                 }
+
                 return;
             }
+
             alert(response.error);
             return;
         }
@@ -870,16 +941,18 @@ Payment.prototype = {
         //checkout.setPayment();
     },
 
-    initWhatIsCvvListeners: function(){
-        $$('.cvv-what-is-this').each(function(element){
+    initWhatIsCvvListeners: function () {
+        $$('.cvv-what-is-this').each(
+            function (element) {
             Event.observe(element, 'click', toggleToolTip);
-        });
+            }
+        );
     }
 }
 
 var Review = Class.create();
 Review.prototype = {
-    initialize: function(saveUrl, successUrl, agreementsForm){
+    initialize: function (saveUrl, successUrl, agreementsForm) {
         this.saveUrl = saveUrl;
         this.successUrl = successUrl;
         this.agreementsForm = agreementsForm;
@@ -887,13 +960,14 @@ Review.prototype = {
         this.onComplete = this.resetLoadWaiting.bindAsEventListener(this);
     },
 
-    save: function(){
+    save: function () {
         if (checkout.loadWaiting!=false) return;
         checkout.setLoadWaiting('review');
         var params = Form.serialize(payment.form);
         if (this.agreementsForm) {
             params += '&'+Form.serialize(this.agreementsForm);
         }
+
         params.save = true;
         var request = new Ajax.Request(
             this.saveUrl,
@@ -907,11 +981,11 @@ Review.prototype = {
         );
     },
 
-    resetLoadWaiting: function(transport){
+    resetLoadWaiting: function (transport) {
         checkout.setLoadWaiting(false, this.isSuccess);
     },
 
-    nextStep: function(transport){
+    nextStep: function (transport) {
         if (transport && transport.responseText) {
             try{
                 response = eval('(' + transport.responseText + ')');
@@ -919,11 +993,13 @@ Review.prototype = {
             catch (e) {
                 response = {};
             }
+
             if (response.redirect) {
                 this.isSuccess = true;
                 location.href = response.redirect;
                 return;
             }
+
             if (response.success) {
                 this.isSuccess = true;
                 window.location=this.successUrl;
@@ -933,6 +1009,7 @@ Review.prototype = {
                 if (typeof(msg)=='object') {
                     msg = msg.join("\n");
                 }
+
                 if (msg) {
                     alert(msg);
                 }
@@ -950,3 +1027,4 @@ Review.prototype = {
 
     isSuccess: false
 }
+

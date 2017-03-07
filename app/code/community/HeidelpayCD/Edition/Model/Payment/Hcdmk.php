@@ -27,6 +27,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmk extends HeidelpayCD_Edition_Model_
         if (!empty($currency_code) && $currency_code != 'TRY') {
             return false;
         }
+
         return parent::isAvailable($quote);
     }
 }

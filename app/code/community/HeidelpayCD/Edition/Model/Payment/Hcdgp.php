@@ -35,9 +35,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcdgp extends HeidelpayCD_Edition_Model_
             if (empty($payment[$this->_code.'_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
+
             if (empty($payment[$this->_code.'_iban'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
+
             if (empty($payment[$this->_code.'_bic'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a bic or bank code'));
             }

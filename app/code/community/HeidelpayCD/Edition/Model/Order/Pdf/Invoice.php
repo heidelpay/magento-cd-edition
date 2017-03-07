@@ -43,6 +43,7 @@ class HeidelpayCD_Edition_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order
                 $x = 50;
             $y = 800;
         }
+
         foreach ($invoices as $invoice) {
             $order = $invoice->getOrder();
             $billing = $order->getBillingAddress();
@@ -95,6 +96,7 @@ class HeidelpayCD_Edition_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order
                     $y-= 10;
                 }
             }
+
             // Mit Payment kommunizieren
             $res = $payment->doRequest($data);
             //if ($debug) echo '<pre>resp('.print_r($this->response, 1).')</pre>';
@@ -106,10 +108,12 @@ class HeidelpayCD_Edition_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order
                 $page->drawText(print_r($res, 1), $x, $y, 'UTF-8');
             }
         }
+
         if ($debug) {
             $this->_afterGetPdf();
             return $pdf;
         }
+
         return parent::getPdf($invoices);
     }
 

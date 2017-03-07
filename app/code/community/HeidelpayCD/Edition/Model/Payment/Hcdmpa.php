@@ -67,7 +67,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
         $user = array();
         
         $user = parent::getUser($order, $isReg);
-        $adress    = ($order->getShippingAddress() == false) ? $order->getBillingAddress()  : $order->getShippingAddress() ;
+        $adress    = ($order->getShippingAddress() == false) ? $order->getBillingAddress()  : $order->getShippingAddress();
         $email = ($adress->getEmail()) ? $adress->getEmail() : $order->getCustomerEmail();
         
         
@@ -75,6 +75,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
         if ($adress->getCompany() == true) {
             $user['NAME.COMPANY']    = trim($adress->getCompany());
         }
+
         $user['NAME.GIVEN']            = trim($adress->getFirstname());
         $user['NAME.FAMILY']        = trim($adress->getLastname());
         $user['ADDRESS.STREET']        = $adress->getStreet1()." ".$adress->getStreet2();
@@ -94,16 +95,16 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
         case 'de_AT':
         case 'de_CH':
                 $url_lang = 'de/DE';
-                break;
+            break;
         case 'fr_FR':
                 $url_lang = 'fr/FR';
-                break;
+            break;
         case 'en_GB':
         case 'en_US':
         default:
                 $url_lang = 'en/US';
-                break;
-    }
+            break;
+        }
     
         $html = '<center><button type="button" title="MasterPass"
 					class="btn-hcdmpa-payment-data" style="position: static"

@@ -37,6 +37,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_
         if ($recognation > 0) {
             return true;
         }
+
         return false ;
     }
     

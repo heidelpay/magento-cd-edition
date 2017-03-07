@@ -31,6 +31,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpf extends HeidelpayCD_Edition_Model_
         if (!empty($currency_code) && $currency_code != 'CHF') {
             return false;
         }
+
         return parent::isAvailable($quote);
     }
     

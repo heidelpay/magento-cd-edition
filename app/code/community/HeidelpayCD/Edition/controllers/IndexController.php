@@ -61,7 +61,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
     {
         if (!$this->getCheckout()->getQuote()->hasItems()) {
             $this->getResponse()->setHeader('HTTP/1.1', '403 Session Expired');
-            exit;
+            return false;
         }
     }
     
@@ -162,7 +162,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             }
         }
         
-        $quoteID = ($session->getLastQuoteId() === false) ? $session->getQuoteId() : $session->getLastQuoteId() ; // last_quote_id workaround for trusted shop buyerprotection
+        $quoteID = ($session->getLastQuoteId() === false) ? $session->getQuoteId() : $session->getLastQuoteId(); // last_quote_id workaround for trusted shop buyerprotection
         $this->getCheckout()->setLastSuccessQuoteId($quoteID);
         $this->log('LastQuteID :'. $quoteID);
         
@@ -177,6 +177,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             $order->sendNewOrderEmail();
             //$this->log('sendOrderMail');
         }
+
         $order->save();
         $this->_redirect('checkout/onepage/success', array('_secure' => true));
         return;
@@ -211,15 +212,17 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             if (isset($data['PROCESSING_RETURN_CODE'])) {
                 $errorCode = $data['PROCESSING_RETURN_CODE'];
             }
+
             if (isset($GET_ERROR)) {
                 $errorCode = $GET_ERROR;
                 $data['PROCESSING_RESULT'] = 'NOK';
             }
+
             $message = Mage::helper('hcd/payment')->handleError($data['PROCESSING_RETURN'], $errorCode, (string)$order->getRealOrderId());
             $intMessage = (!empty($data['PROCESSING_RETURN'])) ? $data['PROCESSING_RETURN'] : $message ;
         }
         
-        $quoteId = ($session->getLastQuoteId() === false) ? $session->getQuoteId() : $session->getLastQuoteId() ; // last_quote_id workaround for trusted shop buyerprotection
+        $quoteId = ($session->getLastQuoteId() === false) ? $session->getQuoteId() : $session->getLastQuoteId(); // last_quote_id workaround for trusted shop buyerprotection
         if ($quoteId) {
             $quote = Mage::getModel('sales/quote')->load($quoteId);
             if ($quote->getId()) {
@@ -272,6 +275,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             $this->setFlag('', self::FLAG_NO_DISPATCH, true);
             return $this;
         }
+
         $payment = $order->getPayment()->getMethodInstance();
         
         if ($session->getHcdWallet() !== false) {
@@ -320,13 +324,16 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         
         if ($data['POST_VALIDATION'] == 'ACK' and $data['PROCESSING_RESULT'] == 'ACK') {
             if ($data['PAYMENT_CODE'] == "OT.PA") {
-                $quoteID = ($session->getLastQuoteId() === false) ? $session->getQuoteId() : $session->getLastQuoteId() ; // last_quote_id workaround for trusted shop buyerprotection
+                $quoteID = ($session->getLastQuoteId() === false) ? $session->getQuoteId() : $session->getLastQuoteId(); // last_quote_id workaround for trusted shop buyerprotection
                 $order->getPayment()->setTransactionId($quoteID);
                 $order->getPayment()->setIsTransactionClosed(true);
             }
-            $order->setState($order->getPayment()->getMethodInstance()->getStatusPendig(false),
+
+            $order->setState(
+                $order->getPayment()->getMethodInstance()->getStatusPendig(false),
                 $order->getPayment()->getMethodInstance()->getStatusPendig(true),
-                Mage::helper('hcd')->__('Get payment url from Heidelpay -> ').$data['FRONTEND_REDIRECT_URL']);
+                Mage::helper('hcd')->__('Get payment url from Heidelpay -> ').$data['FRONTEND_REDIRECT_URL']
+            );
             $order->getPayment()->addTransaction(
                 Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH,
                 null,
@@ -341,6 +348,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                 $this->_redirectUrl($data['FRONTEND_REDIRECT_URL']);
                 return;
             }
+
             $this->loadLayout();
             $this->log('RedirectUrl ' .$data['FRONTEND_PAYMENT_FRAME_URL']);
             $this->log('CCHolder ' .$payment->getCustomerName());
@@ -475,15 +483,15 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         $FRONTEND_SESSIONID                = $Request->getPost('CRITERION_SECRET');
         $data = array();
         $IDENTIFICATION_TRANSACTIONID = $Request->getPOST('IDENTIFICATION_TRANSACTIONID');
-        $data['IDENTIFICATION_TRANSACTIONID']    = (!empty($IDENTIFICATION_TRANSACTIONID)) ? $Request->getPOST('IDENTIFICATION_TRANSACTIONID') : $Request->getPOST('IDENTIFICATION_SHOPPERID') ;
+        $data['IDENTIFICATION_TRANSACTIONID']    = (!empty($IDENTIFICATION_TRANSACTIONID)) ? $Request->getPOST('IDENTIFICATION_TRANSACTIONID') : $Request->getPOST('IDENTIFICATION_SHOPPERID');
         
         /*
          * validate Hash to prevent manipulation
          */
         if (Mage::getModel('hcd/resource_encryption')->validateHash($data['IDENTIFICATION_TRANSACTIONID'], $FRONTEND_SESSIONID) === false) {
-            echo  Mage::getUrl('hcd/index/error', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true));
+            print  Mage::getUrl('hcd/index/error', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true));
             $this->log("Get response form server " . $Request->getServer('REMOTE_ADDR') . " with an invalid hash. This could be some kind of manipulation.", 'WARN');
-            exit();
+            return;
         }
         
         $data= $Request->getParams();
@@ -512,7 +520,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                 $checkout = $this->getCheckout()->addError($message);
                 $url = Mage::getUrl('hcd/index/error', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true, 'HPError' => $data['PROCESSING_RETURN_CODE']));
             } else {
-                
                 // save cc and dc registration data
                 $custumerData = Mage::getModel('hcd/customer');
                 $currentPaymnet = 'hcd'.strtolower($PaymentCode[0]);
@@ -533,9 +540,10 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                 $custumerData->setCustomerid($data['IDENTIFICATION_SHOPPERID']);
                 $custumerData->setStoreid($Storeid);
                 $custumerData->setPaymentData(
-                                Mage::getModel('hcd/resource_encryption')
-                                    ->encrypt(json_encode(
-                                        array(
+                    Mage::getModel('hcd/resource_encryption')
+                                    ->encrypt(
+                                        json_encode(
+                                            array(
                                             'ACCOUNT.REGISTRATION'    => $data['IDENTIFICATION_UNIQUEID'],
                                             'SHIPPPING_HASH'          => $data['CRITERION_SHIPPPING_HASH'],
                                             'ACCOUNT_BRAND'              => $data['ACCOUNT_BRAND'],
@@ -543,14 +551,16 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                                             'ACCOUNT_HOLDER'          => $data['ACCOUNT_HOLDER'],
                                             'ACCOUNT_EXPIRY_MONTH'      => $data['ACCOUNT_EXPIRY_MONTH'],
                                             'ACCOUNT_EXPIRY_YEAR'      => $data['ACCOUNT_EXPIRY_YEAR']
-                                            ))));
+                                            )
+                                        )
+                                    )
+                );
                                             
                 $custumerData->save();
                 
                 $url = Mage::getUrl('hcd/', array('_secure' => true));
             }
         } elseif ($PaymentCode[1] == 'IN' and $Request->getPost('WALLET_DIRECT_PAYMENT') == 'false') {
-
             // Back to checkout after wallet init
             if ($data['PROCESSING_RESULT'] == 'NOK') {
                 $this->log('Wallet for basketId '.$data['IDENTIFICATION_TRANSACTIONID'].' failed because of '.$data['PROCESSING_RETURN'], 'NOTICE');
@@ -558,16 +568,16 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             } else {
                 $url = Mage::getUrl('hcd/checkout/', array('_secure' => true, '_wallet' => 'hcdmpa'));
             }
+
             Mage::getModel('hcd/transaction')->saveTransactionData($data);
         } else {
-            
-            
             /* load order */
             $order = $this->getOrder();
             $order->loadByIncrementId($data['IDENTIFICATION_TRANSACTIONID']);
             if ($order->getPayment() !== false) {
                 $payment = $order->getPayment()->getMethodInstance();
             }
+
             $this->log('UniqeID: '.$data['IDENTIFICATION_UNIQUEID']);
             
             
@@ -589,9 +599,9 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         }
         
         $this->log('Url: '.$url);
-        
-        
-        echo $url;
+
+
+        print $url;
     }
     
     /**
@@ -659,7 +669,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         $paymentCode = $order->getPayment()->getMethodInstance()->getCode();
         
         switch ($paymentCode) {
-            
             case 'hcddd':
                 $xmlData['CLEARING_AMOUNT']            = (string)$xml->Transaction->Payment->Clearing->Amount;
                 $xmlData['CLEARING_CURRENCY']            = (string)$xml->Transaction->Payment->Clearing->Currency;
