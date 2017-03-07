@@ -17,6 +17,7 @@ class HeidelpayCD_Edition_Model_System_Config_Source_Bookingmode
 {
     /**
      * returns the available booking modes for backend configuration
+     *
      * @return array
      */
     public function toOptionArray()

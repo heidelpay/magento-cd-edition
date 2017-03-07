@@ -15,7 +15,6 @@
  */
 class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-
     protected $_code = 'hcdeps';
     protected $_canRefund = false;
     protected $_canRefundInvoicePartial = false;

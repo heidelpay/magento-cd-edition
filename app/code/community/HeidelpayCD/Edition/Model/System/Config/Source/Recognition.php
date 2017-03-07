@@ -17,6 +17,7 @@ class HeidelpayCD_Edition_Model_System_Config_Source_Recognition
 {
     /**
      * Returns the recognition configuration option for the backend
+     *
      * @return array
      */
     public function toOptionArray()

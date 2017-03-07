@@ -15,5 +15,4 @@
  */
 class HeidelpayCD_Edition_Block_Info_Debit extends Mage_Payment_Block_Info
 {
-
 }

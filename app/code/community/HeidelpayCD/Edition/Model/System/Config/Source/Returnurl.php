@@ -17,6 +17,7 @@ class HeidelpayCD_Edition_Model_System_Config_Source_Returnurl
 {
     /**
      * Retruns the configuration option for the return urk in case of a payment error
+     *
      * @return array currently you can choose between basket and checkout page
      */
     public function toOptionArray()

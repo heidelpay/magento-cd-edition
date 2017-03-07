@@ -95,6 +95,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Inject template for checkout
+     *
      * @return string template form
      */
     public function getFormBlockType()
@@ -104,6 +105,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      *  Get current checkout session
+     *
      * @return Mage_Core_Model_Abstract::getSingleton('checkout/session')
      */
     public function getCheckout()
@@ -113,7 +115,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Getter for pending status
+     *
      * @param bool $param return state or status
+     *
      * @return Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
      */
     public function getStatusPendig($param = false)
@@ -127,7 +131,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Getter for error status
+     *
      * @param bool $param return state or status
+     *
      * @return Mage_Sales_Model_Order::STATE_CANCELED;
      */
     public function getStatusError($param = false)
@@ -141,7 +147,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Getter for success status
+     *
      * @param bool $param return state or status
+     *
      * @return Mage_Sales_Model_Order::STATE_PROCESSING;
      */
     public function getStatusSuccess($param = false)
@@ -155,7 +163,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Getter for partly paid status
+     *
      * @param bool $param return state or status
+     *
      * @return Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW;
      */
     public function getStatusPartlyPaid($param = false)
@@ -189,6 +199,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Validate input data from checkout
+     *
      * @return HeidelpayCD_Edition_Model_Payment_Abstract
      */
     public function validate()
@@ -209,7 +220,10 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Deactivate payment method in case of wrong currency or other credentials
+     *
      * @param Mage_Quote
+     * @param null|mixed $quote
+     *
      * @return bool
      */
     public function isAvailable($quote = null)
@@ -237,6 +251,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Redirect to heidelpay index controller in case of placing the order
+     *
      * @return string controller url
      */
     public function getOrderPlaceRedirectUrl()
@@ -247,9 +262,11 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Call heidelpay api for a payment request
+     *
      * @param bool $isRegistration some payment methods support registration of the customer account data
-     * @param bool $BasketId Id of a heidelpay basket api call
-     * @param bool $RefId payment reference id for debit or authorize on a registered account
+     * @param bool $BasketId       Id of a heidelpay basket api call
+     * @param bool $RefId          payment reference id for debit or authorize on a registered account
+     *
      * @return mixed
      */
     public function getHeidelpayUrl($isRegistration = false, $BasketId = false, $RefId = false)
@@ -321,9 +338,11 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Prepare basket details for heidelpay basket call
+     *
      * @param $order magento order object
      * @param bool $completeBasket
-     * @param bool $amount order amount
+     * @param bool $amount         order amount
+     *
      * @return array
      */
     public function getBasketData($order, $completeBasket = false, $amount = false)
@@ -344,8 +363,10 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Prepare frontend parameter for heidelpay api call
+     *
      * @param $ordernr order identification number
      * @param bool $storeId shore identification number
+     *
      * @return array
      */
     public function getFrontend($ordernr, $storeId = false)
@@ -366,8 +387,10 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Customer parameter for heidelpay api call
+     *
      * @param $order magento order object
      * @param bool $isReg in case of registration
+     *
      * @return array
      */
     public function getUser($order, $isReg = false)
@@ -443,7 +466,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Prepare basket items for BillSafe
+     *
      * @param $order magento order object
+     *
      * @return array basket details for heidelpay billSafe api call
      */
     public function getBasket($order)
@@ -506,7 +531,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Calculate shipping tax in percent for BillSafe
+     *
      * @param $order magentp order object
+     *
      * @return string shipping tex in percent
      */
     protected function getShippingTaxPercent($order)
@@ -517,7 +544,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Calculate shipping net price
+     *
      * @param $order magento order object
+     *
      * @return string shipping net price
      */
     protected function getShippingNetPrice($order)
@@ -532,7 +561,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * Load configuration parameter for the given payment method
      *
-     * @param mixed $code payment method code
+     * @param mixed $code    payment method code
      * @param mixed $storeId magento store identification number
      *
      * @return mixed
@@ -565,6 +594,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Getter for the payment method frontend title
+     *
      * @return string payment method title
      */
     public function getTitle()
@@ -576,6 +606,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Getter for the payment method backend title
+     *
      * @return string payment method title
      */
     public function getAdminTitle()
@@ -585,6 +616,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      *  Calculate weather a order can be captured or not
+     *
      * @return bool canCapture
      */
     public function canCapture()
@@ -621,7 +653,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Api call to capture a given amount on an invoice
      *
      * @param Varien_Object $payment current payment object
-     * @param float $amount amount to capture
+     * @param float         $amount  amount to capture
+     *
      * @return $this
      */
     public function capture(Varien_Object $payment, $amount)
@@ -682,7 +715,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Api call for refunding a given invoice
      *
      * @param Varien_Object $payment current payment object
-     * @param float $amount amount to refund
+     * @param float         $amount  amount to refund
+     *
      * @return $this
      */
     public function refund(Varien_Object $payment, $amount)
@@ -720,7 +754,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      *
      * @param $message message that should be logged
      * @param string $level message level (like debug,info or warning)
-     * @param bool $file name of the logfile
+     * @param bool   $file  name of the logfile
+     *
      * @return mixed
      */
     public function log($message, $level = "DEBUG", $file = false)
@@ -731,7 +766,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Getter for customer given plus family name
+     *
      * @param bool $session checkout session
+     *
      * @return string given plus family name
      */
     public function getCustomerName($session = false)
@@ -746,6 +783,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Save additional payment data of the customer to the database
+     *
      * @param $data additional payment information of the customer
      * @param null $uniqeID payment reference of a account registration
      */
@@ -780,9 +818,11 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Load additional payment information
-     * @param bool $code current payment method
+     *
+     * @param bool $code       current payment method
      * @param bool $customerId the customers identification number
-     * @param bool $storeId magento store id
+     * @param bool $storeId    magento store id
+     *
      * @return array|bool additional payment information
      */
     public function getCustomerData($code = false, $customerId = false, $storeId = false)
@@ -846,6 +886,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
     /**
      * Getter for customer identification number
+     *
      * @return int customer identification number
      */
     public function getCustomerId()
@@ -860,6 +901,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * the billing information
      *
      * @param $payment_data transaction detials form heidelpay api
+     *
      * @return bool| string  customer message for the success page
      */
     public function showPaymentInfo($payment_data)
@@ -882,6 +924,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @param $day day of the customers birth
      * @param $mount mount of the customers birth
      * @param $year year of the customers birth
+     *
      * @return bool return true if the costumer is older then 18 years
      */
     public function validateDateOfBirth($day, $mount, $year)
