@@ -1,3 +1,18 @@
+/**
+ * heidelpay payment frame javascript
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ *
+ * @link  https://dev.heidelpay.de/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
+ */
+
 document.observe('dom:loaded', function(){
 	// Get the target origin from the FRONTEND.PAYMENT_FRAME_URL parameter
 	var targetOrigin = getDomainFromUrl($('paymentFrame').readAttribute('src'));

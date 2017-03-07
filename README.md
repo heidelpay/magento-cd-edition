@@ -2,7 +2,7 @@
 
 # heidelpay payment extension for magento1
 
-This extension for Magento 1 provides a direct integration of the heidelpay payment methods to your Magento shop. 
+This extension for Magento >=1.8 provides a direct integration of the heidelpay payment methods to your Magento shop. 
 
 Currently supported payment methods are:
 * credit card
@@ -26,7 +26,7 @@ This extension requires PHP 5.6 or PHP 7.0
 
 ## LICENSE
 
-You can find a copy of this license in [LICENSE.md](LICENSE.md).
+You can find a copy of this license in [LICENSE.txt](LICENSE.txt).
 
 ## Installation
 
