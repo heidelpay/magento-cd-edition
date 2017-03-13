@@ -20,7 +20,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
     protected $_canCapture = true;
     protected $_canCapturePartial = true;
 
-    protected $_formBlockType = 'hcd/form_debit';
+    protected $_formBlockType = 'hcd/form_directDebitSecured';
     
     public function getFormBlockType()
     {
@@ -31,10 +31,9 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
     {
         $path = "payment/" . $this->_code . "/";
         $storeId = Mage::app()->getStore()->getId();
-        $insurence = Mage::getStoreConfig($path . 'insurence', $storeId);
+
         
         // in case if insurence billing and shipping adress
-        if ($insurence > 0) {
             $billing = $this->getQuote()->getBillingAddress();
             $shipping = $this->getQuote()->getShippingAddress();
             
@@ -44,12 +43,8 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
                 ($billing->getPostcode() != $shipping->getPostcode()) or
                 ($billing->getCity() != $shipping->getCity()) or
                 ($billing->getCountry() != $shipping->getCountry())) {
-                $this->log(
-                    'direct debit with insurence not allowed with diffrend adresses'
-                );
                 return false;
             }
-        }
 
         return parent::isAvailable($quote);
     }
