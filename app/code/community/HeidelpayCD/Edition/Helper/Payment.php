@@ -99,12 +99,25 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         switch ($config['PAYMENT.METHOD']) {
             /* sofortbanking */
             case 'su':
+                $params['ACCOUNT.BRAND'] = "SOFORT";
+                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
+                $params['PAYMENT.CODE'] = "OT." . $type;
+                break;
                 /* griopay */
             case 'gp':
+                $params['ACCOUNT.BRAND'] = "GIROPAY";
+                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
+                $params['PAYMENT.CODE'] = "OT." . $type;
+                break;
                 /* ideal */
             case 'ide':
+                $params['ACCOUNT.BRAND'] = "IDEAL";
+                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
+                $params['PAYMENT.CODE'] = "OT." . $type;
+                break;
                 /* eps */
             case 'eps':
+                $params['ACCOUNT.BRAND'] = "EPS";
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
                 $params['PAYMENT.CODE'] = "OT." . $type;
                 break;
@@ -113,22 +126,11 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
                 $params['PAYMENT.CODE'] = "OT." . $type;
                 break;
-            /* yapital */
-            case 'yt':
-                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "OT." . $type;
-                $params['ACCOUNT.BRAND'] = "YAPITAL";
-                $params['FRONTEND.ENABLED'] = "false";
-                break;
             /* paypal */
             case 'pal':
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'];
                 $params['PAYMENT.CODE'] = "VA." . $type;
                 $params['ACCOUNT.BRAND'] = "PAYPAL";
-                $params['FRONTEND.PM.DEFAULT_DISABLE_ALL'] = "true";
-                $params['FRONTEND.PM.0.ENABLED'] = "true";
-                $params['FRONTEND.PM.0.METHOD'] = "VA";
-                $params['FRONTEND.PM.0.SUBTYPES'] = "PAYPAL";
                 break;
             /* prepayment */
             case 'pp':
@@ -140,25 +142,20 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
                 $params['PAYMENT.CODE'] = "IV." . $type;
                 break;
+            /* invoce secured*/
+            case 'InvoiceSecured':
+                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
+                $params['PAYMENT.CODE'] = "IV." . $type;
+                break;
+            /* invoce secured*/
+            case 'DirectDebitSecured':
+                $params['PAYMENT.CODE'] = "DD.DB";
+                break;
             /* BillSafe */
             case 'bs':
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
                 $params['PAYMENT.CODE'] = "IV." . $type;
                 $params['ACCOUNT.BRAND'] = "BILLSAFE";
-                $params['FRONTEND.ENABLED'] = "false";
-                break;
-            /* BarPay */
-            case 'bp':
-                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "PP." . $type;
-                $params['ACCOUNT.BRAND'] = "BARPAY";
-                $params['FRONTEND.ENABLED'] = "false";
-                break;
-            /* MangirKart */
-            case 'mk':
-                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "PC." . $type;
-                $params['ACCOUNT.BRAND'] = "MANGIRKART";
                 $params['FRONTEND.ENABLED'] = "false";
                 break;
             /* MasterPass */
