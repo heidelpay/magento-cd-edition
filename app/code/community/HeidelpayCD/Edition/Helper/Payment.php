@@ -535,7 +535,6 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         $count = 1;
 
         foreach ($ShoppingCartItems as $item) {
-
             $ShoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
                 'basketItemReferenceId' => $item->getItemId(),

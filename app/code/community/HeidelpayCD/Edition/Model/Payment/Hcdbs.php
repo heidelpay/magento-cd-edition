@@ -14,8 +14,7 @@
  * @subpackage Magento
  * @category Magento
  */
-class HeidelpayCD_Edition_Model_Payment_Hcdbs
-    extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdbs';
     protected $_canRefund = false;
