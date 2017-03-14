@@ -13,9 +13,9 @@
  * @subpackage Magento
  * @category Magento
  */
-$_code = $this->getMethodCode();
+$code = $this->getMethodCode();
 
-$path = "payment/" . $_code . "/";
+$path = "payment/" . $code . "/";
 $storeId = Mage::app()->getStore()->getId();
 $recognition = Mage::getStoreConfig($path . 'recognition', $storeId);
 
@@ -39,33 +39,33 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
 
 
 ?>
-<div class="form-list hcd-payment-info" id="payment_form_<?php echo $_code ?>" style="display: none;">
+<div class="form-list hcd-payment-info" id="payment_form_<?php echo $code ?>" style="display: none;">
     <div class="input-box">
-        <label for="<?php echo $_code ?>_salutation"
+        <label for="<?php echo $code ?>_salutation"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->__('salutation') ?></label>
 
-        <select title="<?php echo $this->__('salutation') ?>" name="payment[<?php echo $_code ?>_salutation]"
+        <select title="<?php echo $this->__('salutation') ?>" name="payment[<?php echo $code ?>_salutation]"
                 style="width: 75px">
             <option value="MR"><?php echo $this->__('mr') ?></option>
             <option value="MRS"><?php echo $this->__('mrs') ?></option>
         </select>
     </div>
     <div class="input-box">
-        <label for="<?php echo $_code ?>_holder"
+        <label for="<?php echo $code ?>_holder"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Owner') ?></label>
 
         <input type="text" title="<?php echo $this->__('Owner:') ?>"
-               class="input-text required-entry" id="<?php echo $_code ?>_holder"
-               name="payment[<?php echo $_code ?>_holder]"
+               class="input-text required-entry" id="<?php echo $code ?>_holder"
+               name="payment[<?php echo $code ?>_holder]"
                value="<?php echo $this->htmlEscape((isset($userData['payment_data']['ACCOUNT.HOLDER'])) ? $userData['payment_data']['ACCOUNT.HOLDER'] : $this->getMethod()->getCustomerName()) ?>"/>
     </div>
     <div class="input-box">
-        <label for="<?php echo $_code ?>_iban"
+        <label for="<?php echo $code ?>_iban"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->__('IBAN') ?></label>
 
         <input type="text" title="<?php echo $this->__('IBAN') ?>" class="input-text required-entry validate-alphanum"
-               id="<?php echo $_code ?>_iban"
-               name="payment[<?php echo $_code ?>_iban]"
+               id="<?php echo $code ?>_iban"
+               name="payment[<?php echo $code ?>_iban]"
                value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) {
                    echo $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']);
                }
@@ -73,10 +73,10 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
                size="25">
     </div>
     <div class="input-box">
-        <label for="<?php echo $_code ?>_dob"
+        <label for="<?php echo $code ?>_dob"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Date of birth') ?></label>
         <select title="<?php echo $this->__('day') ?>"
-                name="payment[<?php echo $_code ?>_dobday]" style="width: 50px">
+                name="payment[<?php echo $code ?>_dobday]" style="width: 50px">
             <option><?php echo $this->__('day'); ?>/option>
                 <?php
                 $i = 0;
@@ -88,7 +88,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
                 ?>
         </select>
         <select title="<?php echo $this->__('month') ?>"
-                name="payment[<?php echo $_code ?>_dobmonth]">
+                name="payment[<?php echo $code ?>_dobmonth]">
             <option><?php echo $this->__('month'); ?></option>
             <?php
             $i = 0;
@@ -99,7 +99,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
             }
             ?>
         </select>
-        <select title="<?php echo $this->__('year') ?>" name="payment[<?php echo $_code ?>_dobyear]"
+        <select title="<?php echo $this->__('year') ?>" name="payment[<?php echo $code ?>_dobyear]"
                 style="width: 75px">
             <option><?php echo $this->__('year'); ?></option>
             <?php
@@ -115,5 +115,5 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
 
 </div>
 <div class="hcd-payment-desc">
-    <?php echo $this->__('Desc' . $_code); ?>
+    <?php echo $this->__('Desc' . $code); ?>
 </div>
