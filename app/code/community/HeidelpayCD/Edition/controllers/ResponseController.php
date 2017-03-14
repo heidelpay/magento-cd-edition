@@ -260,8 +260,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         $this->log('Url: ' . $url);
 
 
-        $this->getLayout()->getBlock('hcd_response')
-            ->setHcdURL($url);
+        print $url;
     }
 
 }

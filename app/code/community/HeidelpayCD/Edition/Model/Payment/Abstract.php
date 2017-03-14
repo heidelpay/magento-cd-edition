@@ -409,7 +409,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         return array(
             'FRONTEND.LANGUAGE' => Mage::helper('hcd/payment')->getLang(),
             'FRONTEND.RESPONSE_URL' =>
-                Mage::getUrl('hcd/index/response',
+                Mage::getUrl('hcd/response/',
                     array(
                         '_forced_secure' => true,
                         '_store_to_url' => true,
