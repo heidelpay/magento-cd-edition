@@ -445,7 +445,7 @@
                         </specificcountry>
                     </fields>
                 </hcddd>
-                <hcdddsd translate="label">
+                <hcdDirectDebitSecured translate="label">
                     <label>Heidelpay direct debit secured(hcd)</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>65</sort_order>
@@ -539,7 +539,7 @@
                             <show_in_store>1</show_in_store>
                         </specificcountry>
                     </fields>
-                </hcdddsd>
+                </hcdDirectDebitSecured>
                 <hcdsu translate="label">
                     <label><![CDATA[Heidelpay SOFORT &Uuml;berweisung (hcd)]]></label>
                     <frontend_type>text</frontend_type>

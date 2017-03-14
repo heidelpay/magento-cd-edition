@@ -224,7 +224,7 @@
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
             </hcddd>
-            <hcdddsd>
+            <hcdDirectDebitSecured>
                 <group>hcd</group>
                 <title>Direct debit secured</title>
                 <active>0</active>
@@ -238,7 +238,7 @@
                 <min_amount>10</min_amount>
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
-            </hcdddsd>
+            </hcdDirectDebitSecured>
             <hcdsu>
                 <group>hcd</group>
                 <title>SOFORT Überweisung</title>
@@ -277,19 +277,6 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>DE</specificcountry>
             </hcdbs>
-            <hcdmk>
-                <group>hcd</group>
-                <title>MangirKart</title>
-                <active>0</active>
-                <channel>31HA07BC8142EE6D0271011E4508C3F2</channel>
-                <invioce>1</invioce>
-                <model>hcd/payment_hcdmk</model>
-                <sort_order>1</sort_order>
-                <min_amount>10</min_amount>
-                <max_amount>0</max_amount>
-                <allowspecific>1</allowspecific>
-                <specificcountry>TR</specificcountry>
-            </hcdmk>
             <hcdpal>
                 <group>hcd</group>
                 <title>Pay Pal</title>
@@ -330,7 +317,7 @@
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
             </hcdiv>
-            <hcdivsd>
+            <hcdDirectDebitSecured>
                 <group>hcd</group>
                 <title>Invoice secured</title>
                 <active>0</active>
@@ -342,7 +329,7 @@
                 <min_amount>10</min_amount>
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
-            </hcdivsd>
+            </hcdDirectDebitSecured>
             <hcdpf>
                 <group>hcd</group>
                 <title>Postfinance</title>
