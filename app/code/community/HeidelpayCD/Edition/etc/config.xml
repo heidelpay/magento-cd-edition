@@ -317,7 +317,7 @@
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
             </hcdiv>
-            <hcdDirectDebitSecured>
+            <hcdInvoiceSecured>
                 <group>hcd</group>
                 <title>Invoice secured</title>
                 <active>0</active>
@@ -329,7 +329,7 @@
                 <min_amount>10</min_amount>
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
-            </hcdDirectDebitSecured>
+            </hcdInvoiceSecured>
             <hcdpf>
                 <group>hcd</group>
                 <title>Postfinance</title>
