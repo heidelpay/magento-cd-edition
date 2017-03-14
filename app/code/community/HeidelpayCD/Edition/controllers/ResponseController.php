@@ -117,16 +117,13 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                     $securityHash
                 ) === false
         ) {
-            $this->getLayout()->getBlock('hcd_response')
-                ->setHcdURL(
-                    Mage::getUrl(
-                        'hcd/index/error', array(
+            print Mage::getUrl(
+                'hcd/index/error', array(
                             '_forced_secure' => true,
                             '_store_to_url' => true,
                             '_nosid' => true
                         )
-                    )
-                );
+            );
             $this->log(
                 "Get response form server "
                 . $request->getServer('REMOTE_ADDR')
