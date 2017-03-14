@@ -1,6 +1,6 @@
 <?php
 /**
- * Direct debit secured form template
+ * Invoice secured form template
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
@@ -49,28 +49,6 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
             <option value="MR"><?php echo $this->__('mr') ?></option>
             <option value="MRS"><?php echo $this->__('mrs') ?></option>
         </select>
-    </div>
-    <div class="input-box">
-        <label for="<?php echo $_code ?>_holder"
-               class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Owner') ?></label>
-
-        <input type="text" title="<?php echo $this->__('Owner:') ?>"
-               class="input-text required-entry" id="<?php echo $_code ?>_holder"
-               name="payment[<?php echo $_code ?>_holder]"
-               value="<?php echo $this->htmlEscape((isset($userData['payment_data']['ACCOUNT.HOLDER'])) ? $userData['payment_data']['ACCOUNT.HOLDER'] : $this->getMethod()->getCustomerName()) ?>"/>
-    </div>
-    <div class="input-box">
-        <label for="<?php echo $_code ?>_iban"
-               class="required hcd-singleline-label"><em>*</em><?php echo $this->__('IBAN') ?></label>
-
-        <input type="text" title="<?php echo $this->__('IBAN') ?>" class="input-text required-entry validate-alphanum"
-               id="<?php echo $_code ?>_iban"
-               name="payment[<?php echo $_code ?>_iban]"
-               value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) {
-                   echo $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']);
-               }
-               ?>"
-               size="25">
     </div>
     <div class="input-box">
         <label for="<?php echo $_code ?>_dob"

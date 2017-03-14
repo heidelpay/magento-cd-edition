@@ -1,6 +1,6 @@
 <?php
 /**
- * Invoice secured payment method
+ * Invoice secured form block
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
@@ -13,10 +13,12 @@
  * @subpackage Magento
  * @category Magento
  */
-class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
-    extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Block_Form_InvoiceSecured extends Mage_Payment_Block_Form
 {
-    protected $_code = 'hcdInvoiceSecured';
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->setTemplate('hcd/form/invoice-secured.phtml');
 
-    protected $_formBlockType = 'hcd/form_invoiceDebitSecured';
+    }
 }
