@@ -83,7 +83,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
                class="required hcd-singleline-label"><em>*</em>
             <?php echo $this->htmlEscape($this->__('Date of birth')) ?></label>
         <select title="<?php echo $this->htmlEscape($this->__('day')) ?>"
-                name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]" style="width: 50px">
+                name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]">
             <option><?php echo $this->htmlEscape($this->__('day')); ?></option>
                 <?php
                 $i = 0;

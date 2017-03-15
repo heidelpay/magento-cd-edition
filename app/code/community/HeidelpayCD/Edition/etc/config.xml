@@ -224,7 +224,7 @@
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
             </hcddd>
-            <hcdDirectDebitSecured>
+            <hcdddsec>
                 <group>hcd</group>
                 <title>Direct debit secured</title>
                 <active>0</active>
@@ -238,7 +238,7 @@
                 <min_amount>10</min_amount>
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
-            </hcdDirectDebitSecured>
+            </hcdddsec>
             <hcdsu>
                 <group>hcd</group>
                 <title>SOFORT Überweisung</title>
@@ -317,7 +317,7 @@
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
             </hcdiv>
-            <hcdInvoiceSecured>
+            <hcdivsec>
                 <group>hcd</group>
                 <title>Invoice secured</title>
                 <active>0</active>
@@ -329,7 +329,7 @@
                 <min_amount>10</min_amount>
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
-            </hcdInvoiceSecured>
+            </hcdivsec>
             <hcdpf>
                 <group>hcd</group>
                 <title>Postfinance</title>
