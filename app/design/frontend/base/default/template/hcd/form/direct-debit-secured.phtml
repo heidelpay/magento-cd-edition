@@ -33,7 +33,6 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
         }
     }
 } elseif ($recognition == 2 and $cId != 0) {
-    // allways
     $userData = $this->getMethod()->getCustomerData();
 }
 
@@ -89,7 +88,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
                 $i = 0;
                 for ($i = 1; $i <= 31; $i++) {
                     $v = sprintf("%02d", $i);
-                    $selected = ($dobday === $v) ? 'selected="selected"' : '';
+                    $selected = ($userData ['payment_data']['dobday'] === $v) ? 'selected="selected"' : '';
                     echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected)
                         . '>' . $this->htmlEscape($v) . '</option>';
                 }
@@ -102,7 +101,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
             $i = 0;
             for ($i = 1; $i <= 12; $i++) {
                 $v = sprintf("%02d", $i);
-                $selected = ($dobmounth == $v) ? 'selected="selected"' : '';
+                $selected = ($userData ['payment_data']['dobmounth'] == $v) ? 'selected="selected"' : '';
                 echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected) . '>' .
                     $this->htmlEscape($v) . '</option>';
             }
@@ -116,7 +115,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
             $i = 0;
             for ($i = 17; $i <= 80; $i++) {
                 $year = date('Y', strtotime("last day of -$i year"));
-                $selected = ($dobyear === $year) ? 'selected="selected"' : '';
+                $selected = ($userData ['payment_data']['dobyear'] === $year) ? 'selected="selected"' : '';
                 echo '<option value="' . $this->htmlEscape($year) . '" ' .
                     $this->htmlEscape($selected) . '>' . $this->htmlEscape($year) . '</option>';
             }
