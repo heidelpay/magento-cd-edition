@@ -16,9 +16,7 @@
 class HeidelpayCD_Edition_Model_Payment_Hcdgp extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdgp';
-    // protected $_infoBlockType = 'hcd/info_debit';
-    protected $_formBlockType = 'hcd/form_giropay';
-    
+
     public function getFormBlockType()
     {
         return $this->_formBlockType;

@@ -32,82 +32,93 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
             $userData = array();
         }
     }
-} elseif ($recognition == 2 and $cId != 0) // allways
-{
+} elseif ($recognition == 2 and $cId != 0) {
+    // allways
     $userData = $this->getMethod()->getCustomerData();
 }
 
 
 ?>
-<div class="form-list hcd-payment-info" id="payment_form_<?php echo $code ?>" style="display: none;">
+<div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
     <div class="input-box">
-        <label for="<?php echo $code ?>_salutation"
-               class="required hcd-singleline-label"><em>*</em><?php echo $this->__('salutation') ?></label>
+        <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
+               class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('salutation')) ?>
+        </label>
 
-        <select title="<?php echo $this->__('salutation') ?>" name="payment[<?php echo $code ?>_salutation]"
-                style="width: 75px">
-            <option value="MR"><?php echo $this->__('mr') ?></option>
-            <option value="MRS"><?php echo $this->__('mrs') ?></option>
+        <select title="<?php echo $this->htmlEscape($this->__('salutation')) ?>"
+                name="payment[<?php echo $this->htmlEscape($code) ?>_salutation]">
+            <option value="MR"><?php echo $this->htmlEscape($this->__('mr')) ?></option>
+            <option value="MRS"><?php echo $this->htmlEscape($this->__('mrs')) ?></option>
         </select>
     </div>
     <div class="input-box">
-        <label for="<?php echo $code ?>_holder"
-               class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Owner') ?></label>
-
-        <input type="text" title="<?php echo $this->__('Owner:') ?>"
-               class="input-text required-entry" id="<?php echo $code ?>_holder"
-               name="payment[<?php echo $code ?>_holder]"
-               value="<?php echo $this->htmlEscape((isset($userData['payment_data']['ACCOUNT.HOLDER'])) ? $userData['payment_data']['ACCOUNT.HOLDER'] : $this->getMethod()->getCustomerName()) ?>"/>
+        <label for="<?php echo $this->htmlEscape($code) ?>_holder"
+               class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('Owner')) ?>
+        </label>
+        <input type="text" title="<?php echo $this->htmlEscape($this->__('Owner:')) ?>"
+               class="input-text required-entry" id="<?php echo $this->htmlEscape($code) ?>_holder"
+               name="payment[<?php echo $this->htmlEscape($code) ?>_holder]"
+               value="<?php
+               echo $this->htmlEscape(
+                   (isset($userData['payment_data']['ACCOUNT.HOLDER']))
+                   ? $userData['payment_data']['ACCOUNT.HOLDER'] : $this->getMethod()->getCustomerName()
+               ) ?>"/>
     </div>
     <div class="input-box">
-        <label for="<?php echo $code ?>_iban"
-               class="required hcd-singleline-label"><em>*</em><?php echo $this->__('IBAN') ?></label>
+        <label for="<?php echo $this->htmlEscape($code) ?>_iban"
+               class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('IBAN')) ?>
+        </label>
 
-        <input type="text" title="<?php echo $this->__('IBAN') ?>" class="input-text required-entry validate-alphanum"
-               id="<?php echo $code ?>_iban"
-               name="payment[<?php echo $code ?>_iban]"
+        <input type="text" title="<?php echo $this->htmlEscape($this->__('IBAN')) ?>"
+               class="input-text required-entry validate-alphanum"
+               id="<?php echo $this->htmlEscape($code) ?>_iban"
+               name="payment[<?php echo $this->htmlEscape($code) ?>_iban]"
                value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) {
                    echo $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']);
-               }
-               ?>"
-               size="25">
+              } ?>"
+               size="25">q
     </div>
     <div class="input-box">
-        <label for="<?php echo $code ?>_dob"
-               class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Date of birth') ?></label>
-        <select title="<?php echo $this->__('day') ?>"
-                name="payment[<?php echo $code ?>_dobday]" style="width: 50px">
-            <option><?php echo $this->__('day'); ?>/option>
+        <label for="<?php echo $this->htmlEscape($code) ?>_dob"
+               class="required hcd-singleline-label"><em>*</em>
+            <?php echo $this->htmlEscape($this->__('Date of birth')) ?></label>
+        <select title="<?php echo $this->htmlEscape($this->__('day')) ?>"
+                name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]" style="width: 50px">
+            <option><?php echo $this->htmlEscape($this->__('day')); ?>/option>
                 <?php
                 $i = 0;
                 for ($i = 1; $i <= 31; $i++) {
                     $v = sprintf("%02d", $i);
                     $selected = ($dobday === $v) ? 'selected="selected"' : '';
-                    echo '<option value="' . $v . '" ' . $selected . '>' . $v . '</option>';
+                    echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected)
+                        . '>' . $this->htmlEscape($v) . '</option>';
                 }
                 ?>
         </select>
-        <select title="<?php echo $this->__('month') ?>"
-                name="payment[<?php echo $code ?>_dobmonth]">
-            <option><?php echo $this->__('month'); ?></option>
+        <select title="<?php echo $this->htmlEscape($this->__('month')) ?>"
+                name="payment[<?php echo $this->htmlEscape($code) ?>_dobmonth]">
+            <option><?php echo $this->htmlEscape($this->__('month')); ?></option>
             <?php
             $i = 0;
             for ($i = 1; $i <= 12; $i++) {
                 $v = sprintf("%02d", $i);
                 $selected = ($dobmounth == $v) ? 'selected="selected"' : '';
-                echo '<option value="' . $v . '" ' . $selected . '>' . $v . '</option>';
+                echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected) . '>' .
+                    $this->htmlEscape($v) . '</option>';
             }
             ?>
         </select>
-        <select title="<?php echo $this->__('year') ?>" name="payment[<?php echo $code ?>_dobyear]"
+        <select title="<?php echo $this->htmlEscape($this->__('year')) ?>"
+                name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]"
                 style="width: 75px">
-            <option><?php echo $this->__('year'); ?></option>
+            <option><?php echo $this->htmlEscape($this->__('year')); ?></option>
             <?php
             $i = 0;
             for ($i = 17; $i <= 80; $i++) {
                 $year = date('Y', strtotime("last day of -$i year"));
                 $selected = ($dobyear === $year) ? 'selected="selected"' : '';
-                echo '<option value="' . $year . '" ' . $selected . '>' . $year . '</option>';
+                echo '<option value="' . $this->htmlEscape($year) . '" ' .
+                    $this->htmlEscape($selected) . '>' . $this->htmlEscape($year) . '</option>';
             }
             ?>
         </select>
@@ -115,5 +126,5 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
 
 </div>
 <div class="hcd-payment-desc">
-    <?php echo $this->__('Desc' . $code); ?>
+    <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
 </div>

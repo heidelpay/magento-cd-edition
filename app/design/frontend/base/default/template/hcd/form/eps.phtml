@@ -1,38 +1,60 @@
-<?php 
+<?php
+/**
+ * EPS form template
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ *
+ * @link  https://dev.heidelpay.de/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
+ */
 $payment = '';
 
-$_code=$this->getMethodCode();
-$payment = $this->getMethod() ;
+$code = $this->getMethodCode();
+$payment = $this->getMethod();
 
-	$data = $payment->getHeidelpayUrl(true);
-		if ($data['PROCESSING_RESULT'] == 'NOK') $userData = array();
-		
-?>
-
-<div class="form-list hcd-payment-info" id="payment_form_<?php echo $_code ?>" style="display: none;">
-	<?php //echo '<pre>Data'.print_r($data,1).'</pre>';
-			if ($data['PROCESSING_RESULT'] == 'NOK') {
-				echo '<div class="hcd-payment-desc hcd-payment-error">'.Mage::helper('hcd/payment')->handleError($data['PROCESSING_RETURN']).'</div>';
-	} else {
-	
-	 ?>
-	<label class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Bank') ?></label>
-      	 <div class="input-box">
-			<select class="input-text required-entry" name="payment[<?php echo $_code ?>_bank]">
-			<?php
-foreach (json_decode($data['CONFIG_BRANDS'], true) AS $value => $brand) { 
-	echo '<option value='.$value.' >'.$brand.'</option>' ; 
+$data = $payment->getHeidelpayUrl(true);
+if ($data['PROCESSING_RESULT'] == 'NOK') {
+    $userData = array();
 }
+
 ?>
-			</select>
-	</div>
-	<div class="input-box">
-        <label for="<?php echo $_code ?>_holder" class="required hcd-singleline-label"><em>*</em><?php echo $this->__('Owner') ?></label>
-        
-            <input type="text" title="<?php echo $this->__('Owner:') ?>" class="input-text required-entry" id="<?php echo $_code ?>_holder" name="payment[<?php echo $_code ?>_holder]" value="<?php echo $this->htmlEscape($this->getMethod()->getCustomerName()) ?>" />
-     </div>
-    <div class="hcd-payment-desc">
-    	<?php echo $this->__('Desc'.$_code);?>
-    </div>
-<?php } ?>    
+
+<div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+    <?php
+    if ($data['PROCESSING_RESULT'] == 'NOK') {
+        echo '<div class="hcd-payment-desc hcd-payment-error">' .
+            $this->htmlEscape(Mage::helper('hcd/payment')->handleError($data['PROCESSING_RETURN']))
+            . '</div>';
+    } else {
+        ?>
+        <label class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('Bank')) ?>
+        </label>
+        <div class="input-box">
+            <select class="input-text required-entry" name="payment[<?php echo $this->htmlEscape($code) ?>_bank]">
+                <?php
+                foreach (json_decode($data['CONFIG_BRANDS'], true) AS $value => $brand) {
+                    echo '<option value=' . $this->htmlEscape($value) . ' >' . $this->htmlEscape($brand) . '</option>';
+                }
+                ?>
+            </select>
+        </div>
+        <div class="input-box">
+            <label for="<?php echo $this->htmlEscape($code) ?>_holder" class="required hcd-singleline-label">
+                <em>*</em><?php echo $this->htmlEscape($this->__('Owner')) ?></label>
+
+            <input type="text" title="<?php echo $this->htmlEscape($this->__('Owner:')) ?>"
+                   class="input-text required-entry" id="<?php echo $this->htmlEscape($code) ?>_holder"
+                   name="payment[<?php echo $this->htmlEscape($code) ?>_holder]"
+                   value="<?php echo $this->htmlEscape($this->getMethod()->getCustomerName()) ?>"/>
+        </div>
+        <div class="hcd-payment-desc">
+            <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
+        </div>
+    <?php } ?>
 </div>
