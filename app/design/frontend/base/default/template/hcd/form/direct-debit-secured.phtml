@@ -42,22 +42,25 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
 
 if (array_key_exists('payment_data', $userData) &&
 array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])) {
-    list($dobyear, $dobmounth,$dobday) = explode($userData['payment_data']['NAME.BIRTHDATE']);
+    list($dobyear, $dobmounth,$dobday) = explode('-', $userData['payment_data']['NAME.BIRTHDATE']);
 }
 
 
 ?>
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
-    <?php echo '<pre>'. print_r($userData, 1).'</pre>'; ?>
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('salutation')) ?>
         </label>
-
         <select  title="<?php echo $this->htmlEscape($this->__('salutation')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_salutation]">
             <option value="MR"><?php echo $this->htmlEscape($this->__('mr')) ?></option>
-            <option value="MRS"><?php echo $this->htmlEscape($this->__('mrs')) ?></option>
+            <option value="MRS" <?php if (array_key_exists('payment_data', $userData) and
+                array_key_exists('NAME.SALUTATION', $userData['payment_data']) and
+                $userData['payment_data']['NAME.SALUTATION'] == 'MRS'
+            ) echo 'selected="selected"' ?>>
+                <?php echo $this->htmlEscape($this->__('mrs')) ?>
+            </option>
         </select>
     </div>
     <div class="input-box">

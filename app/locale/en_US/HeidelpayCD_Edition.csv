@@ -81,8 +81,8 @@
 "Deschcdiv","Pay comfortable with invoice"
 "Deschcdbs","Buy with invoice and check your order calmly before payment.<br/>"
 "Deschcdmpa","The MasterPass by MasterCard&copy; digital wallet makes online shopping safe and easy by storing all your payment and shipping information in one convenient and secure place. And it&apos;s free. With MasterPass, you simply shop, and check out faster."
-"DeschcdDirectDebitSecured","Pay safe and secure with direct debit"
-"DeschcdInvoiceSecured","Pay comfortable with invoice"
+"Deschcdddsec","Pay safe and secure with direct debit"
+"Deschcdvisec","Pay comfortable with invoice"
 
 "Return in Errorcase","Return in Errorcase"
 "Please configurate where your costumer should be redirected to in case of an payment error","Please configurate where your costumer should be redirected to in case of an payment error"

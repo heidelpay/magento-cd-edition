@@ -80,8 +80,8 @@
 "Deschcdsu","Sicher zahlen mit Sofort&uuml;berweisung"
 "Deschcdiv","Sicher bezahlen per Rechnungskauf"
 "Deschcdmpa","MasterPass ist eine digitale Bezahll&ouml;sung f&uuml;r den Einkauf im Internet von MasterCard, die von Banken und MasterCard direkt bereitgestellt wird. Ihre Kartendaten und Lieferadressen werden an einem gesch&uuml;tzten Ort aufbewahrt. Nachdem Sie sich registriert haben, k&ouml;nnen Sie mit wenigen Klicks sicher online einkaufen."
-"DeschcdDirectDebitSecured","Sicher zahlen mit Lastschrift"
-"DeschcdInvoiceSecured","Sicher bezahlen per Rechnungskauf"
+"Deschcdddsec","Sicher zahlen mit Lastschrift"
+"Deschcdvisec","Sicher bezahlen per Rechnungskauf"
 
 "Return in Errorcase","R&uuml;ckleitung bei Bezahlfehler"
 "Please configurate where your costumer should be redirected to in case of an payment error","Hier k&ouml;nnen Sie einstellen, wo der Kunde in Fehlerfall hingeleitet werden soll."
