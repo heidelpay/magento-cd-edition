@@ -89,12 +89,6 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
             if (empty($payment[$this->_code.'_iban'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
-
-            if (empty($payment[$this->_code.'_bic'])) {
-                if (!preg_match('/^[A-Za-z]{2}/', $payment[$this->_code.'_iban'])) {
-                    Mage::throwException($this->_getHelper()->__('Please specify a bank code'));
-                }
-            }
         
             $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
                 
@@ -103,17 +97,9 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
             } else {
                 $params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
             }
-            
-            if (preg_match('#^[\d]#', $payment[$this->_code.'_bic'])) {
-                $params['ACCOUNT.BANK'] = $payment[$this->_code.'_bic'];
-                $params['ACCOUNT.COUNTRY'] = $this->getQuote()->getBillingAddress()->getCountry();
-            } else {
-                $params['ACCOUNT.BIC'] = $payment[$this->_code.'_bic'];
-            }
 
             $this->saveCustomerData($params);
-            
-            return $this;
+
         }
         
         return $this;
