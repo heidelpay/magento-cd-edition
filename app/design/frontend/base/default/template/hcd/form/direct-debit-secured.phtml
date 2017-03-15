@@ -39,6 +39,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
 
 ?>
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+    <?php echo '<pre>'. print_r($userData,1).'</pre>'; ?>
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('salutation')) ?>
@@ -60,7 +61,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
                value="<?php
                echo $this->htmlEscape(
                    (isset($userData['payment_data']['ACCOUNT.HOLDER']))
-                   ? $userData['payment_data']['ACCOUNT.HOLDER'] : $this->getMethod()->getCustomerName()
+                       ? $userData['payment_data']['ACCOUNT.HOLDER'] : $this->getMethod()->getCustomerName()
                ) ?>"/>
     </div>
     <div class="input-box">
@@ -75,7 +76,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
                value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) {
                    echo $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']);
               } ?>"
-               size="25">q
+               size="25">
     </div>
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_dob"
@@ -83,7 +84,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
             <?php echo $this->htmlEscape($this->__('Date of birth')) ?></label>
         <select title="<?php echo $this->htmlEscape($this->__('day')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]" style="width: 50px">
-            <option><?php echo $this->htmlEscape($this->__('day')); ?>/option>
+            <option><?php echo $this->htmlEscape($this->__('day')); ?></option>
                 <?php
                 $i = 0;
                 for ($i = 1; $i <= 31; $i++) {
@@ -108,8 +109,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
             ?>
         </select>
         <select title="<?php echo $this->htmlEscape($this->__('year')) ?>"
-                name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]"
-                style="width: 75px">
+                name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]">
             <option><?php echo $this->htmlEscape($this->__('year')); ?></option>
             <?php
             $i = 0;
@@ -123,7 +123,8 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
         </select>
     </div>
 
-</div>
-<div class="hcd-payment-desc">
-    <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
+    <div class="hcd-payment-desc">
+        <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
+    </div>
+
 </div>
