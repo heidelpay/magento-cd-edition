@@ -142,13 +142,12 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
                 $params['PAYMENT.CODE'] = "IV." . $type;
                 break;
-            /* invoce secured*/
-            case 'InvoiceSecured':
-                $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "IV." . $type;
+            /* invoice secured */
+            case 'ivsec':
+                $params['PAYMENT.CODE'] = "IV.PA";
                 break;
-            /* invoce secured*/
-            case 'DirectDebitSecured':
+            /* direct debit secured */
+            case 'ddsec':
                 $params['PAYMENT.CODE'] = "DD.DB";
                 break;
             /* BillSafe */
@@ -172,7 +171,6 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 $params['PAYMENT.CODE'] = "WT." . $type;
                 $params['ACCOUNT.BRAND'] = "MASTERPASS";
                 break;
-            /* default */
             default:
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
                 $params['PAYMENT.CODE'] = strtoupper($config['PAYMENT.METHOD']) . '.' . $type;
