@@ -24,7 +24,8 @@ $userData = array();
 
 $cId = $this->getMethod()->getCustomerId();
 
-if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
+if ($recognition == 1 and $cId != 0) {
+    // only if shipping address is unchanged
     $hash = $this->getMethod()->getShippingHash();
     $userData = $this->getMethod()->getCustomerData();
     if (array_key_exists('payment_data', $userData)) {
@@ -35,7 +36,6 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
 } elseif ($recognition == 2 and $cId != 0) {
     $userData = $this->getMethod()->getCustomerData();
 }
-
 
 ?>
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
