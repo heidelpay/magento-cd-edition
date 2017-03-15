@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Direct debit secured payment method
  *
@@ -21,59 +22,63 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
     protected $_canCapturePartial = true;
 
     protected $_formBlockType = 'hcd/form_directDebitSecured';
-    
+
     public function getFormBlockType()
     {
         return $this->_formBlockType;
     }
-    
+
     public function isAvailable($quote = null)
     {
         $path = "payment/" . $this->_code . "/";
         $storeId = Mage::app()->getStore()->getId();
 
-        
+
         // in case if insurence billing and shipping adress
-            $billing = $this->getQuote()->getBillingAddress();
-            $shipping = $this->getQuote()->getShippingAddress();
-            
-            if (($billing->getFirstname() != $shipping->getFirstname()) or
-                ($billing->getLastname() != $shipping->getLastname()) or
-                ($billing->getStreet() != $shipping->getStreet()) or
-                ($billing->getPostcode() != $shipping->getPostcode()) or
-                ($billing->getCity() != $shipping->getCity()) or
-                ($billing->getCountry() != $shipping->getCountry())) {
-                return false;
-            }
+        $billing = $this->getQuote()->getBillingAddress();
+        $shipping = $this->getQuote()->getShippingAddress();
+
+        if (($billing->getFirstname() != $shipping->getFirstname()) or
+            ($billing->getLastname() != $shipping->getLastname()) or
+            ($billing->getStreet() != $shipping->getStreet()) or
+            ($billing->getPostcode() != $shipping->getPostcode()) or
+            ($billing->getCity() != $shipping->getCity()) or
+            ($billing->getCountry() != $shipping->getCountry())
+        ) {
+            return false;
+        }
 
         return parent::isAvailable($quote);
     }
-    
+
     public function validate()
     {
         parent::validate();
         $payment = array();
         $params = array();
         $payment = Mage::app()->getRequest()->getPOST('payment');
-        
+
 
         if (isset($payment['method']) and $payment['method'] == $this->_code) {
-            if (array_key_exists($this->_code.'_salut', $payment)) {
+            if (array_key_exists($this->_code . '_salutation', $payment)) {
                 $params['NAME.SALUTATION'] =
-                    (preg_match('/[A-z]{2}/', $payment[$this->_code.'_salut']))
-                        ? $payment[$this->_code.'_salut'] : '';
+                    (
+                        $payment[$this->_code . '_salutation'] == 'MR' or
+                        $payment[$this->_code . '_salutation'] == 'MRS'
+                    )
+                        ? $payment[$this->_code . '_salutation'] : '';
             }
-            
-            if (array_key_exists($this->_code.'_dobday', $payment) &&
-                array_key_exists($this->_code.'_dobmonth', $payment) &&
-                array_key_exists($this->_code.'_dobyear', $payment)
-                ) {
-                $day    = (int)$payment[$this->_code.'_dobday'];
-                $mounth = (int)$payment[$this->_code.'_dobmonth'];
-                $year    = (int)$payment[$this->_code.'_dobyear'];
-                
+
+            if (array_key_exists($this->_code . '_dobday', $payment) &&
+                array_key_exists($this->_code . '_dobmonth', $payment) &&
+                array_key_exists($this->_code . '_dobyear', $payment)
+            ) {
+                $day = (int)$payment[$this->_code . '_dobday'];
+                $mounth = (int)$payment[$this->_code . '_dobmonth'];
+                $year = (int)$payment[$this->_code . '_dobyear'];
+
                 if ($this->validateDateOfBirth($day, $mounth, $year)) {
-                    $params['NAME.BIRTHDATE'] = $year.'-'.sprintf("%02d", $mounth).'-'.sprintf("%02d", $day);
+                    $params['NAME.BIRTHDATE'] = $year . '-' . sprintf("%02d", $mounth) . '-' . sprintf("%02d", $day);
                 } else {
                     Mage::throwException(
                         $this->_getHelper()
@@ -81,41 +86,41 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
                     );
                 }
             }
-        
-            if (empty($payment[$this->_code.'_holder'])) {
+
+            if (empty($payment[$this->_code . '_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
 
-            if (empty($payment[$this->_code.'_iban'])) {
+            if (empty($payment[$this->_code . '_iban'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
-        
-            $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
-                
-            if (preg_match('#^[\d]#', $payment[$this->_code.'_iban'])) {
-                $params['ACCOUNT.NUMBER'] = $payment[$this->_code.'_iban'];
+
+            $params['ACCOUNT.HOLDER'] = $payment[$this->_code . '_holder'];
+
+            if (preg_match('#^[\d]#', $payment[$this->_code . '_iban'])) {
+                $params['ACCOUNT.NUMBER'] = $payment[$this->_code . '_iban'];
             } else {
-                $params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
+                $params['ACCOUNT.IBAN'] = $payment[$this->_code . '_iban'];
             }
 
             $this->saveCustomerData($params);
 
         }
-        
+
         return $this;
     }
-    
+
     public function showPaymentInfo($paymentData)
     {
         $loadSnippet = $this->_getHelper()->__("Direct Debit Info Text");
-        
+
         $repl = array(
-                    '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
-                    '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
-                    '{Iban}' => $paymentData['ACCOUNT_IBAN'],
-                    '{Ident}' => $paymentData['ACCOUNT_IDENTIFICATION'],
-                    '{CreditorId}' => $paymentData['IDENTIFICATION_CREDITOR_ID'],
-                );
+            '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
+            '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
+            '{Iban}' => $paymentData['ACCOUNT_IBAN'],
+            '{Ident}' => $paymentData['ACCOUNT_IDENTIFICATION'],
+            '{CreditorId}' => $paymentData['IDENTIFICATION_CREDITOR_ID'],
+        );
 
         return strtr($loadSnippet, $repl);
 
