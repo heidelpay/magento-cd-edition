@@ -65,7 +65,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * @var bool Basket details will be send to the payment server
      */
-    public $_canBasketApi = false;
+    protected $_canBasketApi = false;
     /**
      * @var bool payment method needs to be initialized
      */
@@ -101,6 +101,15 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     public function getFormBlockType()
     {
         return $this->_formBlockType;
+    }
+
+    /**
+     * This payment method supports basket api
+     * @return bool
+     */
+    public function canBasketApi()
+    {
+        return $this->_canBasketApi;
     }
 
     /**

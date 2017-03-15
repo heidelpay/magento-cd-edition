@@ -20,6 +20,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
     protected $_code = 'hcdddsec';
     protected $_canCapture = true;
     protected $_canCapturePartial = true;
+    protected $_canBasketApi = ture;
 
     protected $_formBlockType = 'hcd/form_directDebitSecured';
 

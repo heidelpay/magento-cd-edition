@@ -25,7 +25,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
     protected $_canCapturePartial = true;
     protected $_canRefund = true;
     protected $_canRefundInvoicePartial = true;
-    public $_canBasketApi = true;
+    protected $_canBasketApi = true;
     
     protected $_formBlockType = 'hcd/form_masterpass';
     protected $_infoBlockType = 'hcd/info_masterpass';

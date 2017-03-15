@@ -285,7 +285,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         }
         
 
-        if ($payment->_canBasketApi == true and empty($RefId)) {
+        if ($payment->canBasketApi() and empty($RefId)) {
             $ShoppingCart = Mage::helper('hcd/payment')->basketItems($order, $this->getStore());
         
             $url = (Mage::getStoreConfig('hcd/settings/transactionmode', $this->getStore()) == 0) ? $this->_live_basket_url : $this->_sandbox_basket_url;
