@@ -38,6 +38,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         } else {
             $client->setParameterPost($params);
         }
+
         if (extension_loaded('curl')) {
             $adapter = new Zend_Http_Client_Adapter_Curl();
             $adapter->setCurlOption(CURLOPT_SSL_VERIFYPEER, true);
@@ -45,6 +46,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             $adapter->setCurlOption(CURLOPT_SSLVERSION, 6);
             $client->setAdapter($adapter);
         }
+
         $response = $client->request('POST');
         $res = $response->getBody();
 
@@ -73,7 +75,18 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         $userData = array(),
         $basketData = array(),
         $criterion = array()
-    ) {
+    ) 
+{ 
+     
+     
+     
+     
+     
+     
+     
+     
+     
+    
         $params = array();
         /*
          * configurtation part of this function
@@ -92,6 +105,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             default:
                 $params['TRANSACTION.MODE'] = 'LIVE';
         }
+
         $params['TRANSACTION.CHANNEL'] = $config['TRANSACTION.CHANNEL'];
 
 
@@ -186,6 +200,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         if (array_key_exists('SHOP.TYPE', $config)) {
             $params['SHOP.TYPE'] = $config['SHOP.TYPE'];
         }
+
         if (array_key_exists('SHOPMODUL.VERSION', $config)) {
             $params['SHOPMODUL.VERSION'] = $config['SHOPMODUL.VERSION'];
         }
@@ -248,6 +263,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 // message block for credit and debit cart chargebacks
                 $message = Mage::helper('hcd')->__('chargeback');
             }
+
             if ($order->hasInvoices()) {
                 $invIncrementIDs = array();
                 foreach ($order->getInvoiceCollection() as $inv) {
@@ -256,12 +272,15 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                     $inv->setIsPaid(false);
                     $inv->save();
                 }
+
                 $order->setIsInProcess(false);
             }
 
-            $order->setState($order->getPayment()->getMethodInstance()->getStatusPendig(false),
+            $order->setState(
+                $order->getPayment()->getMethodInstance()->getStatusPendig(false),
                 true,
-                $message);
+                $message
+            );
 
             Mage::dispatchEvent('heidelpay_after_map_status_chargeback', array('order' => $order));
             $this->log('Is this order protected ? ' . (string)$order->isStateProtected());
@@ -280,6 +299,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         if ($order->getStatus() == $order->getPayment()->getMethodInstance()->getStatusSuccess()) {
             return;
         }
+
         /**
          * If an order has been canceled, cloesed or complete do not change order status
          */
@@ -287,7 +307,6 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             $order->getStatus() == Mage_Sales_Model_Order::STATE_CLOSED or
             $order->getStatus() == Mage_Sales_Model_Order::STATE_COMPLETE
         ) {
-
             // you can use this event for example to get a notification when a canceled order has been paid
             Mage::dispatchEvent('heidelpay_map_status_cancel', array('order' => $order, 'data' => $data));
             return;
@@ -297,9 +316,11 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             if ($order->canCancel()) {
                 $order->cancel();
 
-                $order->setState($order->getPayment()->getMethodInstance()->getStatusError(false),
+                $order->setState(
+                    $order->getPayment()->getMethodInstance()->getStatusError(false),
                     $order->getPayment()->getMethodInstance()->getStatusError(true),
-                    $message);
+                    $message
+                );
             }
         } elseif (($PaymentCode[1] == 'CP' or $PaymentCode[1] == 'DB' or $PaymentCode[1] == 'FI' or $PaymentCode[1] == 'RC')
             and ($data['PROCESSING_RESULT'] == 'ACK' and $data['PROCESSING_STATUS_CODE'] != 80)
@@ -315,17 +336,21 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             $order->getPayment()->setIsTransactionClosed(true);
 
             if ($this->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] and $order->getOrderCurrencyCode() == $data['PRESENTATION_CURRENCY']) {
-                $order->setState($order->getPayment()->getMethodInstance()->getStatusSuccess(false),
+                $order->setState(
+                    $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
                     $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
-                    $message);
+                    $message
+                );
                 $totalypaid = true;
             } else {
                 /*
                  * in case rc is ack and amount is to low or curreny missmatch
                  */
-                $order->setState($order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
+                $order->setState(
+                    $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
                     $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(true),
-                    $message);
+                    $message
+                );
             }
 
             $this->log('$totalypaid ' . $totalypaid);
@@ -334,11 +359,17 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 
             $path = "payment/" . $code . "/";
 
-            $this->log($path . ' Auto invoiced :' . Mage::getStoreConfig($path . "invioce",
-                    $data['CRITERION_STOREID']) . $data['CRITERION_STOREID']);
+            $this->log(
+                $path . ' Auto invoiced :' . Mage::getStoreConfig(
+                    $path . "invioce",
+                    $data['CRITERION_STOREID']
+                ) . $data['CRITERION_STOREID']
+            );
 
-            if ($order->canInvoice() and (Mage::getStoreConfig($path . "invioce",
-                        $data['CRITERION_STOREID']) == 1 or $code == 'hcdbs') and $totalypaid === true
+            if ($order->canInvoice() and (Mage::getStoreConfig(
+                $path . "invioce",
+                $data['CRITERION_STOREID']
+            ) == 1 or $code == 'hcdbs') and $totalypaid === true
             ) {
                 $this->log('Can Invoice ? ' . ($order->canInvoice()) ? 'YES' : 'NO');
                 $invoice = $order->prepareInvoice();
@@ -357,6 +388,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                         $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                         $invoiceMailComment = ($info === false) ? '' : '<h3>' . $this->__('Payment Information') . '</h3>' . $info . '<br/>';
                     }
+
                     $invoice->sendEmail(true, $invoiceMailComment); // Rechnung versenden
                 }
 
@@ -380,12 +412,16 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 $message = (isset($data['ACCOUNT_BRAND']) and $data['ACCOUNT_BRAND'] == 'BILLSAFE') ? 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE'] : 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'];
                 $order->getPayment()->setTransactionId($data['IDENTIFICATION_UNIQUEID']);
                 $order->getPayment()->setIsTransactionClosed(0);
-                $order->getPayment()->setTransactionAdditionalInfo(Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
-                    null);
+                $order->getPayment()->setTransactionAdditionalInfo(
+                    Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
+                    null
+                );
                 $this->log('Set Transaction to Pending : ' . $order->getPayment()->getMethodInstance()->getStatusPendig());
-                $order->setState($order->getPayment()->getMethodInstance()->getStatusPendig(false),
+                $order->setState(
+                    $order->getPayment()->getMethodInstance()->getStatusPendig(false),
                     $order->getPayment()->getMethodInstance()->getStatusPendig(true),
-                    $message);
+                    $message
+                );
                 $order->getPayment()->addTransaction(
                     Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH,
                     null,
@@ -394,6 +430,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 );
             }
         }
+
         Mage::dispatchEvent('heidelpay_after_map_status', array('order' => $order));
         $order->save();
     }
@@ -414,6 +451,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         if (!empty($locale)) {
             return strtoupper($locale[0]);
         }
+
         return strtoupper($default); //TOBO falses Module
     }
 
@@ -432,8 +470,10 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         }
 
         if ($errorCode) {
-            if (!preg_match('/HPError-[0-9]{3}\.[0-9]{3}\.[0-9]{3}/', $this->_getHelper()->__('HPError-' . $errorCode),
-                $matches)
+            if (!preg_match(
+                '/HPError-[0-9]{3}\.[0-9]{3}\.[0-9]{3}/', $this->_getHelper()->__('HPError-' . $errorCode),
+                $matches
+            )
             ) { //JUST return when snipet exists
                 return $this->_getHelper()->__('HPError-' . $errorCode);
             }
@@ -493,20 +533,21 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 }
                 break;
         }
+
         $file = ($file === false) ? "Heidelpay.log" : $file;
 
         Mage::log($message, $lev, $file);
         return true;
     }
 
-    public function basketItems($quote, $storeId)
+    public function basketItems($quote, $storeId, $withShipping=false)
     {
-        $ShoppingCartItems = $quote->getAllVisibleItems();
+        $shoppingCartItems = $quote->getAllVisibleItems();
 
-        $ShoppingCart = array();
+        $shoppingCart = array();
 
 
-        $ShoppingCart = array(
+        $shoppingCart = array(
 
             'authentication' => array(
 
@@ -521,7 +562,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 'amountTotalNet' => floor(bcmul($quote->getGrandTotal(), 100, 10)),
                 'currencyCode' => $quote->getGlobalCurrencyCode(),
                 'amountTotalDiscount' => floor(bcmul($quote->getDiscountAmount(), 100, 10)),
-                'itemCount' => count($ShoppingCartItems)
+                'itemCount' => count($shoppingCartItems)
             )
 
 
@@ -529,11 +570,10 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 
         $count = 1;
 
-        foreach ($ShoppingCartItems as $item) {
-            $ShoppingCart['basket']['basketItems'][] = array(
+        foreach ($shoppingCartItems as $item) {
+            $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
                 'basketItemReferenceId' => $item->getItemId(),
-                'unit' => 'Stk.',
                 'quantity' => ($item->getQtyOrdered() !== false) ? floor($item->getQtyOrdered()) : $item->getQty(),
                 'vat' => floor($item->getTaxPercent()),
                 'amountVat' => floor(bcmul($item->getTaxAmount(), 100, 10)),
@@ -544,12 +584,28 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 'type' => 'goods',
                 'title' => $item->getName(),
                 'imageUrl' => (string)Mage::helper('catalog/image')->init($item->getProduct(), 'thumbnail')
-
             );
             $count++;
         };
 
-        return $ShoppingCart;
+        if ($withShipping) {
+            $shoppingCart['basket']['basketItems'][] = array(
+                'position' => $count,
+                'basketItemReferenceId' => $count,
+                "type" => "shipment",
+                "title" => "Shipping",
+                'quantity' => 1,
+                'vat' => '',
+                'amountVat' => '',
+                'amountGross' => '',
+                'amountNet' => '',
+                'amountPerUnit' => '',
+                'amountDiscount' => ''
+            );
+        }
+
+
+        return $shoppingCart;
     }
 
     public function getRegion($countryCode, $stateByName)
@@ -568,6 +624,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 return $region['region_id'];
             }
         }
+
         // Return last region if mapping fails
         return $region['region_id'];
     }
