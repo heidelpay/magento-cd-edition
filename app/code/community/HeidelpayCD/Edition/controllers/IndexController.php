@@ -305,7 +305,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             }
 
             $this->log(
-                "doRequest shoppingcart response : " .
+                "doRequest shopping cart response : " .
                 json_encode($result), 'DEBUG'
             );
             $basketId = (array_key_exists('basketId', $result)) ? $result['basketId'] : false;
@@ -522,7 +522,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             $this->_redirect('', array('_secure' => true));
         }
 
-        /** Hack to remove a structur problem in criterion node */
+        /** Hack to remove a structure problem in criterion node */
         $rawPost = preg_replace('/<Criterion(\s+)name="(.+?)">(.+?)<\/Criterion>/', '<$2>$3</$2>', $rawPost);
 
         $xml = simplexml_load_string($rawPost);

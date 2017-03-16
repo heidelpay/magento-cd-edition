@@ -18,7 +18,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
 {
     protected $_code = 'hcdivsec';
 
-    protected $_formBlockType = 'hcd/form_invoiceDebitSecured';
+    protected $_formBlockType = 'hcd/form_directDebitSecured';
 
     public function getFormBlockType()
     {

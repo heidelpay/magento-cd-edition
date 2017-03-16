@@ -322,20 +322,27 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                     $message
                 );
             }
-        } elseif (($PaymentCode[1] == 'CP' or $PaymentCode[1] == 'DB' or $PaymentCode[1] == 'FI' or $PaymentCode[1] == 'RC')
+        } elseif (($PaymentCode[1] == 'CP' or
+                $PaymentCode[1] == 'DB' or
+                $PaymentCode[1] == 'FI' or
+                $PaymentCode[1] == 'RC')
             and ($data['PROCESSING_RESULT'] == 'ACK' and $data['PROCESSING_STATUS_CODE'] != 80)
         ) {
-            $message = (isset($data['ACCOUNT_BRAND']) and $data['ACCOUNT_BRAND'] == 'BILLSAFE') ? 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE'] : 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'];
+            $message = (isset($data['ACCOUNT_BRAND']) and $data['ACCOUNT_BRAND'] == 'BILLSAFE')
+                ? 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE']
+                : 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'];
 
             if ($PaymentCode[0] == "IV" or $PaymentCode[0] == "PP") {
-                $message = Mage::helper('hcd')->__('recived amount ') . $data['PRESENTATION_AMOUNT'] . ' ' . $data['PRESENTATION_CURRENCY'] . ' ' . $message;
+                $message = Mage::helper('hcd')->__('recived amount ')
+                    . $data['PRESENTATION_AMOUNT'] . ' ' . $data['PRESENTATION_CURRENCY'] . ' ' . $message;
             }
 
             $order->getPayment()->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
                 ->setParentTransactionId($order->getPayment()->getLastTransId());
             $order->getPayment()->setIsTransactionClosed(true);
 
-            if ($this->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] and $order->getOrderCurrencyCode() == $data['PRESENTATION_CURRENCY']) {
+            if ($this->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] and
+                $order->getOrderCurrencyCode() == $data['PRESENTATION_CURRENCY']) {
                 $order->setState(
                     $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
                     $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
@@ -386,7 +393,8 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 if ($this->_invoiceOrderEmail) {
                     if ($code != 'hcdpp' and $code != 'hcdiv') {
                         $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
-                        $invoiceMailComment = ($info === false) ? '' : '<h3>' . $this->__('Payment Information') . '</h3>' . $info . '<br/>';
+                        $invoiceMailComment = ($info === false) ? '' : '<h3>'
+                            . $this->__('Payment Information') . '</h3>' . $info . '<br/>';
                     }
 
                     $invoice->sendEmail(true, $invoiceMailComment); // Rechnung versenden
@@ -408,15 +416,19 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 
             $order->setIsInProcess(true);
         } else {
-            if ($order->getStatus() != $order->getPayment()->getMethodInstance()->getStatusSuccess() and $order->getStatus() != $order->getPayment()->getMethodInstance()->getStatusError()) {
-                $message = (isset($data['ACCOUNT_BRAND']) and $data['ACCOUNT_BRAND'] == 'BILLSAFE') ? 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE'] : 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'];
+            if ($order->getStatus() != $order->getPayment()->getMethodInstance()->getStatusSuccess() and
+                $order->getStatus() != $order->getPayment()->getMethodInstance()->getStatusError()) {
+                $message = (isset($data['ACCOUNT_BRAND']) and $data['ACCOUNT_BRAND'] == 'BILLSAFE')
+                    ? 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE']
+                    : 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'];
                 $order->getPayment()->setTransactionId($data['IDENTIFICATION_UNIQUEID']);
                 $order->getPayment()->setIsTransactionClosed(0);
                 $order->getPayment()->setTransactionAdditionalInfo(
                     Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
                     null
                 );
-                $this->log('Set Transaction to Pending : ' . $order->getPayment()->getMethodInstance()->getStatusPendig());
+
+                $this->log('Set Transaction to Pending : ');
                 $order->setState(
                     $order->getPayment()->getMethodInstance()->getStatusPendig(false),
                     $order->getPayment()->getMethodInstance()->getStatusPendig(true),
@@ -610,12 +622,11 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 
     public function getRegion($countryCode, $stateByName)
     {
-        //$regionData = Mage::getModel ( 'directory/region_api' )->items ( $countryCode );
+
         $regionData = Mage::getModel('directory/region')->getResourceCollection()
             ->addCountryFilter($countryCode)
             ->load();
 
-        //$this->log(print_r($regionData,1));
 
         $regionId = null;
 
