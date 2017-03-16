@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Invoice secured payment method
  *
@@ -34,22 +35,25 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
 
 
         if (isset($payment['method']) and $payment['method'] == $this->_code) {
-            if (array_key_exists($this->_code.'_salut', $payment)) {
+            if (array_key_exists($this->_code . '_salutation', $payment)) {
                 $params['NAME.SALUTATION'] =
-                    (preg_match('/[A-z]{2}/', $payment[$this->_code.'_salut']))
-                        ? $payment[$this->_code.'_salut'] : '';
+                    (
+                        $payment[$this->_code . '_salutation'] == 'MR' or
+                        $payment[$this->_code . '_salutation'] == 'MRS'
+                    )
+                        ? $payment[$this->_code . '_salutation'] : '';
             }
 
-            if (array_key_exists($this->_code.'_dobday', $payment) &&
-                array_key_exists($this->_code.'_dobmonth', $payment) &&
-                array_key_exists($this->_code.'_dobyear', $payment)
+            if (array_key_exists($this->_code . '_dobday', $payment) &&
+                array_key_exists($this->_code . '_dobmonth', $payment) &&
+                array_key_exists($this->_code . '_dobyear', $payment)
             ) {
-                $day    = (int)$payment[$this->_code.'_dobday'];
-                $mounth = (int)$payment[$this->_code.'_dobmonth'];
-                $year    = (int)$payment[$this->_code.'_dobyear'];
+                $day = (int)$payment[$this->_code . '_dobday'];
+                $mounth = (int)$payment[$this->_code . '_dobmonth'];
+                $year = (int)$payment[$this->_code . '_dobyear'];
 
                 if ($this->validateDateOfBirth($day, $mounth, $year)) {
-                    $params['NAME.BIRTHDATE'] = $year.'-'.sprintf("%02d", $mounth).'-'.sprintf("%02d", $day);
+                    $params['NAME.BIRTHDATE'] = $year . '-' . sprintf("%02d", $mounth) . '-' . sprintf("%02d", $day);
                 } else {
                     Mage::throwException(
                         $this->_getHelper()
