@@ -19,6 +19,8 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
 {
     protected $_code = 'hcdivsec';
 
+    protected $_canBasketApi = ture;
+
     protected $_formBlockType = 'hcd/form_invoiceSecured';
 
     public function getFormBlockType()
