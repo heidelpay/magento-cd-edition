@@ -467,8 +467,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 
                 if ($paymentCode[0] == "IV" and $paymentCode[1] == "PA" and $order->canInvoice()) {
                     $invoice = $order->prepareInvoice();
-                    $invoice->register()->capture();
-                    $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+                    $invoice->register();
                     $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
                     $order->setIsInProcess(true);
                     $invoice->setIsPaid(false);
@@ -548,7 +547,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             return strtoupper($locale[0]);
         }
 
-        return strtoupper($default); //TOBO falses Module
+        return strtoupper($default);
     }
 
     /**
