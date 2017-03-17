@@ -141,7 +141,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         $params['TRANSACTION.CHANNEL'] = $config['TRANSACTION.CHANNEL'];
 
 
-        $params = array_merge($params, $this->_setPaymentMethod($config));
+        $params = array_merge($params, $this->_setPaymentMethod($config, $customer));
 
 
         /* Debit on registration */
@@ -192,7 +192,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         return $params;
     }
 
-    protected function _setPaymentMethod($config=array())
+    protected function _setPaymentMethod($config=array(), $customer=array())
     {
         $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
         /* Set payment methode */
@@ -470,14 +470,15 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                     $invoice->register()->capture();
                     $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
                     $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
-                    $invoice->setIsPaid(false);
                     $order->setIsInProcess(true);
+                    $invoice->setIsPaid(false);
                     $order->addStatusHistoryComment(
                         Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'),
                         false
                     );
                     $invoice->save();
                     if ($this->_invoiceOrderEmail) {
+                        $code = $order->getPayment()->getMethodInstance()->getCode();
                         if ($code != 'hcdpp' and $code != 'hcdiv') {
                             $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                             $invoiceMailComment = ($info === false) ? '' : '<h3>'
@@ -492,6 +493,18 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                         ->addObject($invoice)
                         ->addObject($invoice->getOrder());
                     $transactionSave->save();
+
+                    $this->log('Set Transaction to Pending : ');
+                    $order->setState(
+                        $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
+                        $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
+                        $message
+                    );
+
+
+                    Mage::dispatchEvent('heidelpay_after_map_status', array('order' => $order));
+                    $order->save();
+                    return ;
                 }
 
                 $this->log('Set Transaction to Pending : ');
