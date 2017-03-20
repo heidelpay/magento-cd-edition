@@ -36,7 +36,7 @@
 "Invoice Info Text","Bitte &uuml;berweisen Sie uns den Betrag von <strong>{AMOUNT} {CURRENCY}</strong> nach erhalt der Ware auf folgendes Konto:<br/><br/>
 		Kontoinhaber: {CONNECTOR_ACCOUNT_HOLDER}<br/>
 		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/>
-		BIC: {CONNECTOR.ACCOUNT_BIC}<br/><br/>
+		BIC: {CONNECTOR_ACCOUNT_BIC}<br/><br/>
 		<i>Geben Sie als Verwendungszweck bitte ausschlie&szlig;lich diese Identifikationsnummer an:</i><br/>
 		<strong>{IDENTIFICATION_SHORTID}</strong>"
 "An unexpected error occurred. Please contact us to get further information.","Es ist ein Fehler aufgetreten. Bitte kontaktieren Sie uns f&uumlr weitere Informationen."

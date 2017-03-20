@@ -325,7 +325,8 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 
         $message = (!empty($message)) ? $message : $data['PROCESSING_RETURN'];
 
-        $quoteID = ($order->getLastQuoteId() === false) ? $order->getQuoteId() : $order->getLastQuoteId(); // last_quote_id workaround for trusted shop buyerprotection
+        // last_quote_id workaround for trusted shop buyerprotection
+        $quoteID = ($order->getLastQuoteId() === false) ? $order->getQuoteId() : $order->getLastQuoteId();
 
         /**
          * Do nothing if status is already successful
@@ -480,8 +481,8 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                         $code = $order->getPayment()->getMethodInstance()->getCode();
                         if ($code == 'hcdiv' or $code == 'hcdivsec') {
                             $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
-                            $invoiceMailComment = ($info === false) ? '' : '<h6>'
-                                . $this->__('payment information') . '</h6><p>' . $info . '</p>';
+                            $invoiceMailComment = ($info === false) ? '' : '<h3>'
+                                . $this->__('payment information') . '</h3><p>' . $info . '</p>';
                         }
 
                         $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
