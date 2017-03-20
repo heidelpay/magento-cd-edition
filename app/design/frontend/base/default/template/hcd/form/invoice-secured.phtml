@@ -66,8 +66,7 @@ if (array_key_exists('payment_data', $userData) &&
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_dob"
                class="required hcd-singleline-label"><em>*</em>
-            <?php echo $this->htmlEscape($this->__('Date of birth')) ?>
-        </label>
+            <?php echo $this->htmlEscape($this->__('Date of birth')) ?></label>
         <select title="<?php echo $this->htmlEscape($this->__('day')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]">
             <option><?php echo $this->htmlEscape($this->__('day')); ?></option>
@@ -75,9 +74,9 @@ if (array_key_exists('payment_data', $userData) &&
             $i = 0;
             for ($i = 1; $i <= 31; $i++) {
                 $v = sprintf("%02d", $i);
-                $selected = ($userData ['payment_data']['dobday'] === $v) ? 'selected="selected"' : '';
-                echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected) . '>'
-                    . $this->htmlEscape($v) . '</option>';
+                $selected = ($dobday === $v) ? 'selected="selected"' : '';
+                echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected)
+                    . '>' . $this->htmlEscape($v) . '</option>';
             }
             ?>
         </select>
@@ -88,10 +87,9 @@ if (array_key_exists('payment_data', $userData) &&
             $i = 0;
             for ($i = 1; $i <= 12; $i++) {
                 $v = sprintf("%02d", $i);
-                $selected = ($userData ['payment_data']['dobmounth'] == $v) ? 'selected="selected"' : '';
-                echo '<option value="'
-                    . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected) . '>'
-                    . $this->htmlEscape($v) . '</option>';
+                $selected = ($dobmounth == $v) ? 'selected="selected"' : '';
+                echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected) . '>' .
+                    $this->htmlEscape($v) . '</option>';
             }
             ?>
         </select>
@@ -102,9 +100,9 @@ if (array_key_exists('payment_data', $userData) &&
             $i = 0;
             for ($i = 17; $i <= 80; $i++) {
                 $year = date('Y', strtotime("last day of -$i year"));
-                $selected = ($userData ['payment_data']['dobyear'] === $year) ? 'selected="selected"' : '';
-                echo '<option value="' . $this->htmlEscape($year) . '" '
-                    . $this->htmlEscape($selected) . '>' . $this->htmlEscape($year) . '</option>';
+                $selected = ($dobyear === $year) ? 'selected="selected"' : '';
+                echo '<option value="' . $this->htmlEscape($year) . '" ' .
+                    $this->htmlEscape($selected) . '>' . $this->htmlEscape($year) . '</option>';
             }
             ?>
         </select>
