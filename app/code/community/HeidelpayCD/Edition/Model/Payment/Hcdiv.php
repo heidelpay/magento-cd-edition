@@ -22,9 +22,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
     /**
      * Payment information for invoice mail
      *
-     * @param transaction $paymentData transaction response
+     * @param array $paymentData transaction response
      * @return string return payment information text
      */
+
     public function showPaymentInfo($paymentData)
     {
         $loadSnippet = $this->_getHelper()->__("Invoice Info Text");
@@ -34,7 +35,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
             '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
             '{CONNECTOR_ACCOUNT_HOLDER}' => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
             '{CONNECTOR_ACCOUNT_IBAN}' => $paymentData['CONNECTOR_ACCOUNT_IBAN'],
-            '{CONNECTOR.ACCOUNT_BIC}' => $paymentData['CONNECTOR.ACCOUNT_BIC'],
+            '{CONNECTOR_ACCOUNT_BIC}' => $paymentData['CONNECTOR_ACCOUNT_BIC'],
             '{IDENTIFICATION_SHORTID}' => $paymentData['IDENTIFICATION_SHORTID'],
         );
 

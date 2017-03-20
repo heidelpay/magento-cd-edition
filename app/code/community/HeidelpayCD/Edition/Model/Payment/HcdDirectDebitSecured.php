@@ -17,26 +17,53 @@
 class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
     extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
+    /**
+     * payment code
+     *
+     * @var string payment code
+     */
+
     protected $_code = 'hcdddsec';
-    protected $_canBasketApi = ture;
+
+    /**
+     * send basket information to basket api
+     *
+     * @var bool send basket information to basket api
+     */
+
+    protected $_canBasketApi = true;
+
+    /**
+     * set checkout form block
+     *
+     * @var string checkout form block
+     */
 
     protected $_formBlockType = 'hcd/form_directDebitSecured';
+
+    /**
+     * Over wright from block
+     * @return string
+     */
 
     public function getFormBlockType()
     {
         return $this->_formBlockType;
     }
 
+    /**
+     * is payment method available
+     *
+     * @param null $quote
+     * @return bool is payment method available
+     */
+
     public function isAvailable($quote = null)
     {
-        $path = "payment/" . $this->_code . "/";
-        $storeId = Mage::app()->getStore()->getId();
-
-
-        // in case if insurence billing and shipping adress
         $billing = $this->getQuote()->getBillingAddress();
         $shipping = $this->getQuote()->getShippingAddress();
 
+        /* billing and shipping address has to match */
         if (($billing->getFirstname() != $shipping->getFirstname()) or
             ($billing->getLastname() != $shipping->getLastname()) or
             ($billing->getStreet() != $shipping->getStreet()) or
@@ -47,8 +74,19 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
             return false;
         }
 
+        /* payment method is b2c only */
+        if (!empty($billing->getCompany())) {
+            return false;
+        }
+
+
         return parent::isAvailable($quote);
     }
+
+    /**
+     * Validate customer input on checkout
+     * @return $this
+     */
 
     public function validate()
     {
@@ -108,6 +146,13 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
 
         return $this;
     }
+
+    /**
+     * Payment information for invoice mail
+     *
+     * @param array $paymentData transaction response
+     * @return string return payment information text
+     */
 
     public function showPaymentInfo($paymentData)
     {

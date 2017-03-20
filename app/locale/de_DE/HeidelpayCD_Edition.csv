@@ -9,7 +9,7 @@
 "year","Jahr"
 "Verification number","Pr&uuml;fnummer"
 "pay now","Jetzt Bezahlen"
-"payment informations","Zahlungsinformationen - "
+"payment information","Zahlungsinformationen"
 "Automatically invoiced by Heidelpay.","Automatische Rechnungserstellung durch Heidelpay."
 "Automatically invoiced","Automatische Rechnungserstellung und Versand"
 "Bookingmode","Buchungsmodus"
@@ -35,7 +35,7 @@
 			Bitte sorgen Sie f&uuml;r ausreichende Deckung auf dem entsprechenden Konto."
 "Invoice Info Text","Bitte &uuml;berweisen Sie uns den Betrag von <strong>{AMOUNT} {CURRENCY}</strong> nach erhalt der Ware auf folgendes Konto:<br/><br/>
 		Kontoinhaber: {CONNECTOR_ACCOUNT_HOLDER}<br/>
-		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/><br/>
+		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/>
 		BIC: {CONNECTOR.ACCOUNT_BIC}<br/><br/>
 		<i>Geben Sie als Verwendungszweck bitte ausschlie&szlig;lich diese Identifikationsnummer an:</i><br/>
 		<strong>{IDENTIFICATION_SHORTID}</strong>"

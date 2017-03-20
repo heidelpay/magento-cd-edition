@@ -386,7 +386,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 $totalypaid = true;
             } else {
                 /*
-                 * in case rc is ack and amount is to low or curreny missmatch
+                 * in case rc is ack and amount is to low or currency miss match
                  */
                 $order->setState(
                     $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
@@ -480,8 +480,8 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                         $code = $order->getPayment()->getMethodInstance()->getCode();
                         if ($code == 'hcdiv' or $code == 'hcdivsec') {
                             $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
-                            $invoiceMailComment = ($info === false) ? '' : '<h3>'
-                                . $this->__('Payment Information') . '</h3>' . $info . '<br/>';
+                            $invoiceMailComment = ($info === false) ? '' : '<h6>'
+                                . $this->__('payment information') . '</h6><p>' . $info . '</p>';
                         }
 
                         $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail

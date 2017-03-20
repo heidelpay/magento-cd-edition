@@ -22,6 +22,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
      *
      * @var string payment code
      */
+
     protected $_code = 'hcdivsec';
 
     /**
@@ -48,6 +49,37 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
     public function getFormBlockType()
     {
         return $this->_formBlockType;
+    }
+
+    /**
+     * is payment method available
+     *
+     * @param null $quote
+     * @return bool is payment method available
+     */
+
+    public function isAvailable($quote = null)
+    {
+        $billing = $this->getQuote()->getBillingAddress();
+        $shipping = $this->getQuote()->getShippingAddress();
+
+        /* billing and shipping address has to match */
+        if (($billing->getFirstname() != $shipping->getFirstname()) or
+            ($billing->getLastname() != $shipping->getLastname()) or
+            ($billing->getStreet() != $shipping->getStreet()) or
+            ($billing->getPostcode() != $shipping->getPostcode()) or
+            ($billing->getCity() != $shipping->getCity()) or
+            ($billing->getCountry() != $shipping->getCountry())
+        ) {
+            return false;
+        }
+
+        /* payment method is b2c only */
+        if (!empty($billing->getCompany())) {
+            return false;
+        }
+
+        return parent::isAvailable($quote);
     }
 
     /**
@@ -104,6 +136,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
      * @param array $paymentData transaction response
      * @return string return payment information text
      */
+
     public function showPaymentInfo($paymentData)
     {
         $loadSnippet = $this->_getHelper()->__("Invoice Info Text");
@@ -113,7 +146,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
             '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
             '{CONNECTOR_ACCOUNT_HOLDER}' => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
             '{CONNECTOR_ACCOUNT_IBAN}' => $paymentData['CONNECTOR_ACCOUNT_IBAN'],
-            '{CONNECTOR.ACCOUNT_BIC}' => $paymentData['CONNECTOR.ACCOUNT_BIC'],
+            '{CONNECTOR_ACCOUNT_BIC}' => $paymentData['CONNECTOR_ACCOUNT_BIC'],
             '{IDENTIFICATION_SHORTID}' => $paymentData['IDENTIFICATION_SHORTID'],
         );
 
