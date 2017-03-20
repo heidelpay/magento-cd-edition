@@ -18,4 +18,27 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
     protected $_code = 'hcdiv';
 
     protected $_infoBlockType = 'hcd/info_invoice';
+
+    /**
+     * Payment information for invoice mail
+     *
+     * @param transaction $paymentData transaction response
+     * @return string return payment information text
+     */
+    public function showPaymentInfo($paymentData)
+    {
+        $loadSnippet = $this->_getHelper()->__("Invoice Info Text");
+
+        $repl = array(
+            '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
+            '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
+            '{CONNECTOR_ACCOUNT_HOLDER}' => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
+            '{CONNECTOR_ACCOUNT_IBAN}' => $paymentData['CONNECTOR_ACCOUNT_IBAN'],
+            '{CONNECTOR.ACCOUNT_BIC}' => $paymentData['CONNECTOR.ACCOUNT_BIC'],
+            '{IDENTIFICATION_SHORTID}' => $paymentData['IDENTIFICATION_SHORTID'],
+        );
+
+        return strtr($loadSnippet, $repl);
+
+    }
 }

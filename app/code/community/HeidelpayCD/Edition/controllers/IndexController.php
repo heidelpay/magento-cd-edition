@@ -155,7 +155,8 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         $session->unsHcdPaymentInfo();
 
-        if ($order->getPayment()->getMethodInstance()->getCode() != 'hcdiv') {
+        if ($order->getPayment()->getMethodInstance()->getCode() != 'hcdiv' and
+            $order->getPayment()->getMethodInstance()->getCode() != 'hcdivsec') {
             $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
             if ($info !== false) {
                 $session->setHcdPaymentInfo($info);

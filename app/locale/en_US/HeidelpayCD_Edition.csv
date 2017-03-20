@@ -35,9 +35,10 @@
 		<br />
 		Please ensure that there will be sufficient funds on the corresponding account."	
 "An unexpected error occurred. Please contact us to get further information.","An unexpected error occurred. Please contact us to get further information."
-"Invoice Info Text","Please transfer the amount of <strong>{AMOUNT} {CURRENCY}</strong> to the following account<br /><br />
+"Invoice Info Text","Please transfer the amount of <strong>{AMOUNT} {CURRENCY}</strong>after receiving your order to the following account<br /><br />
 		Holder: {CONNECTOR_ACCOUNT_HOLDER}<br/>
 		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/><br/>
+		BIC: {CONNECTOR.ACCOUNT_BIC}<br/><br/>
 		<i>Please use only this identification number as the descriptor :</i><br/>
 		<strong>{IDENTIFICATION_SHORTID}</strong>"
 "continue","continue"
@@ -82,7 +83,7 @@
 "Deschcdbs","Buy with invoice and check your order calmly before payment.<br/>"
 "Deschcdmpa","The MasterPass by MasterCard&copy; digital wallet makes online shopping safe and easy by storing all your payment and shipping information in one convenient and secure place. And it&apos;s free. With MasterPass, you simply shop, and check out faster."
 "Deschcdddsec","Pay safe and secure with direct debit"
-"Deschcdvisec","Pay comfortable with invoice"
+"Deschcdivsec","Pay comfortable with invoice"
 
 "Return in Errorcase","Return in Errorcase"
 "Please configurate where your costumer should be redirected to in case of an payment error","Please configurate where your costumer should be redirected to in case of an payment error"

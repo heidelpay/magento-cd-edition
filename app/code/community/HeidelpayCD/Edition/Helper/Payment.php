@@ -478,7 +478,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                     $invoice->save();
                     if ($this->_invoiceOrderEmail) {
                         $code = $order->getPayment()->getMethodInstance()->getCode();
-                        if ($code != 'hcdpp' and $code != 'hcdiv') {
+                        if ($code == 'hcdiv' or $code == 'hcdivsec') {
                             $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                             $invoiceMailComment = ($info === false) ? '' : '<h3>'
                                 . $this->__('Payment Information') . '</h3>' . $info . '<br/>';
@@ -500,6 +500,12 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                         $message
                     );
 
+                    $order->getPayment()->addTransaction(
+                        Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH,
+                        null,
+                        true,
+                        $message
+                    );
 
                     Mage::dispatchEvent('heidelpay_after_map_status', array('order' => $order));
                     $order->save();

@@ -33,9 +33,10 @@
 			und die Gl&auml;ubiger ID: {CreditorId}</i><br />
 			<br />
 			Bitte sorgen Sie f&uuml;r ausreichende Deckung auf dem entsprechenden Konto."
-"Invoice Info Text","Bitte &uuml;berweisen Sie uns den Betrag von <strong>{AMOUNT} {CURRENCY}</strong> auf folgendes Konto:<br/><br/>
+"Invoice Info Text","Bitte &uuml;berweisen Sie uns den Betrag von <strong>{AMOUNT} {CURRENCY}</strong> nach erhalt der Ware auf folgendes Konto:<br/><br/>
 		Kontoinhaber: {CONNECTOR_ACCOUNT_HOLDER}<br/>
 		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/><br/>
+		BIC: {CONNECTOR.ACCOUNT_BIC}<br/><br/>
 		<i>Geben Sie als Verwendungszweck bitte ausschlie&szlig;lich diese Identifikationsnummer an:</i><br/>
 		<strong>{IDENTIFICATION_SHORTID}</strong>"
 "An unexpected error occurred. Please contact us to get further information.","Es ist ein Fehler aufgetreten. Bitte kontaktieren Sie uns f&uumlr weitere Informationen."
@@ -81,7 +82,7 @@
 "Deschcdiv","Sicher bezahlen per Rechnungskauf"
 "Deschcdmpa","MasterPass ist eine digitale Bezahll&ouml;sung f&uuml;r den Einkauf im Internet von MasterCard, die von Banken und MasterCard direkt bereitgestellt wird. Ihre Kartendaten und Lieferadressen werden an einem gesch&uuml;tzten Ort aufbewahrt. Nachdem Sie sich registriert haben, k&ouml;nnen Sie mit wenigen Klicks sicher online einkaufen."
 "Deschcdddsec","Sicher zahlen mit Lastschrift"
-"Deschcdvisec","Sicher bezahlen per Rechnungskauf"
+"Deschcdivsec","Sicher bezahlen per Rechnungskauf"
 
 "Return in Errorcase","R&uuml;ckleitung bei Bezahlfehler"
 "Please configurate where your costumer should be redirected to in case of an payment error","Hier k&ouml;nnen Sie einstellen, wo der Kunde in Fehlerfall hingeleitet werden soll."

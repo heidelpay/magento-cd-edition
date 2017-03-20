@@ -17,16 +17,43 @@
 class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
     extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
+    /**
+     * payment code
+     *
+     * @var string payment code
+     */
     protected $_code = 'hcdivsec';
 
-    protected $_canBasketApi = ture;
+    /**
+     * send basket information to basket api
+     *
+     * @var bool send basket information to basket api
+     */
+
+    protected $_canBasketApi = true;
+
+    /**
+     * set checkout form block
+     *
+     * @var string checkout form block
+     */
 
     protected $_formBlockType = 'hcd/form_invoiceSecured';
+
+    /**
+     * Over wright from block
+     * @return string
+     */
 
     public function getFormBlockType()
     {
         return $this->_formBlockType;
     }
+
+    /**
+     * Validate customer input on checkout
+     * @return $this
+     */
 
     public function validate()
     {
@@ -69,5 +96,28 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
         }
 
         return $this;
+    }
+
+    /**
+     * Payment information for invoice mail
+     *
+     * @param array $paymentData transaction response
+     * @return string return payment information text
+     */
+    public function showPaymentInfo($paymentData)
+    {
+        $loadSnippet = $this->_getHelper()->__("Invoice Info Text");
+
+        $repl = array(
+            '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
+            '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
+            '{CONNECTOR_ACCOUNT_HOLDER}' => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
+            '{CONNECTOR_ACCOUNT_IBAN}' => $paymentData['CONNECTOR_ACCOUNT_IBAN'],
+            '{CONNECTOR.ACCOUNT_BIC}' => $paymentData['CONNECTOR.ACCOUNT_BIC'],
+            '{IDENTIFICATION_SHORTID}' => $paymentData['IDENTIFICATION_SHORTID'],
+        );
+
+        return strtr($loadSnippet, $repl);
+
     }
 }
