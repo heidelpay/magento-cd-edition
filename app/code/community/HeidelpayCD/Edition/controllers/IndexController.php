@@ -170,7 +170,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         $this->log('LastQuteID :' . $quoteID);
 
         if ($noMail === false) {
-            Mage::helper('hcd/payment')->mapStatus(
+            $order->getPayment()->getMethodInstance()->mapStatus(
                 $data,
                 $order
             );
@@ -234,7 +234,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             }
         }
 
-        Mage::helper('hcd/payment')->mapStatus(
+        $quote->getPayment()->getMethodInstance()->mapStatus(
             $data,
             $order,
             $intMessage
@@ -618,7 +618,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             $methode == 'DB' or
             ($methode == 'FI' and $paymentCode == 'hcdbs')
         ) {
-            Mage::helper('hcd/payment')->mapStatus(
+            $order->getPayment()->getMethodInstance()->mapStatus(
                 $xmlData,
                 $order
             );

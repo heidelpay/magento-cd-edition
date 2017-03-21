@@ -1081,4 +1081,243 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         return false;
     }
+
+    public function mapStatus($data, $order, $message = false)
+    {
+        $this->log('mapStatus' . json_encode($data));
+        $paymentCode = $this->splitPaymentCode($data['PAYMENT_CODE']);
+        $totalypaid = false;
+        $invoiceMailComment = '';
+
+
+        // Set language for mail template etc
+        if (strtoupper($data['CRITERION_LANGUAGE']) == 'DE') {
+            $locale = 'de_DE';
+            Mage::app()->getLocale()->setLocaleCode($locale);
+            Mage::getSingleton('core/translate')->setLocale($locale)->init('frontend', true);
+        }
+
+
+        // handle charge back notifications for cc, dc and dd
+        if ($paymentCode[1] == 'CB') {
+            $this->log('charge back');
+
+            $order = Mage::helper('hcd/orderState')->chargeBack($order);
+
+            Mage::dispatchEvent('heidelpay_after_map_status_chargeback', array('order' => $order));
+            $this->log('Is this order protected ? ' . (string)$order->isStateProtected());
+            $order->save();
+            return;
+        }
+
+
+        $message = (!empty($message)) ? $message : $data['PROCESSING_RETURN'];
+
+        // last_quote_id workaround for trusted shop buyerprotection
+        $quoteID = ($order->getLastQuoteId() === false) ? $order->getQuoteId() : $order->getLastQuoteId();
+
+        /**
+         * Do nothing if status is already successful
+         */
+        if ($order->getStatus() == $order->getPayment()->getMethodInstance()->getStatusSuccess()) {
+            return;
+        }
+
+        /**
+         * If an order has been canceled, cloesed or complete do not change order status
+         */
+        if ($order->getStatus() == Mage_Sales_Model_Order::STATE_CANCELED or
+            $order->getStatus() == Mage_Sales_Model_Order::STATE_CLOSED or
+            $order->getStatus() == Mage_Sales_Model_Order::STATE_COMPLETE
+        ) {
+            // you can use this event for example to get a notification when a canceled order has been paid
+            Mage::dispatchEvent('heidelpay_map_status_cancel', array('order' => $order, 'data' => $data));
+            return;
+        }
+
+        if ($data['PROCESSING_RESULT'] == 'NOK') {
+            if ($order->canCancel()) {
+                $order->cancel();
+
+                $order->setState(
+                    $order->getPayment()->getMethodInstance()->getStatusError(false),
+                    $order->getPayment()->getMethodInstance()->getStatusError(true),
+                    $message
+                );
+            }
+        } elseif (($paymentCode[1] == 'CP' or
+                $paymentCode[1] == 'DB' or
+                $paymentCode[1] == 'FI' or
+                $paymentCode[1] == 'RC')
+            and ($data['PROCESSING_RESULT'] == 'ACK' and $data['PROCESSING_STATUS_CODE'] != 80)
+        ) {
+            $message = (isset($data['ACCOUNT_BRAND']) and $data['ACCOUNT_BRAND'] == 'BILLSAFE')
+                ? 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE']
+                : 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'];
+
+            if ($paymentCode[0] == "IV" or $paymentCode[0] == "PP") {
+                $message = Mage::helper('hcd')->__('recived amount ')
+                    . $data['PRESENTATION_AMOUNT'] . ' ' . $data['PRESENTATION_CURRENCY'] . ' ' . $message;
+            }
+
+            $order->getPayment()->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
+                ->setParentTransactionId($order->getPayment()->getLastTransId());
+            $order->getPayment()->setIsTransactionClosed(true);
+
+            if ($this->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] and
+                $order->getOrderCurrencyCode() == $data['PRESENTATION_CURRENCY']
+            ) {
+                $order->setState(
+                    $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
+                    $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
+                    $message
+                );
+                $totalypaid = true;
+            } else {
+                /*
+                 * in case rc is ack and amount is to low or currency miss match
+                 */
+                $order->setState(
+                    $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
+                    $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(true),
+                    $message
+                );
+            }
+
+            $this->log('$totalypaid ' . $totalypaid);
+
+            $code = $order->getPayment()->getMethodInstance()->getCode();
+
+            $path = "payment/" . $code . "/";
+
+            $this->log(
+                $path . ' Auto invoiced :' . Mage::getStoreConfig(
+                    $path . "invioce",
+                    $data['CRITERION_STOREID']
+                ) . $data['CRITERION_STOREID']
+            );
+
+            if ($order->canInvoice() and (Mage::getStoreConfig(
+                        $path . "invioce",
+                        $data['CRITERION_STOREID']
+                    ) == 1 or $code == 'hcdbs') and $totalypaid === true
+            ) {
+                $invoice = $order->prepareInvoice();
+                $invoice->register()->capture();
+                $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+                $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_PAID);
+                $invoice->setIsPaid(true);
+                $order->setIsInProcess(true);
+                $order->addStatusHistoryComment(
+                    Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'),
+                    false
+                );
+                $invoice->save();
+                if ($this->_invoiceOrderEmail) {
+                    if ($code != 'hcdpp' and $code != 'hcdiv') {
+                        $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
+                        $invoiceMailComment = ($info === false) ? '' : '<h3>'
+                            . $this->__('Payment Information') . '</h3>' . $info . '<br/>';
+                    }
+
+                    $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
+                }
+
+
+                $transactionSave = Mage::getModel('core/resource_transaction')
+                    ->addObject($invoice)
+                    ->addObject($invoice->getOrder());
+                $transactionSave->save();
+            }
+
+            $order->getPayment()->addTransaction(
+                Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE,
+                null,
+                true,
+                $message
+            );
+
+            $order->setIsInProcess(true);
+        } else {
+            if ($order->getStatus() != $order->getPayment()->getMethodInstance()->getStatusSuccess() and
+                $order->getStatus() != $order->getPayment()->getMethodInstance()->getStatusError()
+            ) {
+                $message = (isset($data['ACCOUNT_BRAND']) and $data['ACCOUNT_BRAND'] == 'BILLSAFE')
+                    ? 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE']
+                    : 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'];
+                $order->getPayment()->setTransactionId($data['IDENTIFICATION_UNIQUEID']);
+                $order->getPayment()->setIsTransactionClosed(0);
+                $order->getPayment()->setTransactionAdditionalInfo(
+                    Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
+                    null
+                );
+
+                // prepare invoice in case of payment method invoice
+
+                if ($paymentCode[0] == "IV" and $paymentCode[1] == "PA" and $order->canInvoice()) {
+                    $invoice = $order->prepareInvoice();
+                    $invoice->register();
+                    $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
+                    $order->setIsInProcess(true);
+                    $invoice->setIsPaid(false);
+                    $order->addStatusHistoryComment(
+                        Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'),
+                        false
+                    );
+                    $invoice->save();
+                    if ($this->_invoiceOrderEmail) {
+                        $code = $order->getPayment()->getMethodInstance()->getCode();
+                        if ($code == 'hcdiv' or $code == 'hcdivsec') {
+                            $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
+                            $invoiceMailComment = ($info === false) ? '' : '<h3>'
+                                . $this->__('payment information') . '</h3><p>' . $info . '</p>';
+                        }
+
+                        $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
+                    }
+
+
+                    $transactionSave = Mage::getModel('core/resource_transaction')
+                        ->addObject($invoice)
+                        ->addObject($invoice->getOrder());
+                    $transactionSave->save();
+
+                    $this->log('Set Transaction to Pending : ');
+                    $order->setState(
+                        $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
+                        $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
+                        $message
+                    );
+
+                    $order->getPayment()->addTransaction(
+                        Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH,
+                        null,
+                        true,
+                        $message
+                    );
+
+                    Mage::dispatchEvent('heidelpay_after_map_status', array('order' => $order));
+                    $order->save();
+                    return ;
+                }
+
+                $this->log('Set Transaction to Pending : ');
+                $order->setState(
+                    $order->getPayment()->getMethodInstance()->getStatusPendig(false),
+                    $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+                    $message
+                );
+                $order->getPayment()->addTransaction(
+                    Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH,
+                    null,
+                    true,
+                    $message
+                );
+            }
+        }
+
+        Mage::dispatchEvent('heidelpay_after_map_status', array('order' => $order));
+        $order->save();
+    }
+
 }

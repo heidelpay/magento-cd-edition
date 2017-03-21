@@ -170,7 +170,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                 );
             } else {
                 // save cc and dc registration data
-                $custumerData = Mage::getModel('hcd/customer');
+                $customerData = Mage::getModel('hcd/customer');
                 $currentPaymnet = 'hcd' . strtolower($paymentCode[0]);
                 $storeId = ($data['CRITERION_GUEST'] == 'true')
                     ? 0 : trim($data['CRITERION_STOREID']);
@@ -182,14 +182,14 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                 $registrationData->load();
                 $returnData = $registrationData->getData();
                 if (!empty($returnData[0]['id'])) {
-                    $custumerData->setId((int)$returnData[0]['id']);
+                    $customerData->setId((int)$returnData[0]['id']);
                 }
 
-                $custumerData->setPaymentmethode($currentPaymnet);
-                $custumerData->setUniqeid($data['IDENTIFICATION_UNIQUEID']);
-                $custumerData->setCustomerid($data['IDENTIFICATION_SHOPPERID']);
-                $custumerData->setStoreid($storeId);
-                $custumerData->setPaymentData(
+                $customerData->setPaymentmethode($currentPaymnet);
+                $customerData->setUniqeid($data['IDENTIFICATION_UNIQUEID']);
+                $customerData->setCustomerid($data['IDENTIFICATION_SHOPPERID']);
+                $customerData->setStoreid($storeId);
+                $customerData->setPaymentData(
                     Mage::getModel('hcd/resource_encryption')
                         ->encrypt(
                             json_encode(
@@ -206,7 +206,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                         )
                 );
 
-                $custumerData->save();
+                $customerData->save();
 
                 $url = Mage::getUrl('hcd/', array('_secure' => true));
             }
