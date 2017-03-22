@@ -17,20 +17,30 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
 {
     protected $_code = 'hcdpp';
     
-    public function showPaymentInfo($payment_data)
+    public function showPaymentInfo($paymentData)
     {
-        $load_snippet = $this->_getHelper()->__("Prepayment Info Text");
+        $loadSnippet = $this->_getHelper()->__("Prepayment Info Text");
         
         $repl = array(
-                    '{AMOUNT}'                    => $payment_data['CLEARING_AMOUNT'],
-                    '{CURRENCY}'                  => $payment_data['CLEARING_CURRENCY'],
-                    '{CONNECTOR_ACCOUNT_HOLDER}'  => $payment_data['CONNECTOR_ACCOUNT_HOLDER'],
-                    '{CONNECTOR_ACCOUNT_IBAN}'    => $payment_data['CONNECTOR_ACCOUNT_IBAN'],
-                    '{IDENTIFICATION_SHORTID}'    => $payment_data['IDENTIFICATION_SHORTID'],
+                    '{AMOUNT}'                    => $paymentData['CLEARING_AMOUNT'],
+                    '{CURRENCY}'                  => $paymentData['CLEARING_CURRENCY'],
+                    '{CONNECTOR_ACCOUNT_HOLDER}'  => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
+                    '{CONNECTOR_ACCOUNT_IBAN}'    => $paymentData['CONNECTOR_ACCOUNT_IBAN'],
+                    '{IDENTIFICATION_SHORTID}'    => $paymentData['IDENTIFICATION_SHORTID'],
                 );
                 
-        $load_snippet= strtr($load_snippet, $repl);
+        $loadSnippet= strtr($loadSnippet, $repl);
                 
-        return $load_snippet;
+        return $loadSnippet;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function processingTransaction($order, $data, $message='')
+    {
+        $message = Mage::helper('hcd')->__('received amount ')
+            . $data['PRESENTATION_AMOUNT'] . ' ' . $data['PRESENTATION_CURRENCY'] . ' ' . $message;
+        parent::processingTransaction($order, $data, $message);
     }
 }

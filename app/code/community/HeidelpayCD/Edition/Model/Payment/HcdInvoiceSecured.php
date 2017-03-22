@@ -14,15 +14,13 @@
  * @subpackage Magento
  * @category Magento
  */
-class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
-    extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /**
      * payment code
      *
      * @var string payment code
      */
-
     protected $_code = 'hcdivsec';
 
     /**
@@ -30,7 +28,6 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
      *
      * @var bool send basket information to basket api
      */
-
     protected $_canBasketApi = true;
 
     /**
@@ -38,14 +35,13 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
      *
      * @var string checkout form block
      */
-
     protected $_formBlockType = 'hcd/form_invoiceSecured';
 
     /**
      * Over wright from block
+     *
      * @return string
      */
-
     public function getFormBlockType()
     {
         return $this->_formBlockType;
@@ -55,9 +51,9 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
      * is payment method available
      *
      * @param null $quote
+     *
      * @return bool is payment method available
      */
-
     public function isAvailable($quote = null)
     {
         $billing = $this->getQuote()->getBillingAddress();
@@ -84,9 +80,9 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
 
     /**
      * Validate customer input on checkout
+     *
      * @return $this
      */
-
     public function validate()
     {
         parent::validate();
@@ -134,9 +130,9 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
      * Payment information for invoice mail
      *
      * @param array $paymentData transaction response
+     *
      * @return string return payment information text
      */
-
     public function showPaymentInfo($paymentData)
     {
         $loadSnippet = $this->_getHelper()->__("Invoice Info Text");
@@ -151,6 +147,5 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
         );
 
         return strtr($loadSnippet, $repl);
-
     }
 }

@@ -46,12 +46,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
             '{LEGALNOTE}' => $paymentData['CRITERION_BILLSAFE_LEGALNOTE'],
             '{AMOUNT}' => $paymentData['CRITERION_BILLSAFE_AMOUNT'],
             '{CURRENCY}' => $paymentData['CRITERION_BILLSAFE_CURRENCY'],
-            '{CONNECTOR_ACCOUNT_HOLDER}'
-            => $paymentData['CRITERION_BILLSAFE_RECIPIENT'],
+            '{CONNECTOR_ACCOUNT_HOLDER}' => $paymentData['CRITERION_BILLSAFE_RECIPIENT'],
             '{CONNECTOR_ACCOUNT_IBAN}' => $paymentData['CRITERION_BILLSAFE_IBAN'],
             '{CONNECTOR_ACCOUNT_BIC}' => $paymentData['CRITERION_BILLSAFE_BIC'],
-            '{IDENTIFICATION_SHORTID}'
-            => $paymentData['CRITERION_BILLSAFE_REFERENCE'],
+            '{IDENTIFICATION_SHORTID}' => $paymentData['CRITERION_BILLSAFE_REFERENCE'],
             '{PERIOD}' => $paymentData['CRITERION_BILLSAFE_PERIOD']
         );
 
@@ -60,4 +58,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
 
         return $loadSnippet;
     }
+    /**
+     * @inheritdoc
+     */
+    public function processingTransaction($order, $data, $message='') 
+    {
+        $message = 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE'];
+        parent::processingTransaction($order, $data, $message);
+    }
+
 }

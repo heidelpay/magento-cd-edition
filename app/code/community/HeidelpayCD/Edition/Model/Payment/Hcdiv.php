@@ -23,9 +23,9 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
      * Payment information for invoice mail
      *
      * @param array $paymentData transaction response
+     *
      * @return string return payment information text
      */
-
     public function showPaymentInfo($paymentData)
     {
         $loadSnippet = $this->_getHelper()->__("Invoice Info Text");
@@ -40,6 +40,15 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
         );
 
         return strtr($loadSnippet, $repl);
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function processingTransaction($order, $data, $message='')
+    {
+        $message = Mage::helper('hcd')->__('received amount ')
+            . $data['PRESENTATION_AMOUNT'] . ' ' . $data['PRESENTATION_CURRENCY'] . ' ' . $message;
+        parent::processingTransaction($order, $data, $message);
     }
 }

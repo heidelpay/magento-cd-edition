@@ -51,4 +51,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model
         
         return $user;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function chargeBack($order, $message = "")
+    {
+        $message = Mage::helper('hcd')->__('chargeback');
+        return parent::chargeBack($order, $message);
+    }
 }

@@ -13,6 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Action
 {
     protected $_sendNewOrderEmail = true;
@@ -170,7 +171,9 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         $this->log('LastQuteID :' . $quoteID);
 
         if ($noMail === false) {
-            $order->getPayment()->getMethodInstance()->mapStatus(
+            /** @var  $orderStateHelper HeidelpayCD_Edition_Helper_OrderState */
+            $orderStateHelper = Mage::helper('hcd/oderState');
+            $orderStateHelper->mapStatus(
                 $data,
                 $order
             );
@@ -234,7 +237,9 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             }
         }
 
-        $quote->getPayment()->getMethodInstance()->mapStatus(
+        /** @var  $orderStateHelper HeidelpayCD_Edition_Helper_OrderState */
+        $orderStateHelper = Mage::helper('hcd/oderState');
+        $orderStateHelper->mapStatus(
             $data,
             $order,
             $intMessage
@@ -530,6 +535,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         $this->log('XML Object from Push : ' . $rawPost);
 
+        // @codingStandardsIgnoreStart
         list($type, $methode) = Mage::helper('hcd/payment')
             ->splitPaymentCode((string)$xml->Transaction->Payment['code']);
 
@@ -539,7 +545,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         $hash = (string)$xml->Transaction->Analysis->SECRET;
         $orderID = (string)$xml->Transaction->Identification->TransactionID;
-
+        // @codingStandardsIgnoreEnd
 
         if (Mage::getModel('hcd/resource_encryption')->validateHash($orderID, $hash) === false) {
             $this->log(
@@ -551,7 +557,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             return;
         }
 
-
+        // @codingStandardsIgnoreStart
         $xmlData = array(
             'PAYMENT_CODE' => (string)$xml->Transaction->Payment['code'],
             'IDENTIFICATION_TRANSACTIONID' => (string)$orderID,
@@ -568,7 +574,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             'ACCOUNT_BRAND' => false,
             'CRITERION_LANGUAGE' => strtoupper((string)$xml->Transaction->Analysis->LANGUAGE)
         );
-
+        // @codingStandardsIgnoreEnd
 
         $order = $this->getOrder();
         $order->loadByIncrementId($orderID);
@@ -576,15 +582,18 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         switch ($paymentCode) {
             case 'hcddd':
+                // @codingStandardsIgnoreStart
                 $xmlData['CLEARING_AMOUNT'] = (string)$xml->Transaction->Payment->Clearing->Amount;
                 $xmlData['CLEARING_CURRENCY'] = (string)$xml->Transaction->Payment->Clearing->Currency;
                 $xmlData['ACCOUNT_IBAN'] = (string)$xml->Transaction->Account->Iban;
                 $xmlData['ACCOUNT_BIC'] = (string)$xml->Transaction->Account->Bic;
                 $xmlData['ACCOUNT_IDENTIFICATION'] = (string)$xml->Transaction->Account->Identification;
                 $xmlData['IDENTIFICATION_CREDITOR_ID'] = (string)$xml->Transaction->Identification->CreditorID;
+                // @codingStandardsIgnoreEnd
                 break;
             case 'hcdbs':
                 if ($methode == 'FI') {
+                    // @codingStandardsIgnoreStart
                     $xmlData['CRITERION_BILLSAFE_LEGALNOTE'] = (string)$xml->Transaction->Analysis->BILLSAFE_LEGALNOTE;
                     $xmlData['CRITERION_BILLSAFE_AMOUNT'] = (string)$xml->Transaction->Analysis->BILLSAFE_AMOUNT;
                     $xmlData['CRITERION_BILLSAFE_CURRENCY'] = (string)$xml->Transaction->Analysis->BILLSAFE_CURRENCY;
@@ -594,10 +603,12 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                     $xmlData['CRITERION_BILLSAFE_REFERENCE'] = (string)$xml->Transaction->Analysis->BILLSAFE_REFERENCE;
                     $xmlData['CRITERION_BILLSAFE_PERIOD'] = (string)$xml->Transaction->Analysis->BILLSAFE_PERIOD;
                     $xmlData['ACCOUNT_BRAND'] = 'BILLSAFE';
+                    // @codingStandardsIgnoreEnd
                 }
                 break;
         }
 
+        // @codingStandardsIgnoreLine
         if (!empty($xml->Transaction->Identification->UniqueID)) {
             $lastdata = Mage::getModel('hcd/transaction')
                 ->loadLastTransactionDataByUniqeId($xmlData['IDENTIFICATION_UNIQUEID']);
@@ -618,7 +629,9 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             $methode == 'DB' or
             ($methode == 'FI' and $paymentCode == 'hcdbs')
         ) {
-            $order->getPayment()->getMethodInstance()->mapStatus(
+            /** @var  $orderStateHelper HeidelpayCD_Edition_Helper_OrderState */
+            $orderStateHelper = Mage::helper('hcd/oderState');
+            $orderStateHelper->mapStatus(
                 $xmlData,
                 $order
             );

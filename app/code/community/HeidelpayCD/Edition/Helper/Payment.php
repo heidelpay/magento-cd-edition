@@ -14,6 +14,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 {
     protected $_invoiceOrderEmail = true;
@@ -54,6 +55,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         }
 
         $result = null;
+        // @codingStandardsIgnoreLine
         parse_str($res, $result);
 
         return $result;
@@ -117,7 +119,8 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         return true;
     }
 
-    public function preparePostData($config=array(),$front=array(),$customer=array(),$basket=array(),$criterion=array())
+    // @codingStandardsIgnoreLine
+    public function preparePostData($config = array(),$front = array(),$customer = array(),$basket = array(),$criterion = array())
     {
         $params = array();
         /*
@@ -192,7 +195,12 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         return $params;
     }
 
-    protected function _setPaymentMethod($config=array(), $customer=array())
+    /**
+     * @codingStandardsIgnoreLine
+     * Todo redesign
+     */
+    // @codingStandardsIgnoreLine
+    protected function _setPaymentMethod($config = array(), $customer = array())
     {
         $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
         /* Set payment methode */

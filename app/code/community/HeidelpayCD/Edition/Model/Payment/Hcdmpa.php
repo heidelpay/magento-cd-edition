@@ -49,11 +49,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
                 return '';
             }
             
-            $html = (array_key_exists('mail', $hpdata)) ? $hpdata['mail'].'<br />' : '' ;
-            $html .= (array_key_exists('brand', $hpdata)) ? $this->_getHelper()->__($hpdata['brand']).' ' : '' ;
-            $html .= (array_key_exists('number', $hpdata)) ? $hpdata['number'].'<br/>' : '' ;
-            $html .= (array_key_exists('expiryMonth', $hpdata)) ? $this->_getHelper()->__('Expires').' '.$hpdata['expiryMonth'].'/' : '' ;
-            $html .= (array_key_exists('expiryYear', $hpdata)) ? $hpdata['expiryYear'] : '' ;
+            $html = (array_key_exists('mail', $hpdata)) ? $hpdata['mail'].'<br />' : '';
+            $html .= (array_key_exists('brand', $hpdata)) ? $this->_getHelper()->__($hpdata['brand']).' ' : '';
+            $html .= (array_key_exists('number', $hpdata)) ? $hpdata['number'].'<br/>' : '';
+            $html .= (array_key_exists('expiryMonth', $hpdata)) ? $this->_getHelper()->__('Expires').' '.$hpdata['expiryMonth'].'/' : '';
+            $html .= (array_key_exists('expiryYear', $hpdata)) ? $hpdata['expiryYear'] : '';
             
             return $html;
         }
@@ -112,16 +112,25 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
 	</button>
     	<div sytle="margin-top: 10px  !important;">';
         
-        $html .= (array_key_exists('CONTACT_EMAIL', $payment_data)) ? $payment_data['CONTACT_EMAIL'].'<br />' : '' ;
-        $html .= (array_key_exists('ACCOUNT_BRAND', $payment_data)) ? $this->_getHelper()->__($payment_data['ACCOUNT_BRAND']).' ' : '' ;
-        $html .= (array_key_exists('ACCOUNT_NUMBER', $payment_data)) ? $payment_data['ACCOUNT_NUMBER'].'<br/>' : '' ;
-        $html .= (array_key_exists('ACCOUNT_EXPIRY_MONTH', $payment_data)) ? $this->_getHelper()->__('Expires').' '.$payment_data['ACCOUNT_EXPIRY_MONTH'].'/' : '' ;
-        $html .= (array_key_exists('ACCOUNT_EXPIRY_YEAR', $payment_data)) ? $payment_data['ACCOUNT_EXPIRY_YEAR'] : '' ;
+        $html .= (array_key_exists('CONTACT_EMAIL', $payment_data)) ? $payment_data['CONTACT_EMAIL'].'<br />' : '';
+        $html .= (array_key_exists('ACCOUNT_BRAND', $payment_data)) ? $this->_getHelper()->__($payment_data['ACCOUNT_BRAND']).' ' : '';
+        $html .= (array_key_exists('ACCOUNT_NUMBER', $payment_data)) ? $payment_data['ACCOUNT_NUMBER'].'<br/>' : '';
+        $html .= (array_key_exists('ACCOUNT_EXPIRY_MONTH', $payment_data)) ? $this->_getHelper()->__('Expires').' '.$payment_data['ACCOUNT_EXPIRY_MONTH'].'/' : '';
+        $html .= (array_key_exists('ACCOUNT_EXPIRY_YEAR', $payment_data)) ? $payment_data['ACCOUNT_EXPIRY_YEAR'] : '';
         
         $html .= '</div></center>';
         
         $this->getCheckout()->setHcdPaymentInfo($html);
         
-        return ;
+        return;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function chargeBack($order, $message = "")
+    {
+        $message = Mage::helper('hcd')->__('chargeback');
+        return parent::chargeBack($order, $message);
     }
 }

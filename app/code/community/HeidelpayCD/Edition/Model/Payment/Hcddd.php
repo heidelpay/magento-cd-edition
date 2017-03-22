@@ -13,8 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
-class HeidelpayCD_Edition_Model_Payment_Hcddd
-    extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcddd';
     protected $_canCapture = true;
@@ -45,11 +44,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd
 
             $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
                 
-             $params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
+            $params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
 
             
             $this->saveCustomerData($params);
-        };
+        }
         
         return $this;
     }
@@ -66,6 +65,15 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd
                     '{CreditorId}' => $paymentData['IDENTIFICATION_CREDITOR_ID'],
                 );
                 
-       return $loadSnippet= strtr($loadSnippet, $repl);
+        return $loadSnippet= strtr($loadSnippet, $repl);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function chargeBack($order, $message = "")
+    {
+        $message = Mage::helper('hcd')->__('debit failed');
+        return parent::chargeBack($order, $message);
     }
 }

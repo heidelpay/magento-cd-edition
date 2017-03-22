@@ -15,36 +15,52 @@
  */
 class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    /**
-    * unique internal payment method identifier
-    *
-    * @var string [a-z0-9_]
-    **/
     protected $_code = 'hcddc';
     protected $_canCapture = true;
     protected $_canCapturePartial = true;
-    
-    public function isRecognation()
+
+    /**
+     * @inheritdoc
+     */
+    public function isRecognition()
     {
         $path = "payment/".$this->_code."/";
         $storeId =  Mage::app()->getStore()->getId();
         return Mage::getStoreConfig($path.'recognition', $storeId);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function activeRedirect()
     {
-        $recognation = $this->isRecognation();
+        $recognation = $this->isRecognition();
         if ($recognation > 0) {
             return true;
         }
 
-        return false ;
+        return false;
     }
-    
+
+    /**
+     * @inheritdoc
+     */
     protected $_formBlockType = 'hcd/form_creditcard';
-    
+
+    /**
+     * @inheritdoc
+     */
     public function getFormBlockType()
     {
         return $this->_formBlockType;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function chargeBack($order, $message = "")
+    {
+        $message = Mage::helper('hcd')->__('chargeback');
+        return parent::chargeBack($order, $message);
     }
 }
