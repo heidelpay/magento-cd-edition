@@ -108,13 +108,9 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         $this->log('ResponseController');
         
         $securityHash = $response->getPost('CRITERION_SECRET');
-        $data = array();
-        $transactionId = $response->getPOST('IDENTIFICATION_TRANSACTIONID');
-        $data['IDENTIFICATION_TRANSACTIONID'] =
-            (!empty($transactionId))
-                ? $response->getPOST('IDENTIFICATION_TRANSACTIONID')
-                : $response->getPOST('IDENTIFICATION_SHOPPERID');
 
+        $transactionId = $response->getPOST('IDENTIFICATION_TRANSACTIONID');
+        $data = $this->getResponseContent($response->getParams(), $transactionId);
         /*
          * validate Hash to prevent manipulation
          */
@@ -141,7 +137,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
             return;
         }
 
-        $data = $this->getResponseContent($response->getParams());
+
 
         $paymentCode = Mage::helper('hcd/payment')->splitPaymentCode($data['PAYMENT_CODE']);
 
@@ -225,7 +221,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
      * @param $response
      * @return array filtered response
      */
-    protected function getResponseContent($response)
+    protected function getResponseContent($response, $transactionId=null)
     {
         $data = array();
         $data['PROCESSING_RESULT'] = $response->getPOST('PROCESSING_RESULT');
@@ -240,6 +236,11 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         $data['IDENTIFICATION_SHORTID'] = $response->getPOST('IDENTIFICATION_SHORTID');
         $data['IDENTIFICATION_SHOPPERID'] = $response->getPOST('IDENTIFICATION_SHOPPERID');
         $data['CRITERION_GUEST'] = $response->getPOST('CRITERION_GUEST');
+        $data['IDENTIFICATION_TRANSACTIONID'] =
+            (!empty($transactionId))
+                ? $response->getPOST('IDENTIFICATION_TRANSACTIONID')
+                : $response->getPOST('IDENTIFICATION_SHOPPERID');
+
         return $data;
     }
 
