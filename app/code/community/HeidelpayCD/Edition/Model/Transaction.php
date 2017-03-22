@@ -81,12 +81,8 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
                 
         $data = $trans->getData();
 
-        // @codingStandardsIgnoreLine
-        if (is_array($data)){
-            return  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['jsonresponse']), true);
-        }
+        return  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['jsonresponse']), true);
 
-        return false;
     }
        
     public function loadLastTransactionDataByUniqeId($id)
