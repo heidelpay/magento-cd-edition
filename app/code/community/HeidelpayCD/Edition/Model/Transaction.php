@@ -13,6 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
 {
     public function _construct()
@@ -23,10 +24,10 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
        
     public function saveTransactionData($data, $source='shop')
     {
-        $PaymentCode = Mage::helper('hcd/payment')->splitPaymentCode($data['PAYMENT_CODE']);
+        $paymentCode = Mage::helper('hcd/payment')->splitPaymentCode($data['PAYMENT_CODE']);
            
-        $this->setPaymentMethode($PaymentCode[0]);
-        $this->setPaymentType($PaymentCode[1]);
+        $this->setPaymentMethode($paymentCode[0]);
+        $this->setPaymentType($paymentCode[1]);
         $this->setTransactionid($data['IDENTIFICATION_TRANSACTIONID']);
         $this->setUniqeid($data['IDENTIFICATION_UNIQUEID']);
         $this->setResult($data['PROCESSING_RESULT']);
@@ -35,6 +36,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $this->setReturn($data['PROCESSING_RETURN']);
         $this->setReturncode($data['PROCESSING_RETURN_CODE']);
         $this->setJsonresponse(Mage::getModel('hcd/resource_encryption')->encrypt(json_encode($data)));
+        // @codingStandardsIgnoreLine
         $this->setDatetime(date('Y-m-d H:i:s'));
         $this->setSource($source);
         return $this->save();
@@ -72,6 +74,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $trans = $this->getCollection();
         $trans->addFieldToFilter('transactionid', $transid);
         $trans->getSelect()->order('id DESC');
+        // @codingStandardsIgnoreLine
         $trans->getSelect()->limit(1);
         $trans->load();
                 
@@ -85,6 +88,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $data = array();
         $trans = $this->getCollection();
         $trans->addFieldToFilter('uniqeid', $id);
+        // @codingStandardsIgnoreLine
         $trans->getSelect()->limit(1);
         $trans->load();
                 
@@ -104,6 +108,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $trans->addFieldToFilter('transactionid', $transid)
                      ->addFieldToFilter('Payment_Type', $methode);
         $trans->getSelect()->order('id DESC');
+        // @codingStandardsIgnoreLine
         $trans->getSelect()->limit(1);
         $trans->load();
                 

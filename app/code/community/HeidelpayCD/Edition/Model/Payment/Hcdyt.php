@@ -15,6 +15,7 @@
  *
  * @deprecated This payment method is not longer available
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Model_Payment_Hcdyt extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdyt';

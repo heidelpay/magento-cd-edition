@@ -535,7 +535,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @return array
      *
      */
-
+    // @codingStandardsIgnoreLine
     public function getUser($order, $isReg = false)
     {
         $user = array();
@@ -1094,6 +1094,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      */
     public function validateDateOfBirth($day, $month, $year)
     {
+        // @codingStandardsIgnoreLine
         if (strtotime("$year/$month/$day") < (time() - (18 * 60 * 60 * 24 * 365))) {
             return true;
         }

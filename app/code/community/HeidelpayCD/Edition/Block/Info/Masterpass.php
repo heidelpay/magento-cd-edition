@@ -13,6 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Block_Info_Masterpass extends Mage_Payment_Block_Info
 {
     /**

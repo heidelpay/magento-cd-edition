@@ -13,6 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Block_Onepage_Progress extends Mage_Checkout_Block_Onepage_Progress
 {
     public function getBilling()

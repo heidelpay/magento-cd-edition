@@ -13,6 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Model_Payment_Hcdpf extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdpf';
@@ -27,8 +28,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpf extends HeidelpayCD_Edition_Model_
     
     public function isAvailable($quote=null)
     {
-        $currency_code=$this->getQuote()->getQuoteCurrencyCode();
-        if (!empty($currency_code) && $currency_code != 'CHF') {
+        $currencyCode=$this->getQuote()->getQuoteCurrencyCode();
+        if (!empty($currencyCode) && $currencyCode != 'CHF') {
             return false;
         }
 

@@ -13,6 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Model_Customer extends Mage_Core_Model_Abstract
 {
     public function _construct()

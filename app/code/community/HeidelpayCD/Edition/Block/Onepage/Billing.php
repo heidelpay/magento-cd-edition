@@ -13,12 +13,13 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Block_Onepage_Billing extends Mage_Checkout_Block_Onepage_Billing
 {
     public function getAddress()
     {
-        $HcdWallet = Mage::getSingleton('checkout/session')->getHcdWallet();
-        if (!empty($HcdWallet)) {
+        $hcdWallet = Mage::getSingleton('checkout/session')->getHcdWallet();
+        if (!empty($hcdWallet)) {
             $wallet = Mage::getSingleton('checkout/session')->getHcdWallet();
             $this->_address = Mage::getModel('sales/quote_address')->setAddressType(
                 Mage_Sales_Model_Quote_Address::TYPE_BILLING

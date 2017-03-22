@@ -13,6 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Block_Success extends HeidelpayCD_Edition_Block_Abstract
 {
     public function showPaymentInfo()

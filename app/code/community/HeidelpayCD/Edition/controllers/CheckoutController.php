@@ -14,9 +14,9 @@
  * @category Magento
  */
  
-$module_path = Mage::getModuleDir('', 'Mage_Checkout');
-require_once($module_path."/controllers/OnepageController.php");
-
+$modulePath = Mage::getModuleDir('', 'Mage_Checkout');
+require_once($modulePath."/controllers/OnepageController.php");
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageController
 {
     public function indexAction()
@@ -38,13 +38,15 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         $session->setCurrency($quote->getGlobalCurrencyCode());
         $session->setTotalamount($quote->getGrandTotal());
         
-        $data = Mage::getModel('hcd/transaction')->loadLastTransactionDataByTransactionnr(Mage::getSingleton('checkout/session')->getQuoteId());
+        $data = Mage::getModel('hcd/transaction')
+            ->loadLastTransactionDataByTransactionnr(Mage::getSingleton('checkout/session')->getQuoteId());
         
         Mage::getSingleton('checkout/session')->setCartWasUpdated(false);
         Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_secure' => true)));
         $this->getOnepage()->initCheckout();
-        
-        
+
+
+        // @codingStandardsIgnoreLine
         $this->log('Data from wallet '.print_r($data, 1));
         
         
@@ -75,7 +77,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             "confirm_password" =>"",
             "save_in_address_book" => 1
         );
-        
+        // @codingStandardsIgnoreLine
         $this->log('adress'.print_r($billingAddress, 1));
         
         $hpdata = array(
@@ -83,9 +85,12 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             'brand'            => (array_key_exists('ACCOUNT_BRAND', $data)) ? $data['ACCOUNT_BRAND'] : false ,
             'mail'            => (array_key_exists('CONTACT_EMAIL', $data)) ? $data['CONTACT_EMAIL'] : false ,
             'number'        => (array_key_exists('ACCOUNT_NUMBER', $data)) ? $data['ACCOUNT_NUMBER'] : false ,
-            'expiryMonth'    => (array_key_exists('ACCOUNT_EXPIRY_MONTH', $data)) ? $data['ACCOUNT_EXPIRY_MONTH'] : false ,
-            'expiryYear'    => (array_key_exists('ACCOUNT_EXPIRY_YEAR', $data)) ? $data['ACCOUNT_EXPIRY_YEAR'] : false ,
-            'referenceId'    => (array_key_exists('IDENTIFICATION_UNIQUEID', $data)) ? $data['IDENTIFICATION_UNIQUEID'] : false ,
+            'expiryMonth'    => (array_key_exists('ACCOUNT_EXPIRY_MONTH', $data))
+                ? $data['ACCOUNT_EXPIRY_MONTH'] : false ,
+            'expiryYear'    => (array_key_exists('ACCOUNT_EXPIRY_YEAR', $data))
+                ? $data['ACCOUNT_EXPIRY_YEAR'] : false ,
+            'referenceId'    => (array_key_exists('IDENTIFICATION_UNIQUEID', $data))
+                ? $data['IDENTIFICATION_UNIQUEID'] : false ,
             'adress'        => $billingAddress
         );
         
@@ -275,7 +280,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         return $output;
     }
     
-    private function log($message, $level="DEBUG", $file=false)
+    protected function log($message, $level="DEBUG", $file=false)
     {
         $callers=debug_backtrace();
         return  Mage::helper('hcd/payment')->realLog($callers[1]['function'].' '.$message, $level, $file);

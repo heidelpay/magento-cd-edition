@@ -13,10 +13,11 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Model_System_Config_Source_Returnurl
 {
     /**
-     * Retruns the configuration option for the return urk in case of a payment error
+     * Return the configuration option for the return urk in case of a payment error
      *
      * @return array currently you can choose between basket and checkout page
      */
@@ -25,7 +26,6 @@ class HeidelpayCD_Edition_Model_System_Config_Source_Returnurl
         return array(
             array('value'=>'basket', 'label'=>Mage::helper('hcd')->__('Basket')),
             array('value'=>'onepage', 'label'=>Mage::helper('hcd')->__('Onepage Checkout')),
-            // array('value'=>'onestepcheckout', 'label'=>Mage::helper('hcd')->__('Onestep Checkout'))
-        );
+            );
     }
 }

@@ -15,6 +15,7 @@
  *
  * @deprecated This payment method is not longer available
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Model_Payment_Hcdmk extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdmk';
@@ -23,8 +24,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmk extends HeidelpayCD_Edition_Model_
     
     public function isAvailable($quote=null)
     {
-        $currency_code=$this->getQuote()->getQuoteCurrencyCode();
-        if (!empty($currency_code) && $currency_code != 'TRY') {
+        $currencyCode=$this->getQuote()->getQuoteCurrencyCode();
+        if (!empty($currencyCode) && $currencyCode != 'TRY') {
             return false;
         }
 

@@ -13,33 +13,32 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Model_Observer
 {
-    public $_invoiceOrderEmail = true;
-    
+    public $invoiceOrderEmail = true;
+    // @codingStandardsIgnoreLine
     public function removeWalletDataFromCheckout($observer)
     {
         // unset wallet data from session
         if ($session = Mage::getSingleton('checkout/session')) {
             $session->unsHcdWallet();
         }
-
-        //Mage::log('remove masterpass');
     }
     
     public function handleWalletDataDuringCheckout($observer)
     {
         $controller = $observer->getControllerAction();
         
-        $ControllerName = $controller->getRequest()->getControllerName();
+        $controllerName = $controller->getRequest()->getControllerName();
         
-        $ActionName  = $controller->getRequest()->getActionName();
+        $actionName  = $controller->getRequest()->getActionName();
 
-        if (($ControllerName == "cart" and $ActionName == "index")
-            or ($ControllerName == "onepage" and $ActionName == "index")) {
+        if (($controllerName == "cart" and $actionName == "index")
+            or ($controllerName == "onepage" and $actionName == "index")) {
             
                 /**
-                 * remove wallet infomation from session (currently only masterpass)
+                 * remove wallet information from session (currently only masterpass)
                  */
                 if ($session = Mage::getSingleton('checkout/session')) {
                     $session->unsHcdWallet();
@@ -49,8 +48,9 @@ class HeidelpayCD_Edition_Model_Observer
     
     public function saveInvoice($observer)
     {
+        // @codingStandardsIgnoreLine
         $this->log('saveInvoice '.print_r($observer->debug(), 1));
-        
+        // @codingStandardsIgnoreLine
         $this->log('saveInvoice '.print_r($observer->getOrder()->debug(), 1));
     }
     
@@ -67,22 +67,25 @@ class HeidelpayCD_Edition_Model_Observer
         $paymentCode = $payment->getCode();
         
         
-        $PaymentMethode = array( 'hcdiv' );
+        $paymentMethode = array( 'hcdiv' );
         
         
         
-        if (!in_array($paymentCode, $PaymentMethode)) {
+        if (!in_array($paymentCode, $paymentMethode)) {
             return $this;
         } else {
             $path = "payment/".$paymentCode."/";
-            if (Mage::getStoreConfig($path."capture_on_delivery",
-                $order->getStoreId())) {
+            if (Mage::getStoreConfig(
+                $path."capture_on_delivery",
+                $order->getStoreId()
+            )) {
                 // if invoice on delivery is on try to invoice this order
                 $criterion = array();
-                $Autorisation = Mage::getModel('hcd/transaction')
+                /** @var  $authorisation HeidelpayCD_Edition_Model_Transaction */
+                $authorisation = Mage::getModel('hcd/transaction')
                     ->getOneTransactionByMethode($order->getRealOrderId(), 'PA');
                 
-                if ($Autorisation === false) {
+                if ($authorisation === false) {
                     return $this;
                 }
                 
@@ -93,8 +96,10 @@ class HeidelpayCD_Edition_Model_Observer
             
             
                 $frontend =
-                    $payment->getFrontend($order->getRealOrderId(),
-                        $Autorisation['CRITERION_STOREID']);
+                    $payment->getFrontend(
+                        $order->getRealOrderId(),
+                        $authorisation['CRITERION_STOREID']
+                    );
                 $frontend['FRONTEND.MODE']        = 'DEFAULT';
                 $frontend['FRONTEND.ENABLED']    = 'false';
             
@@ -103,7 +108,7 @@ class HeidelpayCD_Edition_Model_Observer
                 $basketData = $payment->getBasketData($order);
             
                 $basketData['IDENTIFICATION.REFERENCEID'] =
-                    $Autorisation['IDENTIFICATION_UNIQUEID'];
+                    $authorisation['IDENTIFICATION_UNIQUEID'];
                 Mage::dispatchEvent(
                     'heidelpay_reportShippingToHeidelpay_bevor_preparePostData',
                     array(
@@ -123,11 +128,12 @@ class HeidelpayCD_Edition_Model_Observer
             
             
                 $this->log("doRequest url : ".$config['URL']);
+                // @codingStandardsIgnoreLine
                 $this->log("doRequest params : ".print_r($params, 1));
             
                 $src = Mage::helper('hcd/payment')
                     ->doRequest($config['URL'], $params);
-            
+                // @codingStandardsIgnoreLine
                 $this->log("doRequest response : ".print_r($src, 1));
 
             
@@ -138,11 +144,13 @@ class HeidelpayCD_Edition_Model_Observer
                             Mage::helper('hcd')
                                 ->__(
                                     'Delivery notes to Heidelpay fail, because of : 
-                                    ')
+                                    '
+                                )
                             .$src['PROCESSING_RETURN']
                         );
                     $shipment->_dataSaveAllowed = false;
                     Mage::app()->getResponse()
+                        // @codingStandardsIgnoreLine
                         ->setRedirect($_SERVER['HTTP_REFERER'])
                         ->sendResponse();
                     return;
@@ -157,7 +165,7 @@ class HeidelpayCD_Edition_Model_Observer
         }
     }
     
-    private function log($message, $level="DEBUG", $file=false)
+    protected function log($message, $level="DEBUG", $file=false)
     {
         $callers=debug_backtrace();
         return  Mage::helper('hcd/payment')

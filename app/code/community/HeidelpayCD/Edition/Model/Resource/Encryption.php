@@ -15,6 +15,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Model_Resource_Encryption extends Mage_Core_Model_Encryption
 {
     public function hash($data)

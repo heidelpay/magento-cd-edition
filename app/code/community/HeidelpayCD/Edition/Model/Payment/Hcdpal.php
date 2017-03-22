@@ -13,6 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /**
@@ -32,7 +33,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model
         $user = array();
         
         $user = parent::getUser($order, $isReg);
-        $adress    = ($order->getShippingAddress() == false) ? $order->getBillingAddress()  : $order->getShippingAddress();
+        $adress    = ($order->getShippingAddress() == false)
+            ? $order->getBillingAddress()  : $order->getShippingAddress();
         $email = ($adress->getEmail()) ? $adress->getEmail() : $order->getCustomerEmail();
         
         
