@@ -14,6 +14,7 @@
  * @subpackage Magento
  * @category Magento
  */
+// @codingStandardsIgnoreLine
 class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_Action
 {
     protected $_sendNewOrderEmail = true;
@@ -74,7 +75,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
     /**
      * Get hp session namespace
      *
-     * @return Mage_Heidelpay_Model_Session
+     * @return Mage_Core_Model_Abstract
      */
     public function getSession()
     {
@@ -98,15 +99,15 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
 
     public function indexAction()
     {
-        $request = Mage::app()->getRequest();
-        $request->setParamSources(array('_POST'));
-        $securityHash = $request->getPost('CRITERION_SECRET');
+        $response = Mage::app()->getRequest();
+        $response->setParamSources(array('_POST'));
+        $securityHash = $response->getPost('CRITERION_SECRET');
         $data = array();
-        $transactionId = $request->getPOST('IDENTIFICATION_TRANSACTIONID');
+        $transactionId = $response->getPOST('IDENTIFICATION_TRANSACTIONID');
         $data['IDENTIFICATION_TRANSACTIONID'] =
             (!empty($transactionId))
-                ? $request->getPOST('IDENTIFICATION_TRANSACTIONID')
-                : $request->getPOST('IDENTIFICATION_SHOPPERID');
+                ? $response->getPOST('IDENTIFICATION_TRANSACTIONID')
+                : $response->getPOST('IDENTIFICATION_SHOPPERID');
 
         /*
          * validate Hash to prevent manipulation
@@ -117,6 +118,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                     $securityHash
                 ) === false
         ) {
+            // @codingStandardsIgnoreLine
             print Mage::getUrl(
                 'hcd/index/error', array(
                             '_forced_secure' => true,
@@ -126,28 +128,14 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
             );
             $this->log(
                 "Get response form server "
-                . $request->getServer('REMOTE_ADDR')
+                . $response->getServer('REMOTE_ADDR')
                 . " with an invalid hash. This could be some kind of manipulation.",
                 'WARN'
             );
             return;
         }
 
-        $data = $request->getParams();
-
-
-        $data['PROCESSING_RESULT'] = $request->getPOST('PROCESSING_RESULT');
-        $data['IDENTIFICATION_TRANSACTIONID'] = $request->getPOST('IDENTIFICATION_TRANSACTIONID');
-        $data['PROCESSING_STATUS_CODE'] = $request->getPOST('PROCESSING_STATUS_CODE');
-        $data['PROCESSING_RETURN'] = $request->getPOST('PROCESSING_RETURN');
-        $data['PROCESSING_RETURN_CODE'] = $request->getPOST('PROCESSING_RETURN_CODE');
-        $data['PAYMENT_CODE'] = $request->getPOST('PAYMENT_CODE');
-        $data['IDENTIFICATION_UNIQUEID'] = $request->getPOST('IDENTIFICATION_UNIQUEID');
-        $data['FRONTEND_SUCCESS_URL'] = $request->getPOST('FRONTEND_SUCCESS_URL');
-        $data['FRONTEND_FAILURE_URL'] = $request->getPOST('FRONTEND_FAILURE_URL');
-        $data['IDENTIFICATION_SHORTID'] = $request->getPOST('IDENTIFICATION_SHORTID');
-        $data['IDENTIFICATION_SHOPPERID'] = $request->getPOST('IDENTIFICATION_SHOPPERID');
-        $data['CRITERION_GUEST'] = $request->getPOST('CRITERION_GUEST');
+        $data = $this->getResponseContent($response->getParams());
 
         $paymentCode = Mage::helper('hcd/payment')->splitPaymentCode($data['PAYMENT_CODE']);
 
@@ -170,47 +158,11 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                 );
             } else {
                 // save cc and dc registration data
-                $customerData = Mage::getModel('hcd/customer');
-                $currentPaymnet = 'hcd' . strtolower($paymentCode[0]);
-                $storeId = ($data['CRITERION_GUEST'] == 'true')
-                    ? 0 : trim($data['CRITERION_STOREID']);
-                $registrationData = Mage::getModel('hcd/customer')
-                    ->getCollection()
-                    ->addFieldToFilter('Customerid', trim($data['IDENTIFICATION_SHOPPERID']))
-                    ->addFieldToFilter('Storeid', $storeId)
-                    ->addFieldToFilter('Paymentmethode', trim($currentPaymnet));
-                $registrationData->load();
-                $returnData = $registrationData->getData();
-                if (!empty($returnData[0]['id'])) {
-                    $customerData->setId((int)$returnData[0]['id']);
-                }
-
-                $customerData->setPaymentmethode($currentPaymnet);
-                $customerData->setUniqeid($data['IDENTIFICATION_UNIQUEID']);
-                $customerData->setCustomerid($data['IDENTIFICATION_SHOPPERID']);
-                $customerData->setStoreid($storeId);
-                $customerData->setPaymentData(
-                    Mage::getModel('hcd/resource_encryption')
-                        ->encrypt(
-                            json_encode(
-                                array(
-                                    'ACCOUNT.REGISTRATION' => $data['IDENTIFICATION_UNIQUEID'],
-                                    'SHIPPPING_HASH' => $data['CRITERION_SHIPPPING_HASH'],
-                                    'ACCOUNT_BRAND' => $data['ACCOUNT_BRAND'],
-                                    'ACCOUNT_NUMBER' => $data['ACCOUNT_NUMBER'],
-                                    'ACCOUNT_HOLDER' => $data['ACCOUNT_HOLDER'],
-                                    'ACCOUNT_EXPIRY_MONTH' => $data['ACCOUNT_EXPIRY_MONTH'],
-                                    'ACCOUNT_EXPIRY_YEAR' => $data['ACCOUNT_EXPIRY_YEAR']
-                                )
-                            )
-                        )
-                );
-
-                $customerData->save();
+                $this->saveCustomerRegistration($data, $paymentCode);
 
                 $url = Mage::getUrl('hcd/', array('_secure' => true));
             }
-        } elseif ($paymentCode[1] == 'IN' and $request->getPost('WALLET_DIRECT_PAYMENT') == 'false') {
+        } elseif ($paymentCode[1] == 'IN' and $response->getPost('WALLET_DIRECT_PAYMENT') == 'false') {
             // Back to checkout after wallet init
             if ($data['PROCESSING_RESULT'] == 'NOK') {
                 $this->log(
@@ -259,8 +211,68 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
 
         $this->log('Url: ' . $url);
 
-
+        // @codingStandardsIgnoreLine
         print $url;
+    }
+
+    protected function getResponseContent($response)
+    {
+        $data = array();
+        $data['PROCESSING_RESULT'] = $response->getPOST('PROCESSING_RESULT');
+        $data['IDENTIFICATION_TRANSACTIONID'] = $response->getPOST('IDENTIFICATION_TRANSACTIONID');
+        $data['PROCESSING_STATUS_CODE'] = $response->getPOST('PROCESSING_STATUS_CODE');
+        $data['PROCESSING_RETURN'] = $response->getPOST('PROCESSING_RETURN');
+        $data['PROCESSING_RETURN_CODE'] = $request->getPOST('PROCESSING_RETURN_CODE');
+        $data['PAYMENT_CODE'] = $response->$response('PAYMENT_CODE');
+        $data['IDENTIFICATION_UNIQUEID'] = $response->getPOST('IDENTIFICATION_UNIQUEID');
+        $data['FRONTEND_SUCCESS_URL'] = $response->getPOST('FRONTEND_SUCCESS_URL');
+        $data['FRONTEND_FAILURE_URL'] = $response->getPOST('FRONTEND_FAILURE_URL');
+        $data['IDENTIFICATION_SHORTID'] = $response->getPOST('IDENTIFICATION_SHORTID');
+        $data['IDENTIFICATION_SHOPPERID'] = $response->getPOST('IDENTIFICATION_SHOPPERID');
+        $data['CRITERION_GUEST'] = $response->getPOST('CRITERION_GUEST');
+        return $data;
+    }
+
+    protected function saveCustomerRegistration($data, $paymentCode)
+    {
+        /** @var  $customerData HeidelpayCD_Edition_Model_Customer */
+        $customerData = Mage::getModel('hcd/customer');
+        $currentPayment = 'hcd' . strtolower($paymentCode[0]);
+        $storeId = ($data['CRITERION_GUEST'] == 'true')
+            ? 0 : trim($data['CRITERION_STOREID']);
+        $registrationData = Mage::getModel('hcd/customer')
+            ->getCollection()
+            ->addFieldToFilter('Customerid', trim($data['IDENTIFICATION_SHOPPERID']))
+            ->addFieldToFilter('Storeid', $storeId)
+            ->addFieldToFilter('Paymentmethode', trim($currentPayment));
+        $registrationData->load();
+        $returnData = $registrationData->getData();
+        if (!empty($returnData[0]['id'])) {
+            $customerData->setId((int)$returnData[0]['id']);
+        }
+
+        $customerData->setPaymentmethode($currentPayment);
+        $customerData->setUniqeid($data['IDENTIFICATION_UNIQUEID']);
+        $customerData->setCustomerid($data['IDENTIFICATION_SHOPPERID']);
+        $customerData->setStoreid($storeId);
+        $customerData->setPaymentData(
+            Mage::getModel('hcd/resource_encryption')
+                ->encrypt(
+                    json_encode(
+                        array(
+                            'ACCOUNT.REGISTRATION' => $data['IDENTIFICATION_UNIQUEID'],
+                            'SHIPPPING_HASH' => $data['CRITERION_SHIPPPING_HASH'],
+                            'ACCOUNT_BRAND' => $data['ACCOUNT_BRAND'],
+                            'ACCOUNT_NUMBER' => $data['ACCOUNT_NUMBER'],
+                            'ACCOUNT_HOLDER' => $data['ACCOUNT_HOLDER'],
+                            'ACCOUNT_EXPIRY_MONTH' => $data['ACCOUNT_EXPIRY_MONTH'],
+                            'ACCOUNT_EXPIRY_YEAR' => $data['ACCOUNT_EXPIRY_YEAR']
+                        )
+                    )
+                )
+        );
+
+       return $customerData->save();
     }
 
 }
