@@ -1230,7 +1230,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
                 if ($code != 'hcdpp' and $code != 'hcdiv') {
                     $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                     $invoiceMailComment = ($info === false) ? '' : '<h3>'
-                        . $this->__('Payment Information') . '</h3>' . $info . '<br/>';
+                        . $this->_getHelper()->__('Payment Information') . '</h3>' . $info . '<br/>';
                 }
 
                 $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
