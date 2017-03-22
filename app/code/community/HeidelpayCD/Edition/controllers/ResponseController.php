@@ -141,19 +141,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
             return;
         }
 
-        $data['PROCESSING_RESULT'] = $response->getPOST('PROCESSING_RESULT');
-        $data['IDENTIFICATION_TRANSACTIONID'] = $response->getPOST('IDENTIFICATION_TRANSACTIONID');
-        $data['PROCESSING_STATUS_CODE'] = $response->getPOST('PROCESSING_STATUS_CODE');
-        $data['PROCESSING_RETURN'] = $response->getPOST('PROCESSING_RETURN');
-        $data['PROCESSING_RETURN_CODE'] = $response->getPOST('PROCESSING_RETURN_CODE');
-        $data['PAYMENT_CODE'] = $response->getPOST('PAYMENT_CODE');
-        $data['IDENTIFICATION_UNIQUEID'] = $response->getPOST('IDENTIFICATION_UNIQUEID');
-        $data['FRONTEND_SUCCESS_URL'] = $response->getPOST('FRONTEND_SUCCESS_URL');
-        $data['FRONTEND_FAILURE_URL'] = $response->getPOST('FRONTEND_FAILURE_URL');
-        $data['IDENTIFICATION_SHORTID'] = $response->getPOST('IDENTIFICATION_SHORTID');
-        $data['IDENTIFICATION_SHOPPERID'] = $response->getPOST('IDENTIFICATION_SHOPPERID');
-        $data['CRITERION_GUEST'] = $response->getPOST('CRITERION_GUEST');
-
+        $data= $response->getParams();
 
 
         $paymentCode = Mage::helper('hcd/payment')->splitPaymentCode($data['PAYMENT_CODE']);
