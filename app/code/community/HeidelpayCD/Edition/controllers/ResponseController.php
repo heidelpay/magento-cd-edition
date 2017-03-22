@@ -82,6 +82,9 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         return Mage::getSingleton('core/session');
     }
 
+    /**
+     * @return Mage_Checkout_Model_Session
+     */
     protected function _getCheckout()
     {
         return Mage::getSingleton('checkout/session');
@@ -215,6 +218,10 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         print $url;
     }
 
+    /**
+     * @param $response
+     * @return array filtered response
+     */
     protected function getResponseContent($response)
     {
         $data = array();
@@ -222,8 +229,8 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         $data['IDENTIFICATION_TRANSACTIONID'] = $response->getPOST('IDENTIFICATION_TRANSACTIONID');
         $data['PROCESSING_STATUS_CODE'] = $response->getPOST('PROCESSING_STATUS_CODE');
         $data['PROCESSING_RETURN'] = $response->getPOST('PROCESSING_RETURN');
-        $data['PROCESSING_RETURN_CODE'] = $request->getPOST('PROCESSING_RETURN_CODE');
-        $data['PAYMENT_CODE'] = $response->$response('PAYMENT_CODE');
+        $data['PROCESSING_RETURN_CODE'] = $response->getPOST('PROCESSING_RETURN_CODE');
+        $data['PAYMENT_CODE'] = $response->getPOST('PAYMENT_CODE');
         $data['IDENTIFICATION_UNIQUEID'] = $response->getPOST('IDENTIFICATION_UNIQUEID');
         $data['FRONTEND_SUCCESS_URL'] = $response->getPOST('FRONTEND_SUCCESS_URL');
         $data['FRONTEND_FAILURE_URL'] = $response->getPOST('FRONTEND_FAILURE_URL');
@@ -233,6 +240,13 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         return $data;
     }
 
+    /**
+     * Save customer registration
+     *
+     * @param $data HeidelpayCD_Edition_Model_Transaction
+     * @param $paymentCode array
+     * @return HeidelpayCD_Edition_Model_Customer
+     */
     protected function saveCustomerRegistration($data, $paymentCode)
     {
         /** @var  $customerData HeidelpayCD_Edition_Model_Customer */
