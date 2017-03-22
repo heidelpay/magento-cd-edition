@@ -28,12 +28,8 @@ class HeidelpayCD_Edition_Helper_OrderState extends Mage_Core_Helper_Abstract
         $paymentHelper = Mage::helper('hcd/payment');
         $paymentHelper->log('mapStatus' . json_encode($data));
         $paymentCode = $paymentHelper->splitPaymentCode($data['PAYMENT_CODE']);
-        $invoiceMailComment = '';
 
         $message = ($message === '') ? $data['PROCESSING_RETURN'] : $message;
-
-        // last_quote_id workaround for trusted shop buyerprotection
-        $order = ($order->getLastQuoteId() === false) ? $order->getQuoteId() : $order->getLastQuoteId();
 
 
         // Set language for mail template etc
