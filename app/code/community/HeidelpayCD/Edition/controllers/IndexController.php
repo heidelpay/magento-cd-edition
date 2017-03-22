@@ -172,7 +172,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         if ($noMail === false) {
             /** @var  $orderStateHelper HeidelpayCD_Edition_Helper_OrderState */
-            $orderStateHelper = Mage::helper('hcd/oderState');
+            $orderStateHelper = Mage::helper('hcd/orderState');
             $orderStateHelper->mapStatus(
                 $data,
                 $order
@@ -238,7 +238,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         }
 
         /** @var  $orderStateHelper HeidelpayCD_Edition_Helper_OrderState */
-        $orderStateHelper = Mage::helper('hcd/oderState');
+        $orderStateHelper = Mage::helper('hcd/orderState');
         $orderStateHelper->mapStatus(
             $data,
             $order,
@@ -630,7 +630,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             ($methode == 'FI' and $paymentCode == 'hcdbs')
         ) {
             /** @var  $orderStateHelper HeidelpayCD_Edition_Helper_OrderState */
-            $orderStateHelper = Mage::helper('hcd/oderState');
+            $orderStateHelper = Mage::helper('hcd/orderState');
             $orderStateHelper->mapStatus(
                 $xmlData,
                 $order

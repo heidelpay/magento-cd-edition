@@ -14,6 +14,9 @@
  * @category Magento
  */
 $code = $this->getMethodCode();
+$dobyear = null;
+$dobmounth = null;
+$dobday = null;
 
 $path = "payment/" . $code . "/";
 $storeId = Mage::app()->getStore()->getId();
@@ -28,7 +31,7 @@ if ($recognition == 1 and $cId != 0) {
     // only if shipping address is unchanged
     $hash = $this->getMethod()->getShippingHash();
     $userData = $this->getMethod()->getCustomerData();
-    if (array_key_exists('payment_data', $userData)) {
+    if ($userData !== false and  array_key_exists('payment_data', $userData)) {
         if ($userData ['payment_data'] ['SHIPPPING_HASH'] != $hash) {
             $userData = array();
         }
