@@ -222,8 +222,8 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         $data['IDENTIFICATION_TRANSACTIONID'] = $response->getPOST('IDENTIFICATION_TRANSACTIONID');
         $data['PROCESSING_STATUS_CODE'] = $response->getPOST('PROCESSING_STATUS_CODE');
         $data['PROCESSING_RETURN'] = $response->getPOST('PROCESSING_RETURN');
-        $data['PROCESSING_RETURN_CODE'] = $request->getPOST('PROCESSING_RETURN_CODE');
-        $data['PAYMENT_CODE'] = $response->$response('PAYMENT_CODE');
+        $data['PROCESSING_RETURN_CODE'] = $response->getPOST('PROCESSING_RETURN_CODE');
+        $data['PAYMENT_CODE'] = $response->getPOST('PAYMENT_CODE');
         $data['IDENTIFICATION_UNIQUEID'] = $response->getPOST('IDENTIFICATION_UNIQUEID');
         $data['FRONTEND_SUCCESS_URL'] = $response->getPOST('FRONTEND_SUCCESS_URL');
         $data['FRONTEND_FAILURE_URL'] = $response->getPOST('FRONTEND_FAILURE_URL');
