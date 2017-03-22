@@ -1174,6 +1174,10 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     public function processingTransaction($order, $data, $message='')
     {
 
+        /** @var  $paymentHelper HeidelpayCD_Edition_Helper_Payment */
+        $paymentHelper = Mage::helper('hcd/payment');
+
+
         $message = ($message === '' ) ? 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] : $message;
         $totallyPaid = false;
 
@@ -1182,7 +1186,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(true);
 
-        if ($this->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] and
+        if ($paymentHelper->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] and
             $order->getOrderCurrencyCode() == $data['PRESENTATION_CURRENCY']
         ) {
             $order->setState(
