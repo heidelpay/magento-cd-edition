@@ -123,6 +123,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
     {
         $session = $this->getCheckout();
         $order = Mage::getModel('sales/order');
+        $this->log('SuccessAction Session: '. json_encode($session->getLastRealOrderId()));
         $order->loadByIncrementId($session->getLastRealOrderId());
         if ($order->getPayment() === false) {
             $this->_redirect('', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true));
@@ -139,6 +140,8 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         $data = Mage::getModel('hcd/transaction')
             ->loadLastTransactionDataByTransactionnr($session->getLastRealOrderId());
+
+        $this->log('SuccessAction Data: '. json_encode($data));
 
         /*
          * validate Hash to prevent manipulation
