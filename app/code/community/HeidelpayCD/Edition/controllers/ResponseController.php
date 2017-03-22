@@ -104,6 +104,9 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
     {
         $response = Mage::app()->getRequest();
         $response->setParamSources(array('_POST'));
+
+        $this->log('ResponseController');
+        
         $securityHash = $response->getPost('CRITERION_SECRET');
         $data = array();
         $transactionId = $response->getPOST('IDENTIFICATION_TRANSACTIONID');
