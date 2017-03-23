@@ -166,27 +166,47 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
 
         $order = parent::pendingTransaction($order, $data, $message);
 
-        $order->getPayment()->setTransactionId($data['IDENTIFICATION_UNIQUEID']);
-
-        $order->getPayment()->setIsTransactionClosed(0);
-
-        $order->getPayment()->setTransactionAdditionalInfo(
-            Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
-            null
+        $invoice = $order->prepareInvoice();
+        $invoice->register();
+        $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
+        $order->setIsInProcess(true);
+        $invoice->setIsPaid(false);
+        $order->addStatusHistoryComment(
+            Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'),
+            false
         );
+        $invoice->save();
+        if ($this->_invoiceOrderEmail) {
+            $code = $order->getPayment()->getMethodInstance()->getCode();
+            if ($code == 'hcdiv' or $code == 'hcdivsec') {
+                $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
+                $invoiceMailComment = ($info === false) ? '' : '<h6>'
+                    . $this->__('payment information') . '</h6><p>' . $info . '</p>';
+            }
+
+            $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
+        }
+
+
+        $transactionSave = Mage::getModel('core/resource_transaction')
+            ->addObject($invoice)
+            ->addObject($invoice->getOrder());
+        $transactionSave->save();
 
         $this->log('Set Transaction to Pending : ');
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
-            $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+            $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
+            $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
             $message
         );
+
         $order->getPayment()->addTransaction(
             Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH,
             null,
             true,
             $message
         );
+
         return $order;
     }
 }

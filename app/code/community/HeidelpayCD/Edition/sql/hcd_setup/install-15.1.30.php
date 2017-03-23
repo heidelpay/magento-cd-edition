@@ -1,17 +1,21 @@
 <?php
 /**
- * @category    Heidelpay
- * @package        Heidelpay CD-Editon
+ * install method
  *
- * @author         Jens Richter
- * @copyright      Copyright (c) 2014 Heidelberger Payment GmbH
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ *
+ * @link  https://dev.heidelpay.de/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
  */
+
 $installer = $this;
 $installer->startSetup();
-
-
-
-
 
 /**
  * create transactions table
