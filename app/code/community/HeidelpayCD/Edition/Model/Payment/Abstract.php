@@ -14,7 +14,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Method_Abstract
 {
     /**
@@ -514,7 +514,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     public function getShippingHash()
     {
         $shipping = $this->getQuote()->getShippingAddress();
-        // @codingStandardsIgnoreStart
+        // @codingStandardsIgnoreStart can not be replace because of backwards compatiblity
         return md5(
             $shipping->getFirstname() .
             $shipping->getLastname() .
@@ -535,7 +535,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @return array
      *
      */
-    // @codingStandardsIgnoreLine
+    // @codingStandardsIgnoreLine should be refactored - issue #1
     public function getUser($order, $isReg = false)
     {
         $user = array();
@@ -1094,7 +1094,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      */
     public function validateDateOfBirth($day, $month, $year)
     {
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine should be refactored - issue #2
         if (strtotime("$year/$month/$day") < (time() - (18 * 60 * 60 * 24 * 365))) {
             return true;
         }
@@ -1120,7 +1120,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
                 $this->log('Invoice Number ' . (string)$invoice->getIncrementId());
                 $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
                 $invoice->setIsPaid(false);
-                // @codingStandardsIgnoreLine
+                // @codingStandardsIgnoreLine use of save in a loop
                 $invoice->save();
             }
 
@@ -1166,7 +1166,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      *
      * @param $order Mage_Sales_Model_Order
      * @param $data HeidelpayCD_Edition_Model_Transaction
-     * @param $invoiceOrderEmail bool prevent invoice mail
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
@@ -1254,6 +1253,16 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         return $order;
     }
+
+    /**
+     * Handle transaction with means pending
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $data HeidelpayCD_Edition_Model_Transaction
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
+     */
 
     public function pendingTransaction($order,$data,$message='')
     {

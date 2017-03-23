@@ -13,7 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
 {
     public function _construct()
@@ -36,7 +36,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $this->setReturn($data['PROCESSING_RETURN']);
         $this->setReturncode($data['PROCESSING_RETURN_CODE']);
         $this->setJsonresponse(Mage::getModel('hcd/resource_encryption')->encrypt(json_encode($data)));
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine should be refactored - issue #2
         $this->setDatetime(date('Y-m-d H:i:s'));
         $this->setSource($source);
         return $this->save();
@@ -81,7 +81,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
                 
         $data = $trans->getData();
 
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine seem to be a bug in marketplace ready
         if (is_array($data)){
             return  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['jsonresponse']), true);
         }
@@ -94,7 +94,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $data = array();
         $trans = $this->getCollection();
         $trans->addFieldToFilter('uniqeid', $id);
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine should be refactored - issue #6
         $trans->getSelect()->limit(1);
         $trans->load();
                 
@@ -114,7 +114,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $trans->addFieldToFilter('transactionid', $transid)
                      ->addFieldToFilter('Payment_Type', $methode);
         $trans->getSelect()->order('id DESC');
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine should be refactored - issue #6
         $trans->getSelect()->limit(1);
         $trans->load();
                 

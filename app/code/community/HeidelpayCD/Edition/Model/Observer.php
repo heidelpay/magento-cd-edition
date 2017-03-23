@@ -13,7 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Observer
 {
     public $invoiceOrderEmail = true;
@@ -48,9 +48,9 @@ class HeidelpayCD_Edition_Model_Observer
     
     public function saveInvoice($observer)
     {
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine should be refactored - issue #4
         $this->log('saveInvoice '.print_r($observer->debug(), 1));
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine should be refactored - issue #4
         $this->log('saveInvoice '.print_r($observer->getOrder()->debug(), 1));
     }
     
@@ -128,12 +128,12 @@ class HeidelpayCD_Edition_Model_Observer
             
             
                 $this->log("doRequest url : ".$config['URL']);
-                // @codingStandardsIgnoreLine
+                // @codingStandardsIgnoreLine should be refactored - issue #4
                 $this->log("doRequest params : ".print_r($params, 1));
             
                 $src = Mage::helper('hcd/payment')
                     ->doRequest($config['URL'], $params);
-                // @codingStandardsIgnoreLine
+                // @codingStandardsIgnoreLine should be refactored - issue #4
                 $this->log("doRequest response : ".print_r($src, 1));
 
             

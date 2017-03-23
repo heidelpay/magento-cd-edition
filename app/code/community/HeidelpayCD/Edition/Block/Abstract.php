@@ -13,7 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Block_Abstract extends Mage_Core_Block_Template
 {
     public function getSession()

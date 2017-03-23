@@ -13,12 +13,12 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order_Pdf_Invoice
 {
     public function getPdf($invoices = array())
     {
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine refactored - issue #4
         Mage::log('Invoice'.print_r($invoices, 1));
 
     }

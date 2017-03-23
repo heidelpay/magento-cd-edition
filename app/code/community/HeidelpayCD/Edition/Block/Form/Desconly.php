@@ -13,7 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warnina
 class HeidelpayCD_Edition_Block_Form_Desconly extends Mage_Payment_Block_Form
 {
     protected function _construct()

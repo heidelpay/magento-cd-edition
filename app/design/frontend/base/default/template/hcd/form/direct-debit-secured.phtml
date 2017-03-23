@@ -126,6 +126,7 @@ array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])) {
             <?php
             $i = 0;
             for ($i = 17; $i <= 80; $i++) {
+                // @codingStandardsIgnoreLine should be refactored - issue #2
                 $year = date('Y', strtotime("last day of -$i year"));
                 $selected = ($dobyear === $year) ? 'selected="selected"' : '';
                 echo '<option value="' . $this->htmlEscape($year) . '" ' .

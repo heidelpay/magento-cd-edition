@@ -14,7 +14,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /**
@@ -148,5 +148,45 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
         );
 
         return strtr($loadSnippet, $repl);
+    }
+
+    /**
+     * Handle transaction with means pending
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $data HeidelpayCD_Edition_Model_Transaction
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
+     */
+
+    public function pendingTransaction($order,$data,$message='')
+    {
+        $message = 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] .' '.$message;
+
+        $order = parent::pendingTransaction($order, $data, $message);
+
+        $order->getPayment()->setTransactionId($data['IDENTIFICATION_UNIQUEID']);
+
+        $order->getPayment()->setIsTransactionClosed(0);
+
+        $order->getPayment()->setTransactionAdditionalInfo(
+            Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
+            null
+        );
+
+        $this->log('Set Transaction to Pending : ');
+        $order->setState(
+            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
+            $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+            $message
+        );
+        $order->getPayment()->addTransaction(
+            Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH,
+            null,
+            true,
+            $message
+        );
+        return $order;
     }
 }

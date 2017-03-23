@@ -16,7 +16,7 @@
  
 $modulePath = Mage::getModuleDir('', 'Mage_Checkout');
 require_once($modulePath."/controllers/OnepageController.php");
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageController
 {
     public function indexAction()
@@ -46,7 +46,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         $this->getOnepage()->initCheckout();
 
 
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine should be refactored - issue #4
         $this->log('Data from wallet '.print_r($data, 1));
         
         
@@ -77,7 +77,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             "confirm_password" =>"",
             "save_in_address_book" => 1
         );
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine should be refactored - issue #4
         $this->log('adress'.print_r($billingAddress, 1));
         
         $hpdata = array(

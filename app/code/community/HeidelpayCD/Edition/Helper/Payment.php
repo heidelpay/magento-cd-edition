@@ -14,11 +14,17 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 {
-    protected $_invoiceOrderEmail = true;
-    protected $_debug = false;
+
+    /**
+     * send request to heidelpay apo
+     *
+     * @param $url string url for the heidelpay api
+     * @param array $params post parameter
+     * @return mixed|null|Zend_Http_Response response from heidelpay api
+     */
 
     public function doRequest($url, $params = array())
     {
@@ -55,7 +61,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         }
 
         $result = null;
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine parse_str is discouraged
         parse_str($res, $result);
 
         return $result;
@@ -75,7 +81,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * real log function which will becalled from all controllers and models
+     * real log function which will be called from all controllers and models
      *
      * @param mixed $message
      * @param mixed $level
@@ -118,8 +124,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         Mage::log($message, $lev, $file);
         return true;
     }
-
-    // @codingStandardsIgnoreLine
+    // @codingStandardsIgnoreLine more than 120 characters
     public function preparePostData($config = array(),$front = array(),$customer = array(),$basket = array(),$criterion = array())
     {
         $params = array();
@@ -147,7 +152,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         $params = array_merge($params, $this->_setPaymentMethod($config, $customer));
 
 
-        /* Debit on registration */
+        /* debit on registration */
         if (array_key_exists('ACCOUNT.REGISTRATION', $config)) {
             $params['ACCOUNT.REGISTRATION'] = $config['ACCOUNT.REGISTRATION'];
             $params['FRONTEND.ENABLED'] = "false";
@@ -163,7 +168,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 
         /* frontend configuration */
 
-        /* override FRONTEND.ENABLED if nessessary */
+        /* override FRONTEND.ENABLED if necessary */
         if (array_key_exists('FRONTEND.ENABLED', $front)) {
             $params['FRONTEND.ENABLED'] = $front['FRONTEND.ENABLED'];
             unset($front['FRONTEND.ENABLED']);
@@ -195,17 +200,13 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         return $params;
     }
 
-    /**
-     * @codingStandardsIgnoreLine
-     * Todo redesign
-     */
-    // @codingStandardsIgnoreLine
-    protected function _setPaymentMethod($config = array(), $customer = array())
+    // @codingStandardsIgnoreLine should be refactored - issue #3
+    protected function  _setPaymentMethod($config = array(), $customer = array())
     {
         $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
-        /* Set payment methode */
+        /* Set payment method */
         switch ($config['PAYMENT.METHOD']) {
-            /* sofortbanking */
+            /* sofort */
             case 'su':
                 $params['ACCOUNT.BRAND'] = "SOFORT";
                 $params['PAYMENT.CODE'] = "OT." . $type;
@@ -225,7 +226,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 $params['ACCOUNT.BRAND'] = "EPS";
                 $params['PAYMENT.CODE'] = "OT." . $type;
                 break;
-            /* postfinace */
+            /* postfinance */
             case 'pf':
                 $params['PAYMENT.CODE'] = "OT." . $type;
                 break;
@@ -262,7 +263,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             case 'mpa':
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'];
 
-                // masterpass as a payment methode
+                // masterpass as a payment method
                 if (!array_key_exists('IDENTIFICATION.REFERENCEID', $customer) and ($type == 'DB' or $type == 'PA')) {
                     $params['WALLET.DIRECT_PAYMENT'] = "true";
                     $params['WALLET.DIRECT_PAYMENT_CODE'] = "WT." . $type;
@@ -280,6 +281,11 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         return $params;
     }
 
+    /**
+     * function to split paymentCode into code and method
+     * @param $paymentCode string payment code from response
+     * @return array payment code and method as an array
+     */
     public function splitPaymentCode($paymentCode)
     {
         return preg_split('/\./', $paymentCode);
@@ -295,6 +301,11 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         return number_format($number, 2, '.', '');
     }
 
+    /**
+     * get language code
+     * @param string $default default language code
+     * @return string return current lang code
+     */
     public function getLang($default = 'en')
     {
         $locale = explode('_', Mage::app()->getLocale()->getLocaleCode());
@@ -310,13 +321,13 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
      *
      * @param mixed $errorMsg
      * @param null|mixed $errorCode
-     * @param null|mixed $ordernr
+     * @param null|mixed $orderNumber
      */
-    public function handleError($errorMsg, $errorCode = null, $ordernr = null)
+    public function handleError($errorMsg, $errorCode = null, $orderNumber = null)
     {
         // default is return generic error message
-        if ($ordernr != null) {
-            $this->log('Ordernumber ' . $ordernr . ' -> ' . $errorMsg . ' [' . $errorCode . ']', 'NOTICE');
+        if ($orderNumber != null) {
+            $this->log('Ordernumber ' . $orderNumber . ' -> ' . $errorMsg . ' [' . $errorCode . ']', 'NOTICE');
         }
 
         if ($errorCode) {
@@ -332,17 +343,25 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         return $this->_getHelper()->__('An unexpected error occurred. Please contact us to get further information.');
     }
 
+    /**
+     * get helper instance
+     *
+     * @return Mage_Core_Helper_Abstract
+     */
     protected function _getHelper()
     {
         return Mage::helper('hcd');
     }
 
-    public function basketItems($quote, $storeId, $withShipping = false)
+    /**
+     * @param $quote Mage_Sales_Model_Quote quote object
+     * @param $storeId int current store id
+     * @param bool $includingShipment include
+     * @return array return basket api array
+     */
+    public function basketItems($quote, $storeId, $includingShipment = false)
     {
         $shoppingCartItems = $quote->getAllVisibleItems();
-
-        $shoppingCart = array();
-
 
         $shoppingCart = array(
 
@@ -385,7 +404,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
             $count++;
         };
 
-        if ($withShipping) {
+        if ($includingShipment) {
             $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
                 'basketItemReferenceId' => $count,
@@ -405,6 +424,13 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         return $shoppingCart;
     }
 
+    /**
+     * Get region code
+     *
+     * @param $countryCode string country code
+     * @param $stateByName string state name
+     * @return mixed regionId
+     */
     public function getRegion($countryCode, $stateByName)
     {
 

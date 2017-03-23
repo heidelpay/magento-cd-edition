@@ -14,7 +14,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Helper_OrderState extends Mage_Core_Helper_Abstract
 {
     /**

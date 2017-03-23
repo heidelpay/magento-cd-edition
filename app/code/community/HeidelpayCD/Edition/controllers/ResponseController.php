@@ -124,7 +124,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                     $securityHash
                 ) === false
         ) {
-            // @codingStandardsIgnoreLine
+            // @codingStandardsIgnoreLine should be refactored - issue #5
             print Mage::getUrl(
                 'hcd/index/error', array(
                             '_forced_secure' => true,
@@ -218,7 +218,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
 
         $this->log('Url: ' . $url);
 
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine should be refactored - issue #5
         print $url;
     }
 

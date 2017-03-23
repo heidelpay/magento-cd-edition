@@ -13,7 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Block_Success extends HeidelpayCD_Edition_Block_Abstract
 {
     public function showPaymentInfo()

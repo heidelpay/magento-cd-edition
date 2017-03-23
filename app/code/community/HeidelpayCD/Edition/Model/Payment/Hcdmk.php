@@ -15,7 +15,7 @@
  *
  * @deprecated This payment method is not longer available
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdmk extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdmk';

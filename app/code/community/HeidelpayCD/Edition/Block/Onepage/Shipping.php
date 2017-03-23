@@ -13,7 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Block_Onepage_Shipping extends Mage_Checkout_Block_Onepage_Shipping
 {
     public function getAddress()

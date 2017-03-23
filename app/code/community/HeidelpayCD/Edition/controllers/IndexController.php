@@ -13,7 +13,7 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Action
 {
     protected $_sendNewOrderEmail = true;
@@ -538,7 +538,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         $this->log('XML Object from Push : ' . $rawPost);
 
-        // @codingStandardsIgnoreStart
+        // @codingStandardsIgnoreStart simplexml notation
         list($type, $methode) = Mage::helper('hcd/payment')
             ->splitPaymentCode((string)$xml->Transaction->Payment['code']);
 
@@ -560,7 +560,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             return;
         }
 
-        // @codingStandardsIgnoreStart
+        // @codingStandardsIgnoreStart simplexml notation
         $xmlData = array(
             'PAYMENT_CODE' => (string)$xml->Transaction->Payment['code'],
             'IDENTIFICATION_TRANSACTIONID' => (string)$orderID,
@@ -585,7 +585,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         switch ($paymentCode) {
             case 'hcddd':
-                // @codingStandardsIgnoreStart
+                // @codingStandardsIgnoreStart simplexml notation
                 $xmlData['CLEARING_AMOUNT'] = (string)$xml->Transaction->Payment->Clearing->Amount;
                 $xmlData['CLEARING_CURRENCY'] = (string)$xml->Transaction->Payment->Clearing->Currency;
                 $xmlData['ACCOUNT_IBAN'] = (string)$xml->Transaction->Account->Iban;
@@ -596,7 +596,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                 break;
             case 'hcdbs':
                 if ($methode == 'FI') {
-                    // @codingStandardsIgnoreStart
+                    // @codingStandardsIgnoreStart simplexml notation
                     $xmlData['CRITERION_BILLSAFE_LEGALNOTE'] = (string)$xml->Transaction->Analysis->BILLSAFE_LEGALNOTE;
                     $xmlData['CRITERION_BILLSAFE_AMOUNT'] = (string)$xml->Transaction->Analysis->BILLSAFE_AMOUNT;
                     $xmlData['CRITERION_BILLSAFE_CURRENCY'] = (string)$xml->Transaction->Analysis->BILLSAFE_CURRENCY;
@@ -611,7 +611,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                 break;
         }
 
-        // @codingStandardsIgnoreLine
+        // @codingStandardsIgnoreLine simplexml notation
         if (!empty($xml->Transaction->Identification->UniqueID)) {
             $lastdata = Mage::getModel('hcd/transaction')
                 ->loadLastTransactionDataByUniqeId($xmlData['IDENTIFICATION_UNIQUEID']);

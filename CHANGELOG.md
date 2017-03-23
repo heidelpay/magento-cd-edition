@@ -14,11 +14,11 @@
 - input fields for iban and bic in store front are not longer required
 ### invoice
  - the magento invoice will now be generated automatically, but is set to not paid
-
 ### Fixed
-
 
 ### Removed
  - remove insurance provider option from direct debit and invoice payment method. Please use the new payment methods instead.
  - payment method yapital is not longer available. The model will not be removed because of backwards capability.
- - payment method magir cart is not longer available. The model will not be removed because of backwards capability.
+ - payment method MangirKart is not longer available. The model will not be removed because of backwards capability.
+ ### direct debit
+  -  bic is not longer necessary for the 23 SEPA countries

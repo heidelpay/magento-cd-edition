@@ -1,13 +1,16 @@
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4c8c379f94d64fd3813dffb260e8bdd6)](https://www.codacy.com/app/heidelpay/magento-cd-edition?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=heidelpay/magento-cd-edition&amp;utm_campaign=Badge_Grade)
+
 ![Logo](https://dev.heidelpay.de/devHeidelpay_400_180.jpg)
 
-# heidelpay payment extension for magento1
+# heidelpay payment extension for magento 1
 
-This extension for Magento >=1.8 provides a direct integration of the heidelpay payment methods to your Magento shop. 
+This extension for Magento >=1.8 provides a direct integration of the heidelpay payment methods to your magento shop. 
 
 Currently supported payment methods are:
 * credit card
 * debit card
-* sepa direct debit
+* SEPA direct debit
 * Giropay
 * Sofort
 * PayPal
@@ -16,8 +19,10 @@ Currently supported payment methods are:
 * EPS
 * iDeal
 * BillSafe
+* Postfinance
+* SEPA direct debit secured
 
-For more information please visit -https://dev.heidelpay.de/magento2/
+For more information please visit - https://dev.heidelpay.de/magento/
 
 ## SYSTEM REQUIREMENTS
 
