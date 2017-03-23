@@ -212,4 +212,84 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
 
         return $order;
     }
+
+    /**
+     * Handle transaction with means processing
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $data HeidelpayCD_Edition_Model_Transaction
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
+     */
+    public function processingTransaction($order, $data, $message='')
+    {
+
+        /** @var  $paymentHelper HeidelpayCD_Edition_Helper_Payment */
+        $paymentHelper = Mage::helper('hcd/payment');
+
+
+        $message = ($message === '' ) ? 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] : $message;
+        $totallyPaid = false;
+
+        $order->getPayment()
+            ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
+            ->setParentTransactionId($order->getPayment()->getLastTransId())
+            ->setIsTransactionClosed(true);
+
+        if ($paymentHelper->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] and
+            $order->getOrderCurrencyCode() == $data['PRESENTATION_CURRENCY']
+        ) {
+            $order->setState(
+                $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
+                $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
+                $message
+            );
+            $totallyPaid = true;
+        } else {
+            // in case rc is ack and amount is to low or currency miss match
+
+            $order->setState(
+                $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
+                $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(true),
+                $message
+            );
+        }
+
+
+        if ($order->hasInvoices() and $totallyPaid) {
+            $invIncrementIDs = array();
+            /** @var  $invoice Mage_Sales_Model_Order_Invoice */
+            foreach ($order->getInvoiceCollection() as $invoice) {
+                $this->log('Set invoice ' . (string)$invoice->getIncrementId(). ' to paid.');
+                $invoice
+                    ->capture()
+                    ->setState(Mage_Sales_Model_Order_Invoice::STATE_PAID)
+                    ->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE)
+                    ->setIsPaid(true)
+                    // @codingStandardsIgnoreLine use of save in a loop
+                    ->save();
+            }
+
+            $order->setTotalInvoiced(true);
+            $order->setTotalPaid(true);
+
+            $transactionSave = Mage::getModel('core/resource_transaction')
+                ->addObject($invoice)
+                ->addObject($invoice->getOrder());
+            $transactionSave->save();
+
+        }
+
+        $order->getPayment()->addTransaction(
+            Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE,
+            null,
+            true,
+            $message
+        );
+
+        $order->setIsInProcess(true);
+
+        return $order;
+    }
 }
