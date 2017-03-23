@@ -404,7 +404,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     public function log($message, $level = "DEBUG", $file = false)
     {
         $callers = debug_backtrace();
-        return Mage::helper('hcd/payment')->realLog($callers[1]['function'] . ' ' . $message, $level, $file);
+        $paymentHelper = Mage::helper('hcd/payment');
+        return $paymentHelper->realLog(json_encode($callers) . ' ' . $message, $level, $file);
     }
 
     /**
