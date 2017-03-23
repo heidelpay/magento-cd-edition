@@ -164,7 +164,6 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
     {
         $message = 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] .' '.$message;
 
-        $order = parent::pendingTransaction($order, $data, $message);
 
         $invoice = $order->prepareInvoice();
         $invoice->register();
