@@ -181,7 +181,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
             if ($code == 'hcdiv' or $code == 'hcdivsec') {
                 $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                 $invoiceMailComment = ($info === false) ? '' : '<h6>'
-                    . $this->__('payment information') . '</h6><p>' . $info . '</p>';
+                    . $this->_getHelper()->__('payment information') . '</h6><p>' . $info . '</p>';
             }
 
             $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
