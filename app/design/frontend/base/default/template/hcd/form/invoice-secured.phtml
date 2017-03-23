@@ -31,7 +31,7 @@ if ($recognition == 1 and $cId != 0) {
     // only if shipping address is unchanged
     $hash = $this->getMethod()->getShippingHash();
     $userData = $this->getMethod()->getCustomerData();
-    if ($userData !== false and  array_key_exists('payment_data', $userData)) {
+    if ($userData !== false and array_key_exists('payment_data', $userData)) {
         if ($userData ['payment_data'] ['SHIPPPING_HASH'] != $hash) {
             $userData = array();
         }
@@ -80,6 +80,8 @@ if (array_key_exists('payment_data', $userData) &&
             }
             ?>
         </select>
+    </div>
+    <div class="input-box">
         <select title="<?php echo $this->htmlEscape($this->__('month')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobmonth]">
             <option><?php echo $this->htmlEscape($this->__('month')); ?></option>
@@ -93,6 +95,8 @@ if (array_key_exists('payment_data', $userData) &&
             }
             ?>
         </select>
+    </div>
+    <div class="input-box">
         <select title="<?php echo $this->htmlEscape($this->__('year')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]">
             <option><?php echo $this->htmlEscape($this->__('year')); ?></option>

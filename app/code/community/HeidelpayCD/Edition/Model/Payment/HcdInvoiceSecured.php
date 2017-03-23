@@ -192,7 +192,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
             ->addObject($invoice->getOrder());
         $transactionSave->save();
 
-        $this->log('Set Transaction to Pending : ');
+        $this->log('Set transaction to processed and generate invoice ');
         $order->setState(
             $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
             $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
