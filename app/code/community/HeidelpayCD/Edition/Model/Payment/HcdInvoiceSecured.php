@@ -159,9 +159,9 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
      *
      * @return Mage_Sales_Model_Order
      */
-    public function pendingTransaction($order, $data, $message='')
+    public function pendingTransaction($order, $data, $message = '')
     {
-        $message = 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] .' '.$message;
+        $message = 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] . ' ' . $message;
 
         $order->getPayment()
             ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
@@ -221,7 +221,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
      *
      * @return Mage_Sales_Model_Order
      */
-    public function processingTransaction($order, $data, $message='')
+    public function processingTransaction($order, $data, $message = '')
     {
 
         /** @var  $paymentHelper HeidelpayCD_Edition_Helper_Payment */
@@ -260,8 +260,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
 
             /** @var  $invoice Mage_Sales_Model_Order_Invoice */
             foreach ($order->getInvoiceCollection() as $invoice) {
-                if(!is_object($invoice)) continue;
-                $this->log('Set invoice ' . (string)$invoice->getIncrementId(). ' to paid.');
+                $this->log('Set invoice ' . (string)$invoice->getIncrementId() . ' to paid.');
                 $invoice
                     ->capture()
                     ->setState(Mage_Sales_Model_Order_Invoice::STATE_PAID)
@@ -269,16 +268,18 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
                     ->setIsPaid(true)
                     // @codingStandardsIgnoreLine use of save in a loop
                     ->save();
+
+                $transactionSave = Mage::getModel('core/resource_transaction')
+                    ->addObject($invoice)
+                    ->addObject($invoice->getOrder());
+                // @codingStandardsIgnoreLine use of save in a loop
+                $transactionSave->save();
             };
         }
 
         $order->setTotalInvoiced($data['PRESENTATION_AMOUNT']);
         $order->setTotalPaid($data['PRESENTATION_AMOUNT']);
 
-        $transactionSave = Mage::getModel('core/resource_transaction')
-            ->addObject($invoice)
-            ->addObject($invoice->getOrder());
-        $transactionSave->save();
 
         $order->getPayment()->addTransaction(
             Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE,
