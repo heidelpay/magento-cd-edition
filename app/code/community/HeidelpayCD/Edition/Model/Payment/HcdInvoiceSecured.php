@@ -257,7 +257,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
 
 
         if ($order->hasInvoices() and $totallyPaid) {
-            $invIncrementIDs = array();
+
             /** @var  $invoice Mage_Sales_Model_Order_Invoice */
             foreach ($order->getInvoiceCollection() as $invoice) {
                 $this->log('Set invoice ' . (string)$invoice->getIncrementId(). ' to paid.');
@@ -270,8 +270,8 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
                     ->save();
             }
 
-            $order->setTotalInvoiced(true);
-            $order->setTotalPaid(true);
+            $order->setTotalInvoiced($data['PRESENTATION_AMOUNT']);
+            $order->setTotalPaid($data['PRESENTATION_AMOUNT']);
 
             $transactionSave = Mage::getModel('core/resource_transaction')
                 ->addObject($invoice)
