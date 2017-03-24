@@ -122,7 +122,7 @@ class HeidelpayCD_Edition_Model_Observer
         $frontend['FRONTEND.MODE'] = 'DEFAULT';
         $frontend['FRONTEND.ENABLED'] = 'false';
 
-        // set useer parameter for request
+        // set user parameter for request
         $user = $payment->getUser($order, true);
 
         $basketData = $payment->getBasketData($order);
@@ -166,6 +166,7 @@ class HeidelpayCD_Edition_Model_Observer
             $shipment->_dataSaveAllowed = false;
             Mage::app()->getResponse()
                 // @codingStandardsIgnoreLine
+
                 ->setRedirect($_SERVER['HTTP_REFERER'])
                 ->sendResponse();
             return;

@@ -452,55 +452,38 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * Prepare frontend parameter for heidelpay api call
      *
-     * @param $ordernr order identification number
+     * @param $orderNumber order identification number
      * @param bool $storeId shore identification number
      *
      * @return array
      */
-    public function getFrontend($ordernr, $storeId = false)
+    public function getFrontend($orderNumber, $storeId = false)
     {
         return array(
             'FRONTEND.LANGUAGE' => Mage::helper('hcd/payment')->getLang(),
             'FRONTEND.RESPONSE_URL' => Mage::getUrl(
                 'hcd/response/',
-                array(
-                        '_forced_secure' => true,
-                        '_store_to_url' => true,
-                        '_nosid' => true
-                    )
+                array('_forced_secure' => true,'_store_to_url' => true,'_nosid' => true)
             ),
             'FRONTEND.SUCCESS_URL' => Mage::getUrl(
                 'hcd/index/success',
-                array(
-                        '_forced_secure' => true,
-                        '_store_to_url' => true,
-                        '_nosid' => true
-                    )
+                array('_forced_secure' => true,'_store_to_url' => true,'_nosid' => true)
             ),
             'FRONTEND.FAILURE_URL' => Mage::getUrl(
                 'hcd/index/error',
-                array(
-                        '_forced_secure' => true,
-                        '_store_to_url' => true,
-                        '_nosid' => true
-                    )
+                array('_forced_secure' => true,'_store_to_url' => true,'_nosid' => true)
             ),
             'CRITERION.PUSH_URL' => Mage::getUrl(
                 'hcd/index/push',
-                array(
-                    '_forced_secure' => true,
-                    '_store_to_url' => true,
-                    '_nosid' => true
-                )
+                array('_forced_secure' => true,'_store_to_url' => true,'_nosid' => true)
             ),
             'CRITERION.SECRET' => Mage::getModel('hcd/resource_encryption')
-                    ->getHash((string)$ordernr),
+                    ->getHash((string)$orderNumber),
             'CRITERION.LANGUAGE' => strtolower(Mage::helper('hcd/payment')->getLang()),
             'CRITERION.STOREID' => ($storeId) ? $storeId : Mage::app()->getStore()->getId(),
             'SHOP.TYPE' => 'Magento ' . Mage::getVersion(),
             'SHOPMODULE.VERSION' => 'HeidelpayCD Edition - ' .
-                (string)Mage::getConfig()->getNode()
-                    ->modules->HeidelpayCD_Edition->version
+                (string)Mage::getConfig()->getNode()->modules->HeidelpayCD_Edition->version
         );
     }
 
@@ -706,115 +689,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         return array_merge($basket, $data);
     }
 
-    /**
-     * Prepare basket items for BillSafe
-     *
-     * @param $order Mage_Sales_Model_Order magento order object
-     *
-     * @return array basket details for heidelpay billSafe api call
-     */
-    public function getBasket($order)
-    {
-        $items = $order->getAllVisibleItems();
-
-        if ($items) {
-            $i = 0;
-            foreach ($items as $item) {
-                $i++;
-                $prefix = 'CRITERION.POS_' . sprintf('%02d', $i);
-
-                 /** @var $item Mage_Sales_Model_Order_Item */
-                $quantity = (int)$item->getQtyOrdered();
-                $parameters[$prefix . '.POSITION'] = $i;
-                $parameters[$prefix . '.QUANTITY'] = $quantity;
-                $parameters[$prefix . '.UNIT'] = 'Stk.'; // Liter oder so
-                $parameters[$prefix . '.AMOUNT_UNIT_GROSS'] =
-                    floor(bcmul($item->getPriceInclTax(), 100, 10));
-                $parameters[$prefix . '.AMOUNT_GROSS'] =
-                    floor(bcmul($item->getPriceInclTax() * $quantity, 100, 10));
-
-
-                $parameters[$prefix . '.TEXT'] = $item->getName();
-                $parameters[$prefix . '.COL1'] = 'SKU:' . $item->getSku();
-                $parameters[$prefix . '.ARTICLE_NUMBER'] = $item->getProductId();
-                $parameters[$prefix . '.PERCENT_VAT'] = sprintf('%1.2f', $item->getTaxPercent());
-                $parameters[$prefix . '.ARTICLE_TYPE'] = 'goods';
-            }
-        }
-
-        if ($this->getShippingNetPrice($order) > 0) {
-            $i++;
-            $prefix = 'CRITERION.POS_' . sprintf('%02d', $i);
-            $parameters[$prefix . '.POSITION'] = $i;
-            $parameters[$prefix . '.QUANTITY'] = '1';
-            $parameters[$prefix . '.UNIT'] = 'Stk.'; // Liter oder so
-            $parameters[$prefix . '.AMOUNT_UNIT_GROSS'] = floor(
-                bcmul(
-                    (($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->getShippingTaxPercent($order) / 100)),
-                    100, 10
-                )
-            );
-            $parameters[$prefix . '.AMOUNT_GROSS'] = floor(
-                bcmul(
-                    (($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->getShippingTaxPercent($order) / 100)),
-                    100, 10
-                )
-            );
-
-            $parameters[$prefix . '.TEXT'] = 'Shipping';
-            $parameters[$prefix . '.ARTICLE_NUMBER'] = '0';
-            $parameters[$prefix . '.PERCENT_VAT'] = $this->getShippingTaxPercent($order);
-            $parameters[$prefix . '.ARTICLE_TYPE'] = 'shipment';
-        }
-
-        if ($order->getDiscountAmount() < 0) {
-            $i++;
-            $prefix = 'CRITERION.POS_' . sprintf('%02d', $i);
-            $parameters[$prefix . '.POSITION'] = $i;
-            $parameters[$prefix . '.QUANTITY'] = '1';
-            $parameters[$prefix . '.UNIT'] = 'Stk.'; // Liter oder so
-            $parameters[$prefix . '.AMOUNT_UNIT_GROSS'] = floor(bcmul($order->getDiscountAmount(), 100, 10));
-            $parameters[$prefix . '.AMOUNT_GROSS'] = floor(bcmul($order->getDiscountAmount(), 100, 10));
-
-            $parameters[$prefix . '.TEXT'] = 'Voucher';
-            $parameters[$prefix . '.ARTICLE_NUMBER'] = '0';
-            $parameters[$prefix . '.PERCENT_VAT'] = '0.00';
-            $parameters[$prefix . '.ARTICLE_TYPE'] = 'voucher';
-        }
-
-        return $parameters;
-    }
-
-    /**
-     * Calculate shipping net price
-     *
-     * @param $order Mage_Sales_Model_Order magento order object
-     *
-     * @return string shipping net price
-     */
-    protected function getShippingNetPrice($order)
-    {
-        $shippingTax = $order->getShippingTaxAmount();
-        $price = $order->getShippingInclTax() - $shippingTax;
-        $price -= $order->getShippingRefunded();
-        $price -= $order->getShippingCanceled();
-        return $price;
-    }
-
-    /**
-     * Calculate shipping tax in percent for BillSafe
-     *
-     * @param $order Mage_Sales_Model_Order magentp order object
-     *
-     * @return string shipping tex in percent
-     */
-    protected function getShippingTaxPercent($order)
-    {
-        $tax = ($order->getShippingTaxAmount() * 100) / $order->getShippingAmount();
-        return Mage::helper('hcd/payment')->format(round($tax));
-    }
 
     /**
      * Getter for the payment method backend title
@@ -926,7 +800,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      */
     public function canCapture()
     {
-
         //check weather this payment method supports capture
 
         if ($this->_canCapture === false) {
@@ -938,7 +811,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             $this->log('try to capture amount in frontend ... this is not necessary !');
             return false;
         }
-
 
         // loading order object to check wether this
         $orderIncrementId = Mage::app()->getRequest()->getParam('order_id');
@@ -1048,7 +920,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             $storeId = 0;
         }
 
-
         $customerData->setPaymentmethode($this->_code);
         $customerData->setUniqeid($uniqeID);
         $customerData->setCustomerid($customerId);
@@ -1074,10 +945,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         /*
          * This function should not be modified please overwrite this function
          * in the class of the used payment method !!!
-         *
-         * your function should set $this->getCheckout()->setHcdPaymentInfo($userMessage)
          */
-
         return false;
     }
 
