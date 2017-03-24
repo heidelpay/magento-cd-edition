@@ -129,7 +129,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
         $html .= '</div></center>';
         
         $this->getCheckout()->setHcdPaymentInfo($html);
-
     }
 
     /**

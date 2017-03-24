@@ -17,6 +17,7 @@
 class HeidelpayCD_Edition_Model_Observer
 {
     public $invoiceOrderEmail = true;
+
     // @codingStandardsIgnoreLine
     public function removeWalletDataFromCheckout($observer)
     {

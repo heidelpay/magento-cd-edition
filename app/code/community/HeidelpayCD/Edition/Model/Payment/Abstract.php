@@ -964,7 +964,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Api call for refunding a given invoice
      *
      * @param Mage_Sales_Model_Order_Payment $payment current payment object
-     * @param float $amount  amount to refund
+     * @param float                          $amount  amount to refund
      *
      * @return $this
      */
@@ -1178,7 +1178,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         $paymentHelper = Mage::helper('hcd/payment');
 
 
-        $message = ($message === '' ) ? 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] : $message;
+        $message = ($message === '') ? 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] : $message;
         $totallyPaid = false;
 
         $order->getPayment()
@@ -1213,7 +1213,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         $this->log('Auto invoiced :'. (string) $autoInvoice);
 
-        if ($order->canInvoice() and ( $autoInvoice or $code == 'hcdbs') and $totallyPaid === true) {
+        if ($order->canInvoice() and ($autoInvoice or $code == 'hcdbs') and $totallyPaid === true) {
             $invoice = $order->prepareInvoice();
             $invoice->register()->capture();
             $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
@@ -1264,8 +1264,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      *
      * @return Mage_Sales_Model_Order
      */
-
-    public function pendingTransaction($order,$data,$message='')
+    public function pendingTransaction($order, $data, $message='')
     {
         $message = 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] .' '.$message;
 

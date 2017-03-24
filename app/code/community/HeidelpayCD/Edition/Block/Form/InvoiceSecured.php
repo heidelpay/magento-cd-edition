@@ -20,6 +20,5 @@ class HeidelpayCD_Edition_Block_Form_InvoiceSecured extends Mage_Payment_Block_F
     {
         parent::_construct();
         $this->setTemplate('hcd/form/invoice-secured.phtml');
-
     }
 }

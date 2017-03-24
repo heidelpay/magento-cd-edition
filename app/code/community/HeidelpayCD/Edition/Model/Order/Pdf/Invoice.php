@@ -20,7 +20,6 @@ class HeidelpayCD_Edition_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order
     {
         // @codingStandardsIgnoreLine refactored - issue #4
         Mage::log('Invoice'.print_r($invoices, 1));
-
     }
     
     public function myPdf($invoices = array())
@@ -38,10 +37,10 @@ class HeidelpayCD_Edition_Model_Order_Pdf_Invoice extends Mage_Sales_Model_Order
             $page = $pdf->newPage(Zend_Pdf_Page::SIZE_A4);
             $pdf->pages[] = $page;
 
-        $this->_setFontRegular($page);
+            $this->_setFontRegular($page);
 
         
-                $x = 50;
+            $x = 50;
             $y = 800;
         }
 

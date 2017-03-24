@@ -103,6 +103,5 @@ class HeidelpayCD_Edition_Helper_OrderState extends Mage_Core_Helper_Abstract
 
         Mage::dispatchEvent('heidelpay_after_map_status', array('order' => $order));
         $order->save();
-
     }
 }

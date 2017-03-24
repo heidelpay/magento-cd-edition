@@ -203,7 +203,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         }
 
         $this->getOnepage()->getCheckout()->setStepData('payment', 'complete', true);
-        return $result ;
+        return $result;
     }
     
     public function savePaymentAction()

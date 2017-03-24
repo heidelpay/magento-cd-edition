@@ -188,7 +188,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         $order->save();
         $this->_redirect('checkout/onepage/success', array('_secure' => true));
-
     }
 
     public function errorAction()

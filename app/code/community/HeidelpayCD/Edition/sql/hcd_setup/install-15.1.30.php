@@ -13,7 +13,6 @@
  * @subpackage Magento
  * @category Magento
  */
-
 $installer = $this;
 $installer->startSetup();
 

@@ -227,6 +227,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
      *
      * @param $data HeidelpayCD_Edition_Model_Transaction
      * @param $paymentCode array
+     *
      * @return HeidelpayCD_Edition_Model_Customer
      */
     protected function saveCustomerRegistration($data, $paymentCode)
@@ -268,7 +269,6 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                 )
         );
 
-       return $customerData->save();
+        return $customerData->save();
     }
-
 }

@@ -159,8 +159,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
      *
      * @return Mage_Sales_Model_Order
      */
-
-    public function pendingTransaction($order,$data,$message='')
+    public function pendingTransaction($order, $data, $message='')
     {
         $message = 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] .' '.$message;
 
@@ -229,7 +228,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
         $paymentHelper = Mage::helper('hcd/payment');
 
 
-        $message = ($message === '' ) ? 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] : $message;
+        $message = ($message === '') ? 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] : $message;
         $totallyPaid = false;
 
         $order->getPayment()
@@ -278,7 +277,6 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
                 ->addObject($invoice)
                 ->addObject($invoice->getOrder());
             $transactionSave->save();
-
         }
 
         $order->getPayment()->addTransaction(

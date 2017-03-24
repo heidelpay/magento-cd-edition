@@ -17,15 +17,14 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 {
-
     /**
      * send request to heidelpay apo
      *
      * @param $url string url for the heidelpay api
      * @param array $params post parameter
+     *
      * @return mixed|null|Zend_Http_Response response from heidelpay api
      */
-
     public function doRequest($url, $params = array())
     {
         $client = new Zend_Http_Client(trim($url), array());
@@ -124,8 +123,9 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
         Mage::log($message, $lev, $file);
         return true;
     }
+
     // @codingStandardsIgnoreLine more than 120 characters
-    public function preparePostData($config = array(),$front = array(),$customer = array(),$basket = array(),$criterion = array())
+    public function preparePostData($config = array(), $front = array(), $customer = array(), $basket = array(), $criterion = array())
     {
         $params = array();
         /*
@@ -201,7 +201,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     }
 
     // @codingStandardsIgnoreLine should be refactored - issue #3
-    protected function  _setPaymentMethod($config = array(), $customer = array())
+    protected function _setPaymentMethod($config = array(), $customer = array())
     {
         $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
         /* Set payment method */
@@ -283,7 +283,9 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 
     /**
      * function to split paymentCode into code and method
+     *
      * @param $paymentCode string payment code from response
+     *
      * @return array payment code and method as an array
      */
     public function splitPaymentCode($paymentCode)
@@ -303,7 +305,9 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
 
     /**
      * get language code
+     *
      * @param string $default default language code
+     *
      * @return string return current lang code
      */
     public function getLang($default = 'en')
@@ -319,7 +323,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
     /**
      * helper to generate customer payment error messages
      *
-     * @param mixed $errorMsg
+     * @param mixed      $errorMsg
      * @param null|mixed $errorCode
      * @param null|mixed $orderNumber
      */
@@ -357,6 +361,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
      * @param $quote Mage_Sales_Model_Quote quote object
      * @param $storeId int current store id
      * @param bool $includingShipment include
+     *
      * @return array return basket api array
      */
     public function basketItems($quote, $storeId, $includingShipment = false)
@@ -402,7 +407,7 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
                 'imageUrl' => (string)Mage::helper('catalog/image')->init($item->getProduct(), 'thumbnail')
             );
             $count++;
-        };
+        }
 
         if ($includingShipment) {
             $shoppingCart['basket']['basketItems'][] = array(
@@ -429,11 +434,11 @@ class HeidelpayCD_Edition_Helper_Payment extends Mage_Core_Helper_Abstract
      *
      * @param $countryCode string country code
      * @param $stateByName string state name
+     *
      * @return mixed regionId
      */
     public function getRegion($countryCode, $stateByName)
     {
-
         $regionData = Mage::getModel('directory/region')->getResourceCollection()
             ->addCountryFilter($countryCode)
             ->load();

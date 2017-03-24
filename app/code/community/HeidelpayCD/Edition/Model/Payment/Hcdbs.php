@@ -59,13 +59,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
 
         return $loadSnippet;
     }
+
     /**
      * @inheritdoc
      */
-    public function processingTransaction($order, $data, $message='') 
+    public function processingTransaction($order, $data, $message='')
     {
         $message = 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE'];
         parent::processingTransaction($order, $data, $message);
     }
-
 }

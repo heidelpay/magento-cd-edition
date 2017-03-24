@@ -49,7 +49,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdcc extends HeidelpayCD_Edition_Model_
             return true;
         }
 
-        return false ;
+        return false;
     }
 
     /**

@@ -82,7 +82,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $data = $trans->getData();
 
         // @codingStandardsIgnoreLine seem to be a bug in marketplace ready
-        if (is_array($data)){
+        if (is_array($data)) {
             return  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['jsonresponse']), true);
         }
 
