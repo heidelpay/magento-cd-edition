@@ -260,6 +260,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
 
             /** @var  $invoice Mage_Sales_Model_Order_Invoice */
             foreach ($order->getInvoiceCollection() as $invoice) {
+                if(!is_object($invoice)) continue;
                 $this->log('Set invoice ' . (string)$invoice->getIncrementId(). ' to paid.');
                 $invoice
                     ->capture()
