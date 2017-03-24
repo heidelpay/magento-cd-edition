@@ -182,8 +182,8 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
             $code = $order->getPayment()->getMethodInstance()->getCode();
             if ($code == 'hcdiv' or $code == 'hcdivsec') {
                 $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
-                $invoiceMailComment = ($info === false) ? '' : '<h6>'
-                    . $this->_getHelper()->__('payment information') . '</h6><p>' . $info . '</p>';
+                $invoiceMailComment = ($info === false) ? '' : '<h3>'
+                    . $this->_getHelper()->__('payment information') . '</h3><p>' . $info . '</p>';
             }
 
             $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
@@ -268,16 +268,16 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
                     ->setIsPaid(true)
                     // @codingStandardsIgnoreLine use of save in a loop
                     ->save();
-            }
-
-            $order->setTotalInvoiced($data['PRESENTATION_AMOUNT']);
-            $order->setTotalPaid($data['PRESENTATION_AMOUNT']);
-
-            $transactionSave = Mage::getModel('core/resource_transaction')
-                ->addObject($invoice)
-                ->addObject($invoice->getOrder());
-            $transactionSave->save();
+            };
         }
+
+        $order->setTotalInvoiced($data['PRESENTATION_AMOUNT']);
+        $order->setTotalPaid($data['PRESENTATION_AMOUNT']);
+
+        $transactionSave = Mage::getModel('core/resource_transaction')
+            ->addObject($invoice)
+            ->addObject($invoice->getOrder());
+        $transactionSave->save();
 
         $order->getPayment()->addTransaction(
             Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE,
