@@ -18,6 +18,10 @@ class HeidelpayCD_Edition_Model_Observer
 {
     public $invoiceOrderEmail = true;
 
+    /**
+     * Unset session variable hcdWallet if the customers return to backet
+     * @param $observer
+     */
     // @codingStandardsIgnoreLine
     public function removeWalletDataFromCheckout($observer)
     {
@@ -27,6 +31,10 @@ class HeidelpayCD_Edition_Model_Observer
         }
     }
 
+    /**
+     * Unset session variable hcdWallet if the customers return to backet
+     * @param $observer
+     */
     public function handleWalletDataDuringCheckout($observer)
     {
         $controller = $observer->getControllerAction();
@@ -56,6 +64,12 @@ class HeidelpayCD_Edition_Model_Observer
         $this->log('saveInvoice ' . print_r($observer->getOrder()->debug(), 1));
     }
 
+    /**
+     * Observer on save shipment to report the shipment to heidelpay
+     *
+     * @param $observer
+     */
+
     public function reportShippingToHeidelpay($observer)
     {
         $shipment = $observer->getEvent()->getShipment();
@@ -69,44 +83,53 @@ class HeidelpayCD_Edition_Model_Observer
         $paymentCode = $payment->getCode();
 
 
-        $paymentMethod = array('hcdivsec','hcdbs');
+        $paymentMethod = array('hcdivsec', 'hcdbs');
 
 
+        // return $this when reporting shipment is not needed
         if (!in_array($paymentCode, $paymentMethod)) {
             return $this;
         }
 
+        /** @var $transactionModel HeidelpayCD_Edition_Model_Transaction */
+        $transactionModel = Mage::getModel('hcd/transaction');
+        /** @var $sessionModel Mage_Core_Model_Session */
+        $sessionModel = Mage::getSingleton('core/session');
+        /** @var  $heidelpayHelper HeidelpayCD_Edition_Helper_Data */
+        $heidelpayHelper = Mage::helper('hcd');
+        /** @var  $paymentHelper HeidelpayCD_Edition_Helper_Payment */
+        $paymentHelper = Mage::helper('hcd/payment');
 
-        // if invoice on delivery is on try to invoice this order
-        $criterion = array();
-        /** @var  $authorisation HeidelpayCD_Edition_Model_Transaction */
-        $authorisation = Mage::getModel('hcd/transaction')
-            ->getOneTransactionByMethode($order->getRealOrderId(), 'PA');
-
+        // load authorisation form database
+        $authorisation = $transactionModel->getOneTransactionByMethode($order->getRealOrderId(), 'PA');
+        // no authorisation found
         if ($authorisation === false) {
+            $sessionModel->addError(
+                $heidelpayHelper->__(
+                    'Delivery notes to Heidelpay fail, because of no initial authorisation'
+                )
+
+            );
             return $this;
         }
 
-
-        $config =
-            $payment->getMainConfig($paymentCode, $order->getStoreId());
+        // set config parameter for request
+        $config = $payment->getMainConfig($paymentCode, $order->getStoreId());
         $config['PAYMENT.TYPE'] = 'FI';
 
-
-        $frontend =
-            $payment->getFrontend(
-                $order->getRealOrderId(),
-                $authorisation['CRITERION_STOREID']
-            );
+        // set frontend parameter for request
+        $frontend = $payment->getFrontend($order->getRealOrderId(), $authorisation['CRITERION_STOREID']);
         $frontend['FRONTEND.MODE'] = 'DEFAULT';
         $frontend['FRONTEND.ENABLED'] = 'false';
 
+        // set useer parameter for request
         $user = $payment->getUser($order, true);
 
         $basketData = $payment->getBasketData($order);
+        $basketData['IDENTIFICATION.REFERENCEID'] = $authorisation['IDENTIFICATION_UNIQUEID'];#
 
-        $basketData['IDENTIFICATION.REFERENCEID'] =
-            $authorisation['IDENTIFICATION_UNIQUEID'];
+        $criterion = array();
+
         Mage::dispatchEvent(
             'heidelpay_reportShippingToHeidelpay_bevor_preparePostData',
             array(
@@ -118,24 +141,22 @@ class HeidelpayCD_Edition_Model_Observer
                 'criterion' => $criterion
             )
         );
-        $params = Mage::helper('hcd/payment')->preparePostData(
-            $config, $frontend, $user, $basketData,
-            $criterion
-        );
 
+        // prepare shipment report
+        $params = $paymentHelper->preparePostData($config, $frontend, $user, $basketData, $criterion);
 
         $this->log("doRequest url : " . $config['URL']);
         $this->log("doRequest params : " . json_encode($params));
+        // send shipment report to heidelpay api
+        $src = $paymentHelper->doRequest($config['URL'], $params);
 
-        $src = Mage::helper('hcd/payment')
-            ->doRequest($config['URL'], $params);
         $this->log("doRequest response : " . json_encode($src));
 
-
+        // generate error message in case of api error
         if ($src['PROCESSING_RESULT'] == "NOK") {
-            Mage::getSingleton('core/session')
+            $sessionModel
                 ->addError(
-                    Mage::helper('hcd')
+                    $heidelpayHelper
                         ->__(
                             'Delivery notes to Heidelpay fail, because of : 
                                     '
@@ -150,13 +171,22 @@ class HeidelpayCD_Edition_Model_Observer
             return;
         };
 
-        Mage::getSingleton('core/session')
+        // successful send shipment report to heidelpay
+        $sessionModel
             ->addSuccess(
-                Mage::helper('hcd')
+                $heidelpayHelper
                     ->__('Successfully report delivery to Heidelpay.')
             );
     }
 
+    /**
+     * log function
+     *
+     * @param $message string log message
+     * @param $level string log level
+     * @param $file string log file
+     * @return mixed
+     */
     protected function log($message, $level = "DEBUG", $file = false)
     {
         $callers = debug_backtrace();
