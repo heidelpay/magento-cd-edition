@@ -165,12 +165,19 @@ class HeidelpayCD_Edition_Model_Observer
                 );
             $shipment->_dataSaveAllowed = false;
             Mage::app()->getResponse()
-                // @codingStandardsIgnoreLine
-
+                // @codingStandardsIgnoreLine use of S_SERVER is discouraged
                 ->setRedirect($_SERVER['HTTP_REFERER'])
                 ->sendResponse();
             return;
         };
+
+        $message = $heidelpayHelper->__('report shipment to heidelpay successful. Waiting for receipt of money');
+        $order->setState(
+            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
+            $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+            $message
+        )->save();
+
 
         // successful send shipment report to heidelpay
         $sessionModel
