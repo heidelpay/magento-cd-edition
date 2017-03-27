@@ -53,12 +53,11 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      */
     protected $_postPayload = array();
 
-    /**
-    public function __construct(HeidelpayCD_Edition_Helper_Validator $validatorHelper)
+    public function __construct($validatorHelper)
     {
-        $this->_validatorHelper = $validatorHelper;
+        $this->log(print_r($validatorHelper,1));
+        //$this->_validatorHelper = $validatorHelper;
     }
-    */
     /**
      * Over wright from block
      *
