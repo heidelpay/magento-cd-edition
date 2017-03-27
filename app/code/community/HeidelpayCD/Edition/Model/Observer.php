@@ -99,7 +99,6 @@ class HeidelpayCD_Edition_Model_Observer
                 $heidelpayHelper->__(
                     'Delivery notes to Heidelpay fail, because of no initial authorisation'
                 )
-
             );
             return $this;
         }
