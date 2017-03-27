@@ -39,6 +39,12 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
     protected $_formBlockType = 'hcd/form_invoiceSecured';
 
     /**
+     * @var string
+     */
+
+    protected $_infoBlockType = 'hcd/info_invoice';
+
+    /**
      * Over wright from block
      *
      * @return string
@@ -255,7 +261,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
             );
         }
 
-
+        // Set invoice to paid when the total amount matches
         if ($order->hasInvoices() and $totallyPaid) {
 
             /** @var  $invoice Mage_Sales_Model_Order_Invoice */
@@ -277,6 +283,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
             };
         }
 
+        // Set total paid and invoice to the connector amount
         $order->setTotalInvoiced($data['PRESENTATION_AMOUNT']);
         $order->setTotalPaid($data['PRESENTATION_AMOUNT']);
 
