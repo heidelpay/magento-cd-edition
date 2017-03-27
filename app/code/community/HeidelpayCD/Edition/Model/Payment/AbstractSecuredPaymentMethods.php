@@ -55,7 +55,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
 
     public function __construct(HeidelpayCD_Edition_Helper_Validator $validatorHelper)
     {
-        parent::__construct();
         $this->_validatorHelper = $validatorHelper;
     }
 
