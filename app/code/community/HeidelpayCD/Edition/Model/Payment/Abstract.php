@@ -950,28 +950,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     }
 
     /**
-     * Validates the age of the customer
-     *
-     * It will return true if the costumer is older then 18 years
-     *
-     * @param $day day of the customers birth
-     * @param $mount month of the customers birth
-     * @param $year year of the customers birth
-     * @param mixed $month
-     *
-     * @return bool return true if the costumer is older then 18 years
-     */
-    public function validateDateOfBirth($day, $month, $year)
-    {
-        // @codingStandardsIgnoreLine should be refactored - issue #2
-        if (strtotime("$year/$month/$day") < (time() - (18 * 60 * 60 * 24 * 365))) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Handle charge back notices from heidelpay payment
      *
      * @param $order Mage_Sales_Model_Order

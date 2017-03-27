@@ -23,6 +23,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
      *
      * @var string payment code
      */
-    protected $_code = 'hcdivsec';
+    protected $_code = 'hcdsan';
+
 
 }

@@ -19,9 +19,11 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
 {
 
     /**
+     * collect items for basket api
+     *
      * @param $quote Mage_Sales_Model_Quote quote object
-     * @param $storeId int current store id
-     * @param  $includingShipment boolean include
+     * @param $storeId integer current store id
+     * @param $includingShipment boolean include
      *
      * @return array return basket api array
      */

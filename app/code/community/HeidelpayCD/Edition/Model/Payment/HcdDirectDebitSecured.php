@@ -15,7 +15,8 @@
  * @category Magento
  */
 // @codingStandardsIgnoreLine magento marketplace namespace warning
-class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
+    extends HeidelpayCD_Edition_Model_Payment_AbstractModel_AbstractSecuredPaymentMethods
 {
     /**
      * payment code
@@ -23,13 +24,6 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
      * @var string payment code
      */
     protected $_code = 'hcdddsec';
-
-    /**
-     * send basket information to basket api
-     *
-     * @var bool send basket information to basket api
-     */
-    protected $_canBasketApi = true;
 
     /**
      * set checkout form block
@@ -45,47 +39,6 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
 
     protected $_infoBlockType = 'hcd/info_directDebit';
 
-    /**
-     * Over wright from block
-     *
-     * @return string
-     */
-    public function getFormBlockType()
-    {
-        return $this->_formBlockType;
-    }
-
-    /**
-     * is payment method available
-     *
-     * @param null $quote
-     *
-     * @return bool is payment method available
-     */
-    public function isAvailable($quote = null)
-    {
-        $billing = $this->getQuote()->getBillingAddress();
-        $shipping = $this->getQuote()->getShippingAddress();
-
-        /* billing and shipping address has to match */
-        if (($billing->getFirstname() != $shipping->getFirstname()) or
-            ($billing->getLastname() != $shipping->getLastname()) or
-            ($billing->getStreet() != $shipping->getStreet()) or
-            ($billing->getPostcode() != $shipping->getPostcode()) or
-            ($billing->getCity() != $shipping->getCity()) or
-            ($billing->getCountry() != $shipping->getCountry())
-        ) {
-            return false;
-        }
-
-        /* payment method is b2c only */
-        if (!empty($billing->getCompany())) {
-            return false;
-        }
-
-
-        return parent::isAvailable($quote);
-    }
 
     /**
      * Validate customer input on checkout
@@ -95,57 +48,28 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
     public function validate()
     {
         parent::validate();
-        $payment = array();
-        $params = array();
-        $payment = Mage::app()->getRequest()->getPOST('payment');
 
+        if (isset($this->_postPayload['method']) and $this->_postPayload['method'] == $this->_code) {
+            parent::validate();
 
-        if (isset($payment['method']) and $payment['method'] == $this->_code) {
-            if (array_key_exists($this->_code . '_salutation', $payment)) {
-                $params['NAME.SALUTATION'] =
-                    (
-                        $payment[$this->_code . '_salutation'] == 'MR' or
-                        $payment[$this->_code . '_salutation'] == 'MRS'
-                    )
-                        ? $payment[$this->_code . '_salutation'] : '';
-            }
-
-            if (array_key_exists($this->_code . '_dobday', $payment) &&
-                array_key_exists($this->_code . '_dobmonth', $payment) &&
-                array_key_exists($this->_code . '_dobyear', $payment)
-            ) {
-                $day = (int)$payment[$this->_code . '_dobday'];
-                $mounth = (int)$payment[$this->_code . '_dobmonth'];
-                $year = (int)$payment[$this->_code . '_dobyear'];
-
-                if ($this->validateDateOfBirth($day, $mounth, $year)) {
-                    $params['NAME.BIRTHDATE'] = $year . '-' . sprintf("%02d", $mounth) . '-' . sprintf("%02d", $day);
-                } else {
-                    Mage::throwException(
-                        $this->_getHelper()
-                            ->__('The minimum age is 18 years for this payment methode.')
-                    );
-                }
-            }
-
-            if (empty($payment[$this->_code . '_holder'])) {
+            if (empty($this->_postPayload[$this->_code . '_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
 
-            if (empty($payment[$this->_code . '_iban'])) {
+            if (empty($this->_postPayload[$this->_code . '_iban'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
 
-            $params['ACCOUNT.HOLDER'] = $payment[$this->_code . '_holder'];
+            $this->_validatedParameters['ACCOUNT.HOLDER'] = $this->_postPayload[$this->_code . '_holder'];
 
-            if (preg_match('#^[\d]#', $payment[$this->_code . '_iban'])) {
-                $params['ACCOUNT.NUMBER'] = $payment[$this->_code . '_iban'];
+            if (preg_match('#^[\d]#', $this->_postPayload[$this->_code . '_iban'])) {
+                $this->_validatedParameters['ACCOUNT.NUMBER'] = $this->_postPayload[$this->_code . '_iban'];
             } else {
-                $params['ACCOUNT.IBAN'] = $payment[$this->_code . '_iban'];
+                $this->_validatedParameters['ACCOUNT.IBAN'] = $this->_postPayload[$this->_code . '_iban'];
             }
 
-            $this->saveCustomerData($params);
-        }
+            $this->saveCustomerData($this->_validatedParameters);
+        };
 
         return $this;
     }
@@ -153,7 +77,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
     /**
      * Payment information for invoice mail
      *
-     * @param array $paymentData transaction response
+     * @param $paymentData array  transaction response
      *
      * @return string return payment information text
      */

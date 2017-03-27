@@ -41,7 +41,6 @@ class HeidelpayCD_Edition_Helper_AbstractHelper extends Mage_Core_Helper_Abstrac
     {
         $storeId = Mage::app()->getStore()->getId();
         $path = "hcd/settings/";
-        $config = array();
 
 
         switch ($level) {
