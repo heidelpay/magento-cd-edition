@@ -6,7 +6,10 @@
 - new payment method invoice secured
 - new payment method direct debit secured
 - add doc blocks to file and functions
-- add payment information to pdf template for invoice and prepayment 
+#### prepayment, invoice and invoice secured
+- add payment information to pdf template for invoice and prepayment
+#### direct debit and direct debit secured
+- add creditor identifier and mandate reference ID to pdf invoice 
 
 ### Changed
  - enforce code style and magento marketplace standard

@@ -15,7 +15,7 @@
  * @category Magento
  */
 // @codingStandardsIgnoreLine magento marketplace namespace warning
-class HeidelpayCD_Edition_Helper_OrderState extends Mage_Core_Helper_Abstract
+class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_AbstractHelper
 {
     /**
      * @param $data HeidelpayCD_Edition_Model_Transaction
@@ -24,10 +24,9 @@ class HeidelpayCD_Edition_Helper_OrderState extends Mage_Core_Helper_Abstract
      */
     public function mapStatus($data, $order, $message = '')
     {
-        /** @var  $paymentHelper HeidelpayCD_Edition_Helper_Payment */
-        $paymentHelper = Mage::helper('hcd/payment');
-        $paymentHelper->log('mapStatus' . json_encode($data));
-        $paymentCode = $paymentHelper->splitPaymentCode($data['PAYMENT_CODE']);
+
+        $this->log('mapStatus' . json_encode($data));
+        $paymentCode = $this->splitPaymentCode($data['PAYMENT_CODE']);
 
         $message = ($message === '') ? $data['PROCESSING_RETURN'] : $message;
 
@@ -42,12 +41,12 @@ class HeidelpayCD_Edition_Helper_OrderState extends Mage_Core_Helper_Abstract
 
         // handle charge back notifications for cc, dc and dd
         if ($paymentCode[1] == 'CB') {
-            $paymentHelper->log('charge back for order ' . $order->getIncrementId());
+            $this->log('charge back for order ' . $order->getIncrementId());
 
             $order->getPayment()->getMethodInstance()->chargeBackTransaction($order);
 
             Mage::dispatchEvent('heidelpay_after_map_status_chargeBack', array('order' => $order));
-            $paymentHelper->log('Is this order protected ? ' . (string)$order->isStateProtected());
+            $this->log('Is this order protected ? ' . (string)$order->isStateProtected());
             $order->save();
             return;
         }
@@ -63,7 +62,7 @@ class HeidelpayCD_Edition_Helper_OrderState extends Mage_Core_Helper_Abstract
             $order->getStatus() == Mage_Sales_Model_Order::STATE_COMPLETE
         ) {
             // you can use this event for example to get a notification when a canceled order has been paid
-            $paymentHelper->log('Order '.$order->getRealOrderId().' is canceled, closed or complete.');
+            $this->log('Order '.$order->getRealOrderId().' is canceled, closed or complete.');
             Mage::dispatchEvent('heidelpay_map_status_cancel', array('order' => $order, 'data' => $data));
             return;
         }

@@ -42,9 +42,25 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         'IDENTIFICATION_SHORTID',
     );
 
+
+    protected $_basketApiHelper;
+
     protected function _getHelper()
     {
         return Mage::helper('hcd');
+    }
+    /**
+     * HeidelpayCD_Edition_IndexController constructor.
+     * @param Zend_Controller_Request_Abstract $request
+     * @param Zend_Controller_Response_Abstract $response
+     * @param HeidelpayCD_Edition_Helper_BasketApi $basketApiHelper
+     * @param array $invokeArgs
+     */
+    // @codingStandardsIgnoreLine bug in multi line standard
+    public function __construct(Zend_Controller_Request_Abstract $request,Zend_Controller_Response_Abstract $response, HeidelpayCD_Edition_Helper_BasketApi $basketApiHelper, array $invokeArgs = array())
+    {
+        parent::__construct($request, $response, $invokeArgs);
+        $this->_basketApiHelper = $basketApiHelper;
     }
 
     protected function log($message, $level = "DEBUG", $file = false)
@@ -290,7 +306,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
 
         if ($payment->canBasketApi() and empty($refId)) {
-            $shoppingCart = Mage::helper('hcd/payment')->basketItems($order, $this->getStore());
+            $shoppingCart = $this->_basketApiHelper->basketItems($order, $this->getStore(),true);
 
             $url = (Mage::getStoreConfig('hcd/settings/transactionmode', $this->getStore()) == 0)
                 ? $this->_liveBasketUrl : $this->_sandboxBasketUrl;
@@ -388,6 +404,9 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         return $this;
     }
 
+    /**
+     * masterpass wallet controller
+     */
     public function walletAction()
     {
         $data = array();
@@ -408,7 +427,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         }
 
 
-        $shoppingCart = Mage::helper('hcd/payment')->basketItems($quote, $storeId);
+        $shoppingCart = $this->_basketApiHelper->basketItems($quote, $storeId, false);
 
         $url = (Mage::getStoreConfig(
             'hcd/settings/transactionmode',
