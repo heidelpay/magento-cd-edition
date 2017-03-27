@@ -52,6 +52,10 @@
         "app/design/adminhtml/default/default/template/hcd/"
       ],
       [
+        "app/design/adminhtml/base/default/template/hcd/*",
+        "app/design/adminhtml/base/default/template/hcd/"
+      ],
+      [
         "app/etc/modules/HeidelpayCD_Edition.xml",
         "app/etc/modules/HeidelpayCD_Edition.xml"
       ],
