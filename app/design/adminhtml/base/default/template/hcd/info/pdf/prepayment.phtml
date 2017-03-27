@@ -31,15 +31,11 @@ if ($transactionId !== False)
 // title of the payment method
 echo $this->escapeHtml($this->getMethod()->getTitle()); ?>
 {{pdf_row_separator}}
-// account holder
 <?php echo $this->escapeHtml($this->__('Holder') . " : " . $data['CONNECTOR_ACCOUNT_HOLDER']) ?>
 {{pdf_row_separator}}
-// account iban
 <?php echo $this->escapeHtml($this->__('IBAN') . " : "  . $data['CONNECTOR_ACCOUNT_IBAN']) ?>
 {{pdf_row_separator}}
-// account bic
 <?php echo $this->escapeHtml($this->__('BIC') . " : "  . $data['CONNECTOR_ACCOUNT_BIC']) ?>
 {{pdf_row_separator}}
-// account identification
 <?php echo $this->escapeHtml($this->__('Identification'). " : " . $data['IDENTIFICATION_SHORTID']) ?>
 
