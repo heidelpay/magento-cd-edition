@@ -183,5 +183,6 @@
 "HPError-800.100.171","Bitte w&auml;hlen Sie eine andere Zahlart"
 "HPError-800.300.101","Bitte w&auml;hlen Sie eine andere Zahlart"
 
-
-
+"The booking contains:","Die Abbuchung enth&auml;lt:"
+"mandate reference ID","Mandatsreferenz-ID"
+"creditor identifier","Gl&auml;ubiger ID"
