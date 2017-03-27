@@ -17,6 +17,8 @@
 class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     protected $_code = 'hcdpp';
+
+    protected $_infoBlockType = 'hcd/info_prepayment';
     
     public function showPaymentInfo($paymentData)
     {
