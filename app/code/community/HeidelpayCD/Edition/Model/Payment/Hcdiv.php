@@ -18,7 +18,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
 {
     protected $_code = 'hcdiv';
 
+    /**
+     * over write existing info block
+     * @var string
+     */
+
     protected $_infoBlockType = 'hcd/info_invoice';
+
 
     /**
      * Payment information for invoice mail

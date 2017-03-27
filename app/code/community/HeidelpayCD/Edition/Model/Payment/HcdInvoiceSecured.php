@@ -39,6 +39,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
     protected $_formBlockType = 'hcd/form_invoiceSecured';
 
     /**
+     * over write existing info block
      * @var string
      */
 

@@ -14,6 +14,11 @@
  * @category Magento
  */
 // @codingStandardsIgnoreLine magento marketplace namespace warning
-class HeidelpayCD_Edition_Block_Info_Debit extends Mage_Payment_Block_Info
+class HeidelpayCD_Edition_Block_Info_DirectDebit extends Mage_Payment_Block_Info
 {
+    public function toPdf()
+    {
+        $this->setTemplate('hcd/info/pdf/directdebit.phtml');
+        return $this->toHtml();
+    }
 }
