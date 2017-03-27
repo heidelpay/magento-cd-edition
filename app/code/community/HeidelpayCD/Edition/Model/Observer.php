@@ -22,8 +22,7 @@ class HeidelpayCD_Edition_Model_Observer
      * Unset session variable hcdWallet if the customers return to backet
      * @param $observer
      */
-    // @codingStandardsIgnoreLine
-    public function removeWalletDataFromCheckout($observer)
+    public function removeWalletDataFromCheckout()
     {
         // unset wallet data from session
         if ($session = Mage::getSingleton('checkout/session')) {
@@ -54,14 +53,6 @@ class HeidelpayCD_Edition_Model_Observer
                 $session->unsHcdWallet();
             }
         }
-    }
-
-    public function saveInvoice($observer)
-    {
-        // @codingStandardsIgnoreLine should be refactored - issue #4
-        $this->log('saveInvoice ' . print_r($observer->debug(), 1));
-        // @codingStandardsIgnoreLine should be refactored - issue #4
-        $this->log('saveInvoice ' . print_r($observer->getOrder()->debug(), 1));
     }
 
     /**

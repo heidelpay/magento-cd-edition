@@ -27,13 +27,6 @@
                     </customer>
                 </entities>
             </hcd_resource>
-            <!--
-                <sales>
-                    <rewrite>
-                        <order_pdf_invoice>HeidelpayCD_Edition_Model_Order_Pdf_Invoice</order_pdf_invoice>
-                      </rewrite>
-                </sales>
-            -->
         </models>
         <blocks>
             <hcd>
@@ -87,16 +80,6 @@
                     </reportShippingToHeidelpay>
                 </observers>
             </sales_order_shipment_save_before>
-            <!--
-            <sales_order_invoice_save_after>
-                    <observers>
-                        <saveInvoice>
-                            <class>hcd/observer</class>
-                            <method>saveInvoice</method>
-                        </saveInvoice>
-                    </observers>
-            </sales_order_invoice_save_after>
-             -->
         </events>
         <template>
             <email>
