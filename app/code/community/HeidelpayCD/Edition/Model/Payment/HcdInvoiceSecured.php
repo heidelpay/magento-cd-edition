@@ -23,4 +23,13 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Ed
      * @var string payment code
      */
     protected $_code = 'hcdivsec';
+
+    /**
+     * @inheritdoc
+     */
+    public function validate()
+    {
+        $this->_postPayload = Mage::app()->getRequest()->getPOST('payment');
+        return parent::validate();
+    }
 }

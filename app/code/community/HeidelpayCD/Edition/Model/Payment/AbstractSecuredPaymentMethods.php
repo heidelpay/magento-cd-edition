@@ -17,6 +17,11 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
+    /**
+     * validation helper
+     *
+     * @var $_validatorHelper HeidelpayCD_Edition_Helper_Validator
+     */
     protected $_validatorHelper;
     /**
      * send basket information to basket api
@@ -114,8 +119,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     public function validate()
     {
         parent::validate();
-        $payment = array();
-        $this->_postPayload = Mage::app()->getRequest()->getPOST('payment');
 
         if (isset($this->_postPayload['method']) and $this->_postPayload['method'] == $this->_code) {
             if (array_key_exists($this->_code . '_salutation', $this->_postPayload)) {

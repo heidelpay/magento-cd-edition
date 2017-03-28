@@ -45,6 +45,8 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
      */
     public function validate()
     {
+        $this->_postPayload = Mage::app()->getRequest()->getPOST('payment');
+
         if (isset($this->_postPayload['method']) and $this->_postPayload['method'] == $this->_code) {
             parent::validate();
 
