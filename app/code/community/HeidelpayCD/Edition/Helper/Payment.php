@@ -62,7 +62,7 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
         $result = null;
         // @codingStandardsIgnoreLine parse_str is discouraged
         parse_str($res, $result);
-
+        ksort($result);
         return $result;
     }
 
