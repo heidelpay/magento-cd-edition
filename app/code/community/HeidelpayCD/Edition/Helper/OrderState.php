@@ -24,7 +24,6 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
      */
     public function mapStatus($data, $order, $message = '')
     {
-
         $this->log('mapStatus' . json_encode($data));
         $paymentCode = $this->splitPaymentCode($data['PAYMENT_CODE']);
 

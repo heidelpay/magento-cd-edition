@@ -22,11 +22,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
     protected $_formBlockType = 'hcd/form_debit';
     /**
      * over write existing info block
+     *
      * @var string
      */
-
     protected $_infoBlockType = 'hcd/info_directDebit';
-
 
     public function getFormBlockType()
     {

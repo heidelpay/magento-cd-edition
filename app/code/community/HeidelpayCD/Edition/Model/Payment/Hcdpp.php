@@ -161,7 +161,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
                     ->addObject($invoice->getOrder());
                 // @codingStandardsIgnoreLine use of save in a loop
                 $transactionSave->save();
-            };
+            }
         }
 
         // Set total paid and invoice to the connector amount

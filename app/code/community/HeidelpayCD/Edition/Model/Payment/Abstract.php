@@ -22,7 +22,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      */
     protected $_code = 'abstract';
     /**
-     * @var magento order object
+     * @var Mage_Sales_Model_Order magento order object
      */
     protected $_order;
     /**
@@ -88,8 +88,10 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @var string checkout information and form
      */
     protected $_formBlockType = 'hcd/form_desconly';
+
     /**
      * HeidelpayCD_Edition_Model_Payment_Abstract constructor.
+     *
      * @param $emptyArray array empty array from upstream
      */
     // @codingStandardsIgnoreLine magento sets an empty array
@@ -697,7 +699,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         return array_merge($basket, $data);
     }
-
 
     /**
      * Getter for the payment method backend title

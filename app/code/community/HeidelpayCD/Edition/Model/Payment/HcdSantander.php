@@ -15,8 +15,7 @@
  * @category Magento
  */
 // @codingStandardsIgnoreLine magento marketplace namespace warning
-class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
-    extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
+class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
     /**
      * payment code
@@ -24,6 +23,4 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
      * @var string payment code
      */
     protected $_code = 'hcdsan';
-
-
 }

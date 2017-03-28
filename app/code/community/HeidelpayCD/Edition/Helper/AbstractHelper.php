@@ -95,5 +95,4 @@ class HeidelpayCD_Edition_Helper_AbstractHelper extends Mage_Core_Helper_Abstrac
     {
         return number_format($number, 2, '.', '');
     }
-
 }

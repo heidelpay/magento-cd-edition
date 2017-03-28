@@ -20,6 +20,7 @@ class HeidelpayCD_Edition_Model_Observer
 
     /**
      * Unset session variable hcdWallet if the customers return to backet
+     *
      * @param $observer
      */
     public function removeWalletDataFromCheckout()
@@ -32,6 +33,7 @@ class HeidelpayCD_Edition_Model_Observer
 
     /**
      * Unset session variable hcdWallet if the customers return to backet
+     *
      * @param $observer
      */
     public function handleWalletDataDuringCheckout($observer)
@@ -60,7 +62,6 @@ class HeidelpayCD_Edition_Model_Observer
      *
      * @param $observer
      */
-
     public function reportShippingToHeidelpay($observer)
     {
         $shipment = $observer->getEvent()->getShipment();
@@ -159,7 +160,7 @@ class HeidelpayCD_Edition_Model_Observer
                 ->setRedirect($_SERVER['HTTP_REFERER'])
                 ->sendResponse();
             return;
-        };
+        }
 
         $message = $heidelpayHelper->__('report shipment to heidelpay successful. Waiting for receipt of money');
         $order->setState(
@@ -183,6 +184,7 @@ class HeidelpayCD_Edition_Model_Observer
      * @param $message string log message
      * @param $level string log level
      * @param $file string log file
+     *
      * @return mixed
      */
     protected function log($message, $level = "DEBUG", $file = false)

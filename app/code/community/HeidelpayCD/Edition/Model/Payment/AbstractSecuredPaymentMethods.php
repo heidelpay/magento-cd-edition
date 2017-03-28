@@ -34,9 +34,9 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
 
     /**
      * over write existing info block
+     *
      * @var string
      */
-
     protected $_infoBlockType = 'hcd/info_invoice';
 
     /**
@@ -55,6 +55,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
 
     /**
      * HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods constructor.
+     *
      * @param $emptyArray array empty array from upstream
      * @param HeidelpayCD_Edition_Helper_Validator $validatorHelper
      */
@@ -64,6 +65,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         parent::__construct($emptyArray);
         $this->_validatorHelper = $validatorHelper;
     }
+
     /**
      * Over wright from block
      *
@@ -299,7 +301,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
                     ->addObject($invoice->getOrder());
                 // @codingStandardsIgnoreLine use of save in a loop
                 $transactionSave->save();
-            };
+            }
         }
 
         // Set total paid and invoice to the connector amount
@@ -318,6 +320,4 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
 
         return $order;
     }
-
-
 }

@@ -17,7 +17,6 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_AbstractHelper
 {
-
     /**
      * collect items for basket api
      *
@@ -93,5 +92,4 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
 
         return $shoppingCart;
     }
-
 }

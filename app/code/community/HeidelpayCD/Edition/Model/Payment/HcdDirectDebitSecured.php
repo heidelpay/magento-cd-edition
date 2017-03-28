@@ -15,8 +15,7 @@
  * @category Magento
  */
 // @codingStandardsIgnoreLine magento marketplace namespace warning
-class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
-    extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
+class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
     /**
      * payment code
@@ -34,11 +33,10 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
 
     /**
      * over write existing info block
+     *
      * @var string
      */
-
     protected $_infoBlockType = 'hcd/info_directDebit';
-
 
     /**
      * Validate customer input on checkout
@@ -47,8 +45,6 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
      */
     public function validate()
     {
-
-
         if (isset($this->_postPayload['method']) and $this->_postPayload['method'] == $this->_code) {
             parent::validate();
 
@@ -69,7 +65,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
             }
 
             parent::validate();
-        };
+        }
 
         return $this;
     }
