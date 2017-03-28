@@ -90,17 +90,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     protected $_formBlockType = 'hcd/form_desconly';
 
     /**
-     * HeidelpayCD_Edition_Model_Payment_Abstract constructor.
-     *
-     * @param $emptyArray array empty array from upstream
-     */
-    // @codingStandardsIgnoreLine magento sets an empty array
-    public function __construct($emptyArray)
-    {
-        parent::__construct($emptyArray);
-    }
-
-    /**
      * @return bool payment method will redirect the customer directly to heidelpay
      */
     public function activeRedirect()
