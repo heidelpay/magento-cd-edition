@@ -139,7 +139,7 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
 
         $params['REQUEST.VERSION'] = "1.0";
 
-        return $params;
+        return ksort($params);
     }
 
     // @codingStandardsIgnoreLine should be refactored - issue #3
