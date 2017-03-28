@@ -230,6 +230,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             $message = Mage::helper('hcd/payment')
                 ->handleError($usersession->getHcdError(), $errorCode, (string)$order->getRealOrderId());
             $intMessage = $usersession->getHcdError();
+            $data['PROCESSING_RESULT'] = 'NOK';
             $usersession->unsHcdError();
         } else {
             if (isset($data['PROCESSING_RETURN_CODE'])) {
