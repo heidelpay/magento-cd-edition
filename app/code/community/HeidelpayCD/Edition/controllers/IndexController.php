@@ -59,10 +59,10 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
      * @param array                                $invokeArgs
      */
     // @codingStandardsIgnoreLine bug in multi line standard
-    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, HeidelpayCD_Edition_Helper_BasketApi $basketApiHelper, array $invokeArgs = array())
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
         parent::__construct($request, $response, $invokeArgs);
-        $this->_basketApiHelper = $basketApiHelper;
+        $this->_basketApiHelper =    Mage::helper('hcd/basketApi');
     }
 
     protected function log($message, $level = "DEBUG", $file = false)
