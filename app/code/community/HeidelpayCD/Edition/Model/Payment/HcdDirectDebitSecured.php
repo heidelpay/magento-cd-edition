@@ -47,7 +47,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
      */
     public function validate()
     {
-        parent::validate();
+
 
         if (isset($this->_postPayload['method']) and $this->_postPayload['method'] == $this->_code) {
             parent::validate();
@@ -68,7 +68,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
                 $this->_validatedParameters['ACCOUNT.IBAN'] = $this->_postPayload[$this->_code . '_iban'];
             }
 
-            $this->saveCustomerData($this->_validatedParameters);
+            parent::validate();
         };
 
         return $this;
