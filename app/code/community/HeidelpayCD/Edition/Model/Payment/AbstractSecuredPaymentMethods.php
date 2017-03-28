@@ -60,7 +60,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      * @param HeidelpayCD_Edition_Helper_Validator $validatorHelper
      */
     // @codingStandardsIgnoreLine magento sets an empty array
-    public function __construct($emptyArray, HeidelpayCD_Edition_Helper_Validator$validatorHelper)
+    public function __construct($emptyArray, HeidelpayCD_Edition_Helper_Validator $validatorHelper)
     {
         parent::__construct($emptyArray);
         $this->_validatorHelper = $validatorHelper;
