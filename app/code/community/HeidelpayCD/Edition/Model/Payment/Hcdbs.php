@@ -171,6 +171,4 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
 
         return $parameters;
     }
-
-
 }
