@@ -42,7 +42,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         'IDENTIFICATION_SHORTID',
     );
 
-
+    /** @var $_basketApiHelper HeidelpayCD_Edition_Helper_BasketApi  */
     protected $_basketApiHelper;
 
     protected function _getHelper()
