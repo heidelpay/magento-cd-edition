@@ -28,7 +28,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      *
      * @var bool send basket information to basket api
      */
-    protected $_canBasketApi = true;
+    protected $_canBasketApi = false;
 
     /**
      * set checkout form block
