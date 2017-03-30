@@ -1,6 +1,6 @@
 # Release Notes - heidelpay extension for Magento 1
 
-## v17.3.13
+## v17.3.30
 
 ### Added
 - new payment method invoice secured
@@ -13,7 +13,7 @@
 
 ### Changed
  - enforce code style and magento marketplace standard
- - move response action into a response controller and  code restructured   
+ - move response action into a response controller   
 #### giropay
 - input fields for iban and bic in store front are not longer required
 ### invoice
