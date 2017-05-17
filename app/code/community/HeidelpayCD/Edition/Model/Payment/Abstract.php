@@ -725,13 +725,12 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         $order = $payment->getOrder();
         $this->log('StoreId' . $order->getStoreId());
-        $authorisation = array();
         if ($this->canCapture()) {
-            $authorisation = Mage::getModel('hcd/transaction');
+            $authorisationModel = Mage::getModel('hcd/transaction');
             /**
              * @var $authorisation HeidelpayCD_Edition_Model_Transaction
              */
-            $authorisation->getOneTransactionByMethode(
+            $authorisation = $authorisationModel->getOneTransactionByMethode(
                 $order->getRealOrderId(),
                 'PA'
             );
