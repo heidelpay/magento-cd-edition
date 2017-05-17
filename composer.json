@@ -82,6 +82,15 @@
       [
         "js/hcd/*",
         "js/hcd/"
+      ],
+      ["README.md",
+        "app/code/community/HeidelpayCD/"
+      ],
+      ["CHANGELOG.md",
+        "app/code/community/HeidelpayCD/"
+      ],
+      ["License.txt",
+        "app/code/community/HeidelpayCD/"
       ]
     ]
   }
