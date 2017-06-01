@@ -78,7 +78,9 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
         // Set status for transaction with payment transaction
         $paidTransactionTypes = array('CP', 'DB', 'RC', 'FI');
 
-        if (in_array($paymentCode[1], $paidTransactionTypes)) {
+        if (in_array($paymentCode[1], $paidTransactionTypes)
+            and    ($data['PROCESSING_RESULT'] == 'ACK' and $data['PROCESSING_STATUS_CODE'] != 80)
+        ) {
             // only Billsafe finalize will have impacted on the order status
             if ($paymentCode[1] === 'FI' and $data['ACCOUNT_BRAND'] !== 'BILLSAFE') {
                 return;
