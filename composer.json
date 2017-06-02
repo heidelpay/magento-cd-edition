@@ -37,7 +37,7 @@
     "map": [
       [
         "app/code/community/HeidelpayCD/*",
-        "app/code/community/HeidelpayCD/"
+        "app/code/community/HeidelpayCD"
       ],
       [
         "app/design/frontend/base/default/layout/hcd.xml",
