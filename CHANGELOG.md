@@ -1,6 +1,9 @@
 # Release Notes - heidelpay extension for Magento 1
 
-## v17.6.2
+## v17.5.17
+
+### Fixed
+ - online capture failed because of missing reference id
 
 ## v17.3.30
 
