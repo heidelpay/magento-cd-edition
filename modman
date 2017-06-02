@@ -1,4 +1,4 @@
-app/code/community/HeidelpayCD/*                        app/code/community/HeidelpayCD/
+app/code/community/HeidelpayCD/*                        app/code/community/HeidelpayCD
 
 app/design/frontend/base/default/layout/hcd.xml			app/design/frontend/base/default/layout/hcd.xml
 app/design/frontend/base/default/template/hcd/*  		app/design/frontend/base/default/template/hcd/
