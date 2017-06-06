@@ -1,5 +1,10 @@
 # Release Notes - heidelpay extension for Magento 1
 
+## v17.6.2
+
+### Fixed
+ - pending payment transaction has been handled as processed
+
 ## v17.5.17
 
 ### Fixed
