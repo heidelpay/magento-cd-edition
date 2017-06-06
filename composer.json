@@ -36,8 +36,8 @@
   "extra": {
     "map": [
       [
-        "app/code/community/HeidelpayCD/*",
-        "app/code/community/HeidelpayCD/"
+        "app/code/community/HeidelpayCD/Edition/*",
+        "app/code/community/HeidelpayCD/Edition/"
       ],
       [
         "app/design/frontend/base/default/layout/hcd.xml",
@@ -82,6 +82,15 @@
       [
         "js/hcd/*",
         "js/hcd/"
+      ],
+      ["README.md",
+        "app/code/community/HeidelpayCD/Edition/"
+      ],
+      ["CHANGELOG.md",
+        "app/code/community/HeidelpayCD/Edition/"
+      ],
+      ["LICENSE.txt",
+        "app/code/community/HeidelpayCD/Edition/"
       ]
     ]
   }

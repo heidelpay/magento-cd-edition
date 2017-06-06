@@ -1,29 +1,27 @@
-language: php
+# automated extension test
+# Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+# Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+# https://dev.heidelpay.de/magento2
+# Jens Richter
+
 dist: trusty
-
-matrix:
-  fast_finish: true
-  include:
-    - php: 5.6
-      env: deps=no
-    - php: 7
-      env: deps=no
-
+language: php
+php:
+  - 5.6
+  - 7.0
 
 cache:
-  directories:
-    - $HOME/.composer/cache
-    - $HOME/.php-cs-fixer
-    - $HOME/.local
+    directories:
+      - $HOME/.composer/cache
+      - $HOME/.php-cs-fixer
+      - $HOME/.local
+
+before_install:
+  - composer config -g http-basic.repo.magento.com $MAGE_PUBLICKEY $MAGE_PRIVATEKEY
+  - composer update
 
 before_script:
-  - mkdir -p "$HOME/.php-cs-fixer"
-  - composer self-update
-  - if [ "$deps" = "no" ]; then composer --prefer-dist install; fi;
-
+ - ./vendor/bin/phpcs --config-set installed_paths vendor/magento/marketplace-eqp
 
 script:
-  - ./vendor/bin/php-cs-fixer fix --dry-run --diff --verbose
-  - ./vendor/bin/phpcs --standard=MEQP1 --ignore=vendor .
-
-after_success:
+ - ./vendor/bin/phpcs . --ignore=vendor/ -v --standard=MEQP1;
