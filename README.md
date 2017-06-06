@@ -1,4 +1,5 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/heidelpay/magento-cd-edition.svg?style=flat-square)](https://packagist.org/packages/heidelpay/magento-cd-edition)
+[![Build Status](https://travis-ci.org/heidelpay/magento-cd-edition.svg?branch=master)](https://travis-ci.org/heidelpay/magento-cd-edition)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4c8c379f94d64fd3813dffb260e8bdd6)](https://www.codacy.com/app/heidelpay/magento-cd-edition?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=heidelpay/magento-cd-edition&amp;utm_campaign=Badge_Grade)
 [![PHP 5.6](https://img.shields.io/badge/php-5.6-blue.svg)](http://www.php.net)
 [![PHP 7.0](https://img.shields.io/badge/php-7.0-blue.svg)](http://www.php.net)
