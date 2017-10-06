@@ -309,10 +309,24 @@
                 <capture_on_delivery>0</capture_on_delivery>
                 <model>hcd/payment_hcdInvoiceSecured</model>
                 <sort_order>1</sort_order>
-                <min_amount>10</min_amount>
+                <min_amount>100</min_amount>
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
             </hcdivsec>
+            <hcdivpd>
+                <group>hcd</group>
+                <title>Payolution invoice secured</title>
+                <active>0</active>
+                <channel>31HA07BC81856CAD6D8E05CDDE7E2AC8</channel>
+                <invioce>0</invioce>
+                <capture_on_delivery>0</capture_on_delivery>
+                <model>hcd/payment_hcdPayolutionInvoiceSecured</model>
+                <sort_order>1</sort_order>
+                <min_amount>10</min_amount>
+                <max_amount>0</max_amount>
+                <allowspecific>0</allowspecific><allowspecific>1</allowspecific>
+                <specificcountry>DE,AT,CH,NL</specificcountry>
+            </hcdivpd>
             <hcdpf>
                 <group>hcd</group>
                 <title>Postfinance</title>
