@@ -71,6 +71,7 @@ if ($data['PROCESSING_RESULT'] == 'NOK') {
                 name="payment[<?php echo $this->htmlEscape($code) ?>_salutation]">
             <option value="MR"><?php echo $this->htmlEscape($this->__('mr')) ?></option>
             <option value="MRS" <?php if (array_key_exists('payment_data', $userData) and
+                is_array($userData['payment_data']) and
                 array_key_exists('NAME.SALUTATION', $userData['payment_data']) and
                 $userData['payment_data']['NAME.SALUTATION'] == 'MRS'
             ) echo 'selected="selected"' ?>>
