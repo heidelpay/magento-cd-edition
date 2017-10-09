@@ -19,19 +19,22 @@ $dobyear = null;
 $dobmounth = null;
 $dobday = null;
 
+/** @var  $paymentMethod HeidelpayCD_Edition_Model_Payment_HcdPayolutionInvoiceSecured */
+$paymentMethod = $this->getMethod();
+
 $path = "payment/" . $code . "/";
 $storeId = Mage::app()->getStore()->getId();
 $recognition = Mage::getStoreConfig($path . 'recognition', $storeId);
 
-$hash = $this->getMethod()->getShippingHash();
+$hash = $paymentMethod->getShippingHash();
 $userData = array();
 
-$cId = $this->getMethod()->getCustomerId();
+$cId = $paymentMethod->getCustomerId();
 
 if ($recognition == 1 and $cId != 0) {
     // only if shipping address is unchanged
-    $hash = $this->getMethod()->getShippingHash();
-    $userData = $this->getMethod()->getCustomerData();
+    $hash = $paymentMethod->getShippingHash();
+    $userData = $paymentMethod->getCustomerData();
     if ($userData !== false and array_key_exists('payment_data', $userData)) {
         if ($userData ['payment_data'] ['SHIPPPING_HASH'] != $hash) {
             $userData = array();
@@ -47,13 +50,19 @@ if (array_key_exists('payment_data', $userData) &&
     list($dobyear, $dobmounth, $dobday) = explode('-', $userData['payment_data']['NAME.BIRTHDATE']);
 }
 
-$data = $payment->getHeidelpayUrl(true);
+$data = $paymentMethod->getHeidelpayUrl(true);
 if ($data['PROCESSING_RESULT'] == 'NOK') {
     $userData = array();
 }
 
+
+
 ?>
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+    <?php
+    // @codingStandardsIgnoreLine
+    echo '<pre>'.$this->htmlEscappe(print_r($data, 1)).'</pre>';
+    ?>
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('salutation')) ?>
