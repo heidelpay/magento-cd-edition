@@ -23,6 +23,7 @@ Currently supported payment methods are:
 * EPS
 * iDeal
 * BillSafe
+* Santander Invoice
 
 For more information please visit -https://dev.heidelpay.de/magento/
 
