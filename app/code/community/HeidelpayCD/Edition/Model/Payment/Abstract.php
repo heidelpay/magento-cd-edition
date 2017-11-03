@@ -310,7 +310,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         }
 
         if ($isRegistration === true) {
-            $basketData['PRESENTATION.AMOUNT'] = $this->getQuote()->getBaseGrandTotal();
+            $basketData['PRESENTATION.AMOUNT'] = Mage::helper('hcd/payment')
+                ->format($this->getQuote()->getBaseGrandTotal());
             $basketData['PRESENTATION.CURRENCY'] = $this->getQuote()->getQuoteCurrencyCode();
         }
 
