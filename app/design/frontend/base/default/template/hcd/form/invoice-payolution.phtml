@@ -20,7 +20,6 @@ $payment = $this->getMethod();
 $data = $payment->getHeidelpayUrl(true);
 
 $payment->log(print_r($data,1));
-
 ?>
 
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
@@ -89,10 +88,13 @@ $payment->log(print_r($data,1));
         </select>
     </div>
     <div>
-
+        <?php
+            if (array_key_exists('CONFIG_OPTIN_TEXT', $data)) {
+                echo $this->htmlEscape($data['CONFIG_OPTIN_TEXT']);
+            }
+        ?>
     </div>
     <div class="hcd-payment-desc">
         <?php echo $this->htmlEscape($this->__('Desc'.$code)); ?>
-        Hallo Welt
     </div>
 </div>
