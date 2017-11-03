@@ -377,7 +377,7 @@
                 <min_amount>0</min_amount>
                 <max_amount>0</max_amount>
                 <allowspecific>1</allowspecific>
-                <specificcountry>DE,AT,CH</specificcountry>
+                <specificcountry>DE,AT,CH,NL</specificcountry>
             </hcdivpol>
         </payment>
     </default>
