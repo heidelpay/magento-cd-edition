@@ -2,7 +2,7 @@
 <config>
     <modules>
         <HeidelpayCD_Edition>
-            <version>17.6.2</version>
+            <version>17.11.3</version>
         </HeidelpayCD_Edition>
     </modules>
     <global>
@@ -365,6 +365,20 @@
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
             </hcdmpa>
+            <hcdivsan>
+                <group>hcd</group>
+                <title>Santander Invoice</title>
+                <active>0</active>
+                <channel>31HA07BC81941E63A2482091FAF374AF</channel>
+                <invioce>0</invioce>
+                <capture_on_delivery>0</capture_on_delivery>
+                <model>hcd/payment_hcdivsan</model>
+                <sort_order>1</sort_order>
+                <min_amount>0</min_amount>
+                <max_amount>0</max_amount>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DE</specificcountry>
+            </hcdivsan>
         </payment>
     </default>
 </config>
