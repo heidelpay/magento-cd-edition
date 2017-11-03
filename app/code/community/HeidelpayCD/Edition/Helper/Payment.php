@@ -220,7 +220,7 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
                 break;
             // Santander Invoice
             case 'ivsan':
-                $params['PAYMENT.CODE'] = 'IV' . $type;
+                $params['PAYMENT.CODE'] = 'IV.' . $type;
                 $params['ACCOUNT.BRAND'] = 'SANTANDER';
                 break;
 
