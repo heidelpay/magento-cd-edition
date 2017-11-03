@@ -218,6 +218,12 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
                 $params['PAYMENT.CODE'] = "WT." . $type;
                 $params['ACCOUNT.BRAND'] = "MASTERPASS";
                 break;
+            // Santander Invoice
+            case 'ivsan':
+                $params['PAYMENT.CODE'] = 'IV' . $type;
+                $params['ACCOUNT.BRAND'] = 'SANTANDER';
+                break;
+
             default:
                 $params['PAYMENT.CODE'] = strtoupper($config['PAYMENT.METHOD']) . '.' . $type;
                 break;
