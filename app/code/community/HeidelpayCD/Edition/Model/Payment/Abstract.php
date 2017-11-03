@@ -311,7 +311,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         if ($isRegistration === true) {
             $basketData['PRESENTATION.CURRENCY'] = $this->getQuote()->getQuoteCurrencyCode();
-            $basketData['PRESENTATION.AMOUNT'] = $this->getQuote()->getBaseGrandTotal();
+            $basketData['PRESENTATION.AMOUNT'] =
+                Mage::helper('hcd/payment')->format($this->getQuote()->getBaseGrandTotal());
         }
 
         // add parameters for pci 3 iframe
