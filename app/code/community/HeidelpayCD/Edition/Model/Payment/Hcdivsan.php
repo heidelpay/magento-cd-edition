@@ -9,6 +9,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
     protected $_code = 'hcdivsan';
 
     /** @var string */
-    protected $_formBlockType = 'hcd/form_santander-invoice';
+    protected $_formBlockType = 'hcd/form_santanderInvoice';
 
 }
