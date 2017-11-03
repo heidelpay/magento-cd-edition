@@ -18,13 +18,41 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
 {
     protected $_code = 'hcdivpol';
 
+    /**
+     * @var string checkout information and form
+     */
+    protected $_formBlockType = 'hcd/form_invoicePayolution';
+
+    public function isAvailable($quote = null)
+    {
+        // check shipping address is same as before
+        $billing = $this->getQuote()->getBillingAddress();
+        $shipping = $this->getQuote()->getShippingAddress();
+
+        /* billing and shipping address has to match */
+        if (($billing->getFirstname() !== $shipping->getFirstname()) ||
+            ($billing->getLastname() !== $shipping->getLastname()) ||
+            ($billing->getStreet() !== $shipping->getStreet()) ||
+            ($billing->getPostcode() !== $shipping->getPostcode()) ||
+            ($billing->getCity() !== $shipping->getCity()) ||
+            ($billing->getCountry() !== $shipping->getCountry())
+        ) {
+            return false;
+        }
+
+        return parent::isAvailable($quote);
+    }
+
+
+
+
 //    /**
 //     * over write existing info block
 //     *
 //     * @var string
 //     */
 //    protected $_infoBlockType = 'hcd/info_invoice';
-//
+
 //    /**
 //     * Payment information for invoice mail
 //     *
