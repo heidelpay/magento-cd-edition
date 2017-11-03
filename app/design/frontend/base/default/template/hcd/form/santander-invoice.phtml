@@ -50,10 +50,30 @@ if ($recognition == 1 and $cId != 0) {
     $userData = $this->getMethod()->getCustomerData();
 }
 
-// Santander Texts
+// Santander vars
+$santander_optin = null; $santander_privacy_policy = null;
+$santander_iv_adv_link = null; $santander_iv_privpol_link = null; $santander_iv_img_link = null;
+$santander_iv_adv_text = null; $santander_iv_privpol_text = null;
+
+// Santander Information is inside of CONFIG.OPTIN_TEXT, which is a json object
 if (isset($data['CONFIG_OPTIN_TEXT'])) {
+    /** @var array $optin_information */
     $optin_information = json_decode($data['CONFIG_OPTIN_TEXT']);
-    $method->log(print_r($optin_information, 1));
+
+    if (is_array($optin_information)) {
+        // optin and privacy policy information texts
+        $santander_optin = $optin_information['optin'];
+        $santander_privacy_policy = $optin_information['privacy_policy'];
+
+        // urls for logo, advanced privacy and policy information
+        $santander_iv_img_link = $optin_information['santander_iv_img_link'];
+        $santander_iv_adv_link = $optin_information['santander_iv_adv_link'];
+        $santander_iv_privpol_link = $optin_information['santander_iv_privpol_link'];
+
+        // texts for checkboxes (accept policies, ...)
+        $santander_iv_adv_text = $optin_information['santander_iv_adv_text'];
+        $santander_iv_privpol_text = $optin_information['santander_iv_privpol_text'];
+    }
 }
 
 if (array_key_exists('payment_data', $userData) &&
@@ -64,6 +84,9 @@ if (array_key_exists('payment_data', $userData) &&
 
 ?>
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+    <div>
+        <img src="<?php echo $santander_iv_img_link ?>" alt="Rechnungskauf von Santander" title="Rechnungskauf von Santander" />
+    </div>
     <!-- Select Input for salutation -->
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
