@@ -50,6 +50,12 @@ if ($recognition == 1 and $cId != 0) {
     $userData = $this->getMethod()->getCustomerData();
 }
 
+// Santander Texts
+if (isset($data['CONFIG_OPTIN_TEXT'])) {
+    $optin_information = json_decode($data['CONFIG_OPTIN_TEXT']);
+    $method->log(print_r($optin_information, 1));
+}
+
 if (array_key_exists('payment_data', $userData) &&
     array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])
 ) {
