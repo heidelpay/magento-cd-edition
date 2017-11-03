@@ -365,6 +365,20 @@
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
             </hcdmpa>
+            <hcdivpol>
+                <group>hcd</group>
+                <title>Payolution</title>
+                <active>0</active>
+                <channel>31HA07BC814A8F6690C0107650478B06</channel>
+                <invioce>1</invioce>
+                <capture_on_delivery>0</capture_on_delivery>
+                <model>hcd/payment_hcdivpol</model>
+                <sort_order>1</sort_order>
+                <min_amount>0</min_amount>
+                <max_amount>0</max_amount>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DE,AT,CH</specificcountry>
+            </hcdivpol>
         </payment>
     </default>
 </config>
