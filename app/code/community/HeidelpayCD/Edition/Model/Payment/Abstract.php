@@ -310,8 +310,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         }
 
         if ($isRegistration === true) {
-            $basketData['PRESENTATION.CURRENCY'] =
-                $this->getQuote()->getQuoteCurrencyCode();
+            $basketData['PRESENTATION.AMOUNT'] = $this->getQuote()->getBaseGrandTotal();
+            $basketData['PRESENTATION.CURRENCY'] = $this->getQuote()->getQuoteCurrencyCode();
         }
 
         // add parameters for pci 3 iframe

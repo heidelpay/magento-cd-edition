@@ -93,7 +93,6 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
 
         $params = array_merge($params, $this->_setPaymentMethod($config, $customer));
 
-
         /* debit on registration */
         if (array_key_exists('ACCOUNT.REGISTRATION', $config)) {
             $params['ACCOUNT.REGISTRATION'] = $config['ACCOUNT.REGISTRATION'];
