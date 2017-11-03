@@ -12,6 +12,17 @@
  * @package heidelpay/magento-cd-edition/template/form/santander-invoice
  */
 
+$data = null;
+
+/** retrieve payment method instance */
+/** @var HeidelpayCD_Edition_Model_Payment_Hcdivsan $method */
+$method = $this->getMethod();
+if ($method !== null) {
+    $data = $method->getHeidelpayUrl(true);
+}
+
+$method->log(print_r($data, 1));
+
 $code = $this->getMethodCode();
 $dobyear = null;
 $dobmounth = null;
@@ -47,6 +58,7 @@ if (array_key_exists('payment_data', $userData) &&
 
 ?>
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+    <!-- Select Input for salutation -->
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('salutation')) ?>
@@ -62,6 +74,7 @@ if (array_key_exists('payment_data', $userData) &&
             </option>
         </select>
     </div>
+    <!-- Select Input for date of birth (day) -->
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_dob"
                class="required hcd-singleline-label"><em>*</em>
@@ -80,6 +93,7 @@ if (array_key_exists('payment_data', $userData) &&
             ?>
         </select>
     </div>
+    <!-- Select Input for date of birth (month) -->
     <div class="input-box">
         <select title="<?php echo $this->htmlEscape($this->__('month')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobmonth]">
@@ -95,6 +109,7 @@ if (array_key_exists('payment_data', $userData) &&
             ?>
         </select>
     </div>
+    <!-- Select Input for date of birth (year) -->
     <div class="input-box">
         <select title="<?php echo $this->htmlEscape($this->__('year')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]">
