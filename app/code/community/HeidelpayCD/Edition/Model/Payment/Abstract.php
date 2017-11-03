@@ -376,17 +376,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             $criterion
         );
 
-        $this->log('--------------------------');
-        $this->log(print_r($config));
-        $this->log(print_r($frontend));
-        $this->log(print_r($user));
-        $this->log(print_r($basketData));
-        $this->log(print_r($criterion));
-        $this->log('--------------------------');
-
-
-
-
         $this->log("doRequest url : " . $config['URL'], 'DEBUG');
         $this->log("doRequest params : " . json_encode($params), 'DEBUG');
         $src = Mage::helper('hcd/payment')->doRequest($config['URL'], $params);
