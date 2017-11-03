@@ -196,7 +196,7 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
             /* Payolution invoice */
             case 'ivpol':
                 $params['PAYMENT.CODE'] = 'IV.' . $type;
-                $params['ACCOUNT.BRAND'] = 'PAYOLUTION' . $type;
+                $params['ACCOUNT.BRAND'] = 'PAYOLUTION';
                 break;
             /* direct debit secured */
             case 'ddsec':
