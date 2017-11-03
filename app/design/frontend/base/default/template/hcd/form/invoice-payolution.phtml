@@ -13,7 +13,14 @@
  * @subpackage Magento
  * @category Magento
  */
-$code=$this->getMethodCode()
+$code = $this->getMethodCode();
+
+/** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
+$payment = $this->getMethod();
+$data = $payment->getHeidelpayUrl(true);
+
+$payment->log(print_r($data,1));
+
 ?>
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
     <div class="hcd-payment-desc">

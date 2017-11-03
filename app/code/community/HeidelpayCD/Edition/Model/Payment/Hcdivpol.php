@@ -43,47 +43,49 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         return parent::isAvailable($quote);
     }
 
+    /**
+     * Validate input data from checkout
+     *
+     * @return HeidelpayCD_Edition_Model_Payment_Abstract
+     * @throws \Mage_Core_Exception
+     */
+    public function validate()
+    {
+        if (isset($this->_postPayload['method']) && $this->_postPayload['method'] === $this->_code) {
+            if (array_key_exists($this->_code . '_salutation', $this->_postPayload)) {
+                $this->_validatedParameters['NAME.SALUTATION'] =
+                    (
+                        $this->_postPayload[$this->_code . '_salutation'] === 'MR' or
+                        $this->_postPayload[$this->_code . '_salutation'] === 'MRS'
+                    )
+                        ? $this->_postPayload[$this->_code . '_salutation'] : '';
+            }
+
+            if (array_key_exists($this->_code . '_dobday', $this->_postPayload) &&
+                array_key_exists($this->_code . '_dobmonth', $this->_postPayload) &&
+                array_key_exists($this->_code . '_dobyear', $this->_postPayload)
+            ) {
+                $day = (int)$this->_postPayload[$this->_code . '_dobday'];
+                $month = (int)$this->_postPayload[$this->_code . '_dobmonth'];
+                $year = (int)$this->_postPayload[$this->_code . '_dobyear'];
+
+                if ($this->_validatorHelper->validateDateOfBirth($day, $month, $year)) {
+                    $this->_validatedParameters['NAME.BIRTHDATE']
+                        = $year . '-' . sprintf('%02d', $month) . '-' . sprintf('%02d', $day);
+                } else {
+                    Mage::throwException(
+                        $this->_getHelper()
+                            ->__('The minimum age is 18 years for this payment methode.')
+                    );
+                }
+            }
+        }
 
 
+        parent::validate();
 
-//    /**
-//     * over write existing info block
-//     *
-//     * @var string
-//     */
-//    protected $_infoBlockType = 'hcd/info_invoice';
+        $this->saveCustomerData($this->_validatedParameters);
 
-//    /**
-//     * Payment information for invoice mail
-//     *
-//     * @param array $paymentData transaction response
-//     *
-//     * @return string return payment information text
-//     */
-//    public function showPaymentInfo($paymentData)
-//    {
-//        /** @var HeidelpayCD_Edition_Model_Payment_Hcdivpol $loadSnippet */
-//        $loadSnippet = $this->_getHelper()->__('Invoice Info Text');
-//
-//        $repl = array(
-//            '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
-//            '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
-//            '{CONNECTOR_ACCOUNT_HOLDER}' => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
-//            '{CONNECTOR_ACCOUNT_IBAN}' => $paymentData['CONNECTOR_ACCOUNT_IBAN'],
-//            '{CONNECTOR_ACCOUNT_BIC}' => $paymentData['CONNECTOR_ACCOUNT_BIC'],
-//            '{IDENTIFICATION_SHORTID}' => $paymentData['IDENTIFICATION_SHORTID'],
-//        );
-//
-//        return strtr($loadSnippet, $repl);
-//    }
-//
-//    /**
-//     * @inheritdoc
-//     */
-//    public function processingTransaction($order, $data, $message='')
-//    {
-//        $message = Mage::helper('hcd')->__('received amount ')
-//            . $data['PRESENTATION_AMOUNT'] . ' ' . $data['PRESENTATION_CURRENCY'] . ' ' . $message;
-//        parent::processingTransaction($order, $data, $message);
-//    }
+        return $this;
+    }
 }
