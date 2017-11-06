@@ -140,7 +140,7 @@ if (array_key_exists('payment_data', $userData) &&
         <div class="input-box <?php echo $code ?>-adv-optout">
             <h4>Werbezustimmung</h4>
             <p class="control">
-                <input type="checkbox" class="checkbox" name="<?php echo $code ?>-adv-optout" id="<?php echo $code ?>-adv-optout" />
+                <input type="checkbox" class="checkbox" name="payment[<?php echo $code ?>_adv_optout]" id="<?php echo $code ?>-adv-optout" />
                 <label for="<?php echo $code ?>-adv-optout"><?php echo $form->advText; ?></label>
             </p>
         </div>
@@ -149,7 +149,7 @@ if (array_key_exists('payment_data', $userData) &&
         <div class="input-box <?php echo $code ?>-privpol-optin">
             <h4>Datenschutzerklärung</h4>
             <p class="control">
-                <input type="checkbox" class="checkbox required-entry" name="<?php echo $code ?>-privpol-optin" id="<?php echo $code ?>-privpol-optin" />
+                <input type="checkbox" class="checkbox required-entry" name="payment[<?php echo $code ?>_privpol_optin]" id="<?php echo $code ?>-privpol-optin" />
                 <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->privpolText; ?></label>
             </p>
         </div>
