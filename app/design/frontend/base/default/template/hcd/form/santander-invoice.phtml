@@ -123,24 +123,28 @@ if (array_key_exists('payment_data', $userData) &&
             ?>
         </select>
     </div>
-    <!-- Santander advertising opt-out -->
-    <div class="input-box <?php echo $code ?>-adv-optout">
-        <h4>Werbezustimmung</h4>
-        <p class="control">
-            <input type="checkbox" class="checkbox" name="<?php echo $code ?>-adv-optout" id="<?php echo $code ?>-adv-optout" />
-            <label for="<?php echo $code ?>-adv-optout"><?php echo $form->advText; ?></label>
-        </p>
-    </div>
 
-    <!-- Santander privacy policy opt-in -->
-    <div class="input-box <?php echo $code ?>-privpol-optin">
-        <h4>Datenschutzerklärung</h4>
-        <p class="control">
-            <input type="checkbox" class="checkbox" name="<?php echo $code ?>-privpol-optin" id="<?php echo $code ?>-privpol-optin" />
-            <label for="<?php echo $code ?>-privpol-optin"><?php echo $form->privpolText; ?></label>
-        </p>
-    </div>
-    <div class="hcd-payment-desc">
-        <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
+    <!-- Santander Agreements -->
+    <div class="<?php echo $code; ?>">
+        <!-- Santander advertising opt-out -->
+        <div class="input-box <?php echo $code ?>-adv-optout">
+            <h4>Werbezustimmung</h4>
+            <p class="control">
+                <input type="checkbox" class="checkbox" name="<?php echo $code ?>-adv-optout" id="<?php echo $code ?>-adv-optout" />
+                <label for="<?php echo $code ?>-adv-optout"><?php echo $form->advText; ?></label>
+            </p>
+        </div>
+
+        <!-- Santander privacy policy opt-in -->
+        <div class="input-box <?php echo $code ?>-privpol-optin">
+            <h4>Datenschutzerklärung</h4>
+            <p class="control">
+                <input type="checkbox" class="checkbox" name="<?php echo $code ?>-privpol-optin" id="<?php echo $code ?>-privpol-optin" />
+                <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->privpolText; ?></label>
+            </p>
+        </div>
+        <div class="hcd-payment-desc">
+            <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
+        </div>
     </div>
 </div>
