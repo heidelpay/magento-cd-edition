@@ -75,7 +75,7 @@ class HeidelpayCD_Edition_Model_Observer
         $paymentCode = $payment->getCode();
 
 
-        $paymentMethod = array('hcdivsec', 'hcdbs');
+        $paymentMethod = array('hcdivsec', 'hcdbs', 'hcdivpol');
 
 
         // return $this when reporting shipment is not needed
