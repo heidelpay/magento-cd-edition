@@ -378,6 +378,7 @@
                 <max_amount>0</max_amount>
                 <allowspecific>1</allowspecific>
                 <specificcountry>DE,AT,CH,NL</specificcountry>
+                <provideremailaddress/>
             </hcdivpol>
         </payment>
     </default>
