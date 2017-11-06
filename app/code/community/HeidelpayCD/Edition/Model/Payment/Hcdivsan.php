@@ -31,13 +31,21 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
             Mage::throwException($this->_getHelper()->__('Something went wrong. Please try again.'));
         }
 
-        $this->log('hcdivsan post payload: ' . print_r($this->_postPayload, true));
+        $advField = $this->_code . '_adv_optout';
+        $privPolField = $this->_code . '_privpol_optin';
 
-//        if ($this->_postPayload[$this->_code . '-privpol-optin'] === null) {
-//            Mage::throwException($this->_getHelper()->__('Please accept the terms and conditions of Santander.'));
-//        }
+        // Privacy Policy terms & conditions must be accepted
+        if (!isset($this->_postPayload[$privPolField])) {
+            $this->log($privPolField . ' is not set or checked!');
+            Mage::throwException($this->_getHelper()->__('Please accept the terms and conditions of Santander.'));
+        }
 
-        // validate age and salutation in AbstractSecured Class
+        // CONFIG.OPTIN = advertising agreement (optional)
+        // CONFIG.OPTIN_2 = privacy policy agreement (required)
+        $this->_validatedParameters['CONFIG.OPTIN'] = isset($this->_postPayload[$advField]) ? 'TRUE' : 'FALSE';
+        $this->_validatedParameters['CONFIG.OPTIN_2'] = isset($this->_postPayload[$privPolField]) ? 'TRUE' : 'FALSE';
+
+        // validate age and salutation in AbstractSecured Class, also save _validatedParameters array in database
         return parent::validate();
     }
 }
