@@ -60,7 +60,8 @@ if (array_key_exists('payment_data', $userData) &&
         <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('salutation')) ?>
         </label>
-        <select title="<?php echo $this->htmlEscape($this->__('salutation')) ?>"
+        <select class="required-entry"
+                title="<?php echo $this->htmlEscape($this->__('salutation')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_salutation]">
             <option value="MR"><?php echo $this->htmlEscape($this->__('mr')) ?></option>
             <option value="MRS" <?php if (array_key_exists('payment_data', $userData) and
@@ -76,7 +77,8 @@ if (array_key_exists('payment_data', $userData) &&
         <label for="<?php echo $this->htmlEscape($code) ?>_dob"
                class="required hcd-singleline-label"><em>*</em>
             <?php echo $this->htmlEscape($this->__('Date of birth')) ?></label>
-        <select title="<?php echo $this->htmlEscape($this->__('day')) ?>"
+        <select class="required-entry"
+                title="<?php echo $this->htmlEscape($this->__('day')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]">
             <option><?php echo $this->htmlEscape($this->__('day')); ?></option>
             <?php
@@ -92,7 +94,8 @@ if (array_key_exists('payment_data', $userData) &&
     </div>
     <!-- Select Input for date of birth (month) -->
     <div class="input-box">
-        <select title="<?php echo $this->htmlEscape($this->__('month')) ?>"
+        <select class="required-entry"
+                title="<?php echo $this->htmlEscape($this->__('month')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobmonth]">
             <option><?php echo $this->htmlEscape($this->__('month')); ?></option>
             <?php
@@ -108,7 +111,8 @@ if (array_key_exists('payment_data', $userData) &&
     </div>
     <!-- Select Input for date of birth (year) -->
     <div class="input-box">
-        <select title="<?php echo $this->htmlEscape($this->__('year')) ?>"
+        <select class="required-entry"
+                title="<?php echo $this->htmlEscape($this->__('year')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]">
             <option><?php echo $this->htmlEscape($this->__('year')); ?></option>
             <?php
@@ -139,7 +143,7 @@ if (array_key_exists('payment_data', $userData) &&
         <div class="input-box <?php echo $code ?>-privpol-optin">
             <h4>Datenschutzerklärung</h4>
             <p class="control">
-                <input type="checkbox" class="checkbox" name="<?php echo $code ?>-privpol-optin" id="<?php echo $code ?>-privpol-optin" />
+                <input type="checkbox" class="checkbox required-entry" name="<?php echo $code ?>-privpol-optin" id="<?php echo $code ?>-privpol-optin" />
                 <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->privpolText; ?></label>
             </p>
         </div>
