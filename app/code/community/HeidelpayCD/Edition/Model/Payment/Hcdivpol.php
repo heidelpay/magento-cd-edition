@@ -14,20 +14,21 @@
  * @category Magento
  */
 // @codingStandardsIgnoreLine magento marketplace namespace warning
-class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Model_Payment_Abstract
+class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
+
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdivpol constructor.
      */
     public function __construct()
     {
         $this->_code = 'hcdivpol';
-        $this->_canBasketApi = true;
         $this->_formBlockType = 'hcd/form_invoicePayolution';
+        $this->_canBasketApi = true;
         $this->_canAuthorize = true;
+        $this->_canRefund = true;
 
-
-        Mage_Payment_Model_Method_Abstract::__construct();
+        HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods::__construct();
     }
 
     /**
@@ -55,52 +56,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
             return false;
         }
 
-        return parent::isAvailable($quote);
-    }
-
-    /**
-     * Validate input data from checkout
-     *
-     * @return HeidelpayCD_Edition_Model_Payment_Abstract
-     * @throws \Mage_Core_Exception
-     */
-    public function validate()
-    {
-        if (isset($this->_postPayload['method']) && $this->_postPayload['method'] === $this->_code) {
-            if (array_key_exists($this->_code . '_salutation', $this->_postPayload)) {
-                $this->_validatedParameters['NAME.SALUTATION'] =
-                    (
-                        $this->_postPayload[$this->_code . '_salutation'] === 'MR' or
-                        $this->_postPayload[$this->_code . '_salutation'] === 'MRS'
-                    )
-                        ? $this->_postPayload[$this->_code . '_salutation'] : '';
-            }
-
-            if (array_key_exists($this->_code . '_dobday', $this->_postPayload) &&
-                array_key_exists($this->_code . '_dobmonth', $this->_postPayload) &&
-                array_key_exists($this->_code . '_dobyear', $this->_postPayload)
-            ) {
-                $day = (int)$this->_postPayload[$this->_code . '_dobday'];
-                $month = (int)$this->_postPayload[$this->_code . '_dobmonth'];
-                $year = (int)$this->_postPayload[$this->_code . '_dobyear'];
-
-                if ($this->_validatorHelper->validateDateOfBirth($day, $month, $year)) {
-                    $this->_validatedParameters['NAME.BIRTHDATE']
-                        = $year . '-' . sprintf('%02d', $month) . '-' . sprintf('%02d', $day);
-                } else {
-                    Mage::throwException(
-                        $this->_getHelper()
-                            ->__('The minimum age is 18 years for this payment methode.')
-                    );
-                }
-            }
-        }
-
-
-        parent::validate();
-
-        $this->saveCustomerData($this->_validatedParameters);
-
-        return $this;
+        return HeidelpayCD_Edition_Model_Payment_Abstract::isAvailable($quote);
     }
 }
