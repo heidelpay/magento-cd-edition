@@ -80,7 +80,9 @@ if (array_key_exists('payment_data', $userData) &&
         <select class="required-entry"
                 title="<?php echo $this->htmlEscape($this->__('day')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]">
-            <option><?php echo $this->htmlEscape($this->__('day')); ?></option>
+            <option disabled <?php echo $dobday === null ? 'selected' : ''; ?> value>
+                <?php echo $this->htmlEscape($this->__('day')); ?>
+            </option>
             <?php
             $i = 0;
             for ($i = 1; $i <= 31; $i++) {
@@ -97,7 +99,9 @@ if (array_key_exists('payment_data', $userData) &&
         <select class="required-entry"
                 title="<?php echo $this->htmlEscape($this->__('month')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobmonth]">
-            <option><?php echo $this->htmlEscape($this->__('month')); ?></option>
+            <option disabled <?php echo $dobmounth === null ? 'selected' : ''; ?> value>
+                <?php echo $this->htmlEscape($this->__('month')); ?>
+            </option>
             <?php
             $i = 0;
             for ($i = 1; $i <= 12; $i++) {
@@ -114,7 +118,9 @@ if (array_key_exists('payment_data', $userData) &&
         <select class="required-entry"
                 title="<?php echo $this->htmlEscape($this->__('year')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]">
-            <option><?php echo $this->htmlEscape($this->__('year')); ?></option>
+            <option disabled <?php echo $dobyear === null ? 'selected' : ''; ?> value>
+                <?php echo $this->htmlEscape($this->__('year')); ?>
+            </option>
             <?php
             $i = 0;
             for ($i = 17; $i <= 80; $i++) {
