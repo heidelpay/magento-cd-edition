@@ -16,13 +16,28 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdivpol';
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdivpol constructor.
+     */
+    public function __construct()
+    {
+        $this->_code = 'hcdivpol';
+        $this->_canBasketApi = true;
+        $this->_formBlockType = 'hcd/form_invoicePayolution';
+        $this->_canAuthorize = true;
+
+
+        Mage_Payment_Model_Method_Abstract::__construct();
+    }
 
     /**
-     * @var string checkout information and form
+     * Deactivate payment method in case of wrong currency or other credentials
+     *
+     * @param Mage_Quote
+     * @param null|mixed $quote
+     *
+     * @return bool
      */
-    protected $_formBlockType = 'hcd/form_invoicePayolution';
-
     public function isAvailable($quote = null)
     {
         // check shipping address is same as before
