@@ -87,7 +87,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'type' => 'shipment',
                 'title' => 'Shipping',
                 'quantity' => 1,
-                'vat' => $this->getShippingTaxPercent($quote),
+                'vat' => (int) $this->getShippingTaxPercent($quote),
                 'amountVat' => floor(
                     bcmul(
                         ($shippingAmountInclTax - $this->getShippingTaxPercent($quote)),
