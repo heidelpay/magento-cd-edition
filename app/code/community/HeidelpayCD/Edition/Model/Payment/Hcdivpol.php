@@ -60,6 +60,35 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
     }
 
     /**
+     * Customer parameter for heidelpay api call
+     *
+     * @param $order Mage_Sales_Model_Order magento order object
+     * @param bool $isReg in case of registration
+     *
+     * @return array
+     *
+     */
+    public function getUser($order, $isReg = false)
+    {
+        $user = parent::getUser($order, $isReg);
+
+        $customerId = $order->getCustomerId();
+
+        /** @var HeidelpayCD_Edition_Model_Customer $customer */
+        $customer = Mage::getModel('customer/customer')->load($customerId);
+
+        $customerSinceTimestamp = null;
+        if ($customerId !== 0) {
+            $customerSinceTimestamp = $customer->getCreatedAtTimestamp();
+        }
+
+        $user['RISKINFORMATION.CUSTOMERSINCE'] =
+            Mage::getSingleton('core/date')->date('Y-m-d', $customerSinceTimestamp);
+
+        return $user;
+    }
+
+    /**
      * Validate customer input on checkout
      *
      * @return HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
