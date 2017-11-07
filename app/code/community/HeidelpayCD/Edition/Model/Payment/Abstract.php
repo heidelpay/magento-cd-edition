@@ -549,6 +549,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         $user['ADDRESS.CITY'] = trim($billing->getCity());
         $user['ADDRESS.COUNTRY'] = trim($billing->getCountry());
         $user['CONTACT.EMAIL'] = trim($email);
+        $user['TEST.PARAMETER'] = 'dies_ist_ein_test';
         $user['CONTACT.IP'] =
             (filter_var(
                 trim(Mage::app()->getRequest()->getClientIp()), FILTER_VALIDATE_IP
