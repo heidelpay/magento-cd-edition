@@ -71,7 +71,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
             $count++;
         }
 
-        if ($includingShipment and $this->getShippingNetPrice($quote) > 0) {
+        if ($includingShipment && $this->getShippingNetPrice($quote) > 0) {
             // Shipping amount including tax
             $shippingAmountInclTax = floor(
                 bcmul(
@@ -84,8 +84,8 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
             $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
                 'basketItemReferenceId' => $count,
-                "type" => "shipment",
-                "title" => "Shipping",
+                'type' => 'shipment',
+                'title' => 'Shipping',
                 'quantity' => 1,
                 'vat' => $this->getShippingTaxPercent($quote),
                 'amountVat' => floor(
