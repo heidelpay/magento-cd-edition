@@ -18,25 +18,22 @@
 class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
     /**
-     * payment code
-     *
-     * @var string payment code
-     */
-    protected $_code = 'hcdddsec';
-
-    /**
-     * set checkout form block
-     *
-     * @var string checkout form block
-     */
-    protected $_formBlockType = 'hcd/form_directDebitSecured';
-
-    /**
-     * over write existing info block
-     *
      * @var string
      */
-    protected $_infoBlockType = 'hcd/info_directDebit';
+    const CODE = 'hcdddsec';
+
+    /**
+     * HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = self::CODE;
+        $this->_formBlockType = 'hcd/form_directDebitSecured';
+        $this->_infoBlockType = 'hcd/info_directDebit';
+        $this->_reportsShippingToHeidelpay = true;
+    }
 
     /**
      * Validate customer input on checkout

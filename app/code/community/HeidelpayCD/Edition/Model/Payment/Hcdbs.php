@@ -17,12 +17,10 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    /** @var  $_code string payment method code */
-    protected $_code = 'hcdbs';
-    /** @var $_canRefund bool   */
-    protected $_canRefund = false;
-    /** @var $_canRefundInvoicePartial bool  */
-    protected $_canRefundInvoicePartial = false;
+    /**
+     * @var string
+     */
+    const CODE = 'hcdbs';
 
     /** @var $_basketApiHelper HeidelpayCD_Edition_Helper_BasketApi  */
     protected $_basketApiHelper;
@@ -33,7 +31,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     public function __construct()
     {
         parent::__construct();
-        $this->_basketApiHelper =    Mage::helper('hcd/basketApi');
+
+        $this->_code = self::CODE;
+        $this->_canRefund = false;
+        $this->_canRefundInvoicePartial = false;
+        $this->_reportsShippingToHeidelpay = true;
+
+        $this->_basketApiHelper = Mage::helper('hcd/basketApi');
     }
 
     /**

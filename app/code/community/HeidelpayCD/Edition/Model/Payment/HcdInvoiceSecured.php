@@ -18,11 +18,19 @@
 class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
     /**
-     * payment code
-     *
-     * @var string payment code
+     * @var string
      */
-    protected $_code = 'hcdivsec';
+    const CODE = 'hcdivsec';
+
+    /**
+     * HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = self::CODE;
+    }
 
     /**
      * @inheritdoc

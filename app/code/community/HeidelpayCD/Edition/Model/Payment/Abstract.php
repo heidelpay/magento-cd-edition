@@ -90,6 +90,11 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     protected $_formBlockType = 'hcd/form_desconly';
 
     /**
+     * @var bool
+     */
+    protected $_reportsShippingToHeidelpay = false;
+
+    /**
      * @return bool payment method will redirect the customer directly to heidelpay
      */
     public function activeRedirect()
@@ -1135,5 +1140,15 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             $message
         );
         return $order;
+    }
+
+    /**
+     * Returns if a shipment needs to be reported to heidelpay (Finalize request)
+     *
+     * @return bool
+     */
+    public function reportsShippingToHeidelpay()
+    {
+        return $this->_reportsShippingToHeidelpay;
     }
 }

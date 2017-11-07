@@ -52,7 +52,6 @@ class HeidelpayCD_Edition_Block_Form_SantanderInvoice extends Mage_Payment_Block
         $method = $this->getMethod();
 
         $data = $method->getHeidelpayUrl(true);
-        $method->log('SantanderInvoice FormBlock request result: ' . print_r($data, 1));
 
         // Santander Information is inside of CONFIG.OPTIN_TEXT, which is a json object
         if (isset($data['CONFIG_OPTIN_TEXT'])) {
