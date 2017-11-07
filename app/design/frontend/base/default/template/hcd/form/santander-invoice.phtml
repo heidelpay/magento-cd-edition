@@ -51,7 +51,8 @@ if (array_key_exists('payment_data', $userData) &&
 }
 
 ?>
-<div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+<div class="form-list fieldset hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+    <p class="required"><?php echo $this->htmlEscape($this->__('* Required Fields')) ?></p>
     <div>
         <img src="<?php echo $form->imgLink ?>" alt="Rechnungskauf von Santander" title="Rechnungskauf von Santander" />
     </div>

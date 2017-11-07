@@ -34,18 +34,56 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
         $advField = $this->_code . '_adv_optout';
         $privPolField = $this->_code . '_privpol_optin';
 
-        // Privacy Policy terms & conditions must be accepted
+        // Privacy Policy terms & conditions must be accepted, so if frontend validation
+        // fails, throw an exception here to cancel further processing in checkout.
         if (!isset($this->_postPayload[$privPolField])) {
-            $this->log($privPolField . ' is not set or checked!');
             Mage::throwException($this->_getHelper()->__('Please accept the terms and conditions of Santander.'));
         }
 
-        // CONFIG.OPTIN = advertising agreement (optional)
-        // CONFIG.OPTIN_2 = privacy policy agreement (required)
-        $this->_validatedParameters['CONFIG.OPTIN'] = isset($this->_postPayload[$advField]) ? 'TRUE' : 'FALSE';
-        $this->_validatedParameters['CONFIG.OPTIN_2'] = isset($this->_postPayload[$privPolField]) ? 'TRUE' : 'FALSE';
+        // CUSTOMER.OPTIN = advertising agreement (optional)
+        // CUSTOMER.OPTIN_2 = privacy policy agreement (required)
+        $this->_validatedParameters['CUSTOMER.OPTIN'] = isset($this->_postPayload[$advField]) ? 'TRUE' : 'FALSE';
+        $this->_validatedParameters['CUSTOMER.OPTIN_2'] = isset($this->_postPayload[$privPolField]) ? 'TRUE' : 'FALSE';
 
         // validate age and salutation in AbstractSecured Class, also save _validatedParameters array in database
         return parent::validate();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getUser($order, $isReg = false)
+    {
+        // get parent user information
+        $user = parent::getUser($order, $isReg);
+
+        // retrieve heidelpay customer data (which was saved in checkout)
+        $billing = $order->getBillingAddress();
+        $hcdCustomerData = $this->getCustomerData($this->_code, $billing->getCustomerId());
+
+        if (isset($hcdCustomerData['payment_data']['CUSTOMER.OPTIN'])) {
+            $user['CUSTOMER.OPTIN'] = $hcdCustomerData['payment_data']['CUSTOMER.OPTIN'];
+        }
+
+        if (isset($hcdCustomerData['payment_data']['CUSTOMER.OPTIN_2'])) {
+            $user['CUSTOMER.OPTIN_2'] = $hcdCustomerData['payment_data']['CUSTOMER.OPTIN_2'];
+        }
+
+        /** @var  $paymentHelper HeidelpayCD_Edition_Helper_Payment */
+        $paymentHelper = Mage::helper('hcd/payment');
+
+        // risk information to reduce the risk of rejection
+        $user['RISKINFORMATION.GUEST_CHECKOUT'] = $user['CRITERION.GUEST']; // is already set by parent getUser()
+        $user['RISKINFORMATION.CUSTOMERORDERCOUNT'] = $paymentHelper->getCustomerOrderCount(
+            $order->getCustomerId(),
+            $order->getCustomerIsGuest() ? true : false,
+            $order->getCustomerEmail()
+        );
+        $user['RISKINFORMATION.CUSTOMERSINCE'] = $paymentHelper->getCustomerRegistrationDate(
+            $order->getCustomerId(),
+            $order->getCustomerIsGuest() ? true : false
+        );
+
+        return $user;
     }
 }
