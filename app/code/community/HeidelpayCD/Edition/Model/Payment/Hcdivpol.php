@@ -58,4 +58,15 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
 
         return HeidelpayCD_Edition_Model_Payment_Abstract::isAvailable($quote);
     }
+
+    /**
+     * Validate customer input on checkout
+     *
+     * @return HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
+     */
+    public function validate()
+    {
+        $this->_postPayload = Mage::app()->getRequest()->getPost('payment');
+        return parent::validate();
+    }
 }
