@@ -15,12 +15,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->_code = self::CODE;
         $this->_formBlockType = 'hcd/form_santanderInvoice';
         $this->_canBasketApi = true;
         $this->_reportsShippingToHeidelpay = true;
-
-        parent::__construct();
     }
 
     /**
