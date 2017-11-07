@@ -20,7 +20,7 @@ $dobyear = $dobmounth = $dobday = null;
 $payment = $this->getMethod();
 $data = $payment->getHeidelpayUrl(true);
 
-$userData = $this->getMethod()->getCustomerData();
+$userData = $this->getMethod()->getCustomerData() ?: [];
 if (array_key_exists('payment_data', $userData) &&
     array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])
 ) {
