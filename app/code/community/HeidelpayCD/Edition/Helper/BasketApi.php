@@ -72,6 +72,9 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
         }
 
         if ($includingShipment && $this->getShippingNetPrice($quote) > 0) {
+            // shipment counts as a single position and is also part of the itemCount.
+            $shoppingCart['basket']['itemCount'] += 1;
+
             // Shipping amount including tax
             $shippingAmountInclTax = floor(
                 bcmul(
@@ -90,13 +93,8 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 $quote->getStore()
             );
 
-            $this->log('Tax rate request from Quote: ' . print_r($taxRateRequest, true));
-
             /** @var Mage_Tax_Model_Sales_Total_Quote_Shipping $taxRateId */
             $taxRateId = Mage::getStoreConfig('tax/classes/shipping_tax_class', $quote->getStore());
-
-            $this->log('TaxRateId: ' . print_r($taxRateId, true));
-
             $percent = $taxCalculation->getRate($taxRateRequest->setProductClassId($taxRateId));
 
             $this->log('Tax Percent: ' . print_r($percent, true));
@@ -109,7 +107,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'title' => 'Shipping',
                 'quantity' => 1,
                 'vat' => (int) $this->getShippingTaxPercent($quote),
-                'amountVat' => floor(
+                'amountVat' => (int) floor(
                     bcmul(
                         ($shippingAmountInclTax - $this->getShippingTaxPercent($quote)),
                         100, 10
