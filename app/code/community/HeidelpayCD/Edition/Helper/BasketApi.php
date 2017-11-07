@@ -83,14 +83,24 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
 
             /** @var Mage_Tax_Model_Calculation $taxCalculation */
             $taxCalculation = Mage::getModel('tax/calculation');
-            $taxQuoteInfo = $taxCalculation->getRateRequest(
+            $taxRateRequest = $taxCalculation->getRateRequest(
                 $quote->getShippingAddress(),
                 $quote->getBillingAddress(),
                 null,
-                $storeId
+                $quote->getStore()
             );
 
-            $this->log('Tax Info from Quote: ' . print_r($taxQuoteInfo, true));
+            $this->log('Tax rate request from Quote: ' . print_r($taxRateRequest, true));
+
+            /** @var Mage_Tax_Model_Sales_Total_Quote_Shipping $taxRateId */
+            $taxRateId = Mage::getStoreConfig('tax/classes/shipping_tax_class', $quote->getStore());
+
+            $this->log('TaxRateId: ' . print_r($taxRateId, true));
+
+            $percent = $taxCalculation->getRate($taxRateRequest->setProductClassId($taxRateId));
+
+            $this->log('Tax Percent: ' . print_r($percent, true));
+
 
             $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
