@@ -265,7 +265,8 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
             $orders = Mage::getModel('sales/order')
                 ->getCollection()
                 ->addFieldToFilter('customer_id', null)
-                ->addFieldToFilter('customer_email', $emailAddress);
+                ->addFieldToFilter('customer_email', $emailAddress)
+                ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
 
             return $orders->count();
         }
@@ -273,7 +274,8 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
         /** @var Mage_Eav_Model_Entity_Collection_Abstract $orders */
         $orders = Mage::getModel('sales/order')
             ->getCollection()
-            ->addFieldToFilter('customer_id', $customerId);
+            ->addFieldToFilter('customer_id', $customerId)
+            ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
 
         return $orders->count();
     }
