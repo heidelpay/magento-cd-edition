@@ -8,12 +8,19 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
     /**
      * @var string
      */
-    protected $_code = 'hcdivsan';
+    const CODE = 'hcdivsan';
 
     /**
-     * @var string
+     * HeidelpayCD_Edition_Model_Payment_Hcdivsan constructor.
      */
-    protected $_formBlockType = 'hcd/form_santanderInvoice';
+    public function __construct()
+    {
+        $this->_code = self::CODE;
+        $this->_formBlockType = 'hcd/form_santanderInvoice';
+        $this->_canBasketApi = true;
+
+        parent::__construct();
+    }
 
     /**
      * @inheritdoc
@@ -73,7 +80,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
         $paymentHelper = Mage::helper('hcd/payment');
 
         // risk information to reduce the risk of rejection
-        $user['RISKINFORMATION.GUEST_CHECKOUT'] = $user['CRITERION.GUEST']; // is already set by parent getUser()
+        $user['RISKINFORMATION.CUSTOMERGUESTCHECKOUT'] = $user['CRITERION.GUEST']; // is already set by parent getUser()
         $user['RISKINFORMATION.CUSTOMERORDERCOUNT'] = $paymentHelper->getCustomerOrderCount(
             $order->getCustomerId(),
             $order->getCustomerIsGuest() ? true : false,
