@@ -623,21 +623,25 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @param int|null $storeId magento store id
      *
      * @return array additional payment information
+     *
+     * @throws \Mage_Core_Model_Store_Exception
      */
     public function getCustomerData($code = null, $customerId = null, $storeId = null)
     {
         $result = array();
 
-        $paymentCode = ($code) ? $code : $this->_code;
-        $customerId = ($customerId) ? $customerId : $this->getQuote()->getBillingAddress()->getCustomerId();
-        $storeId = ($storeId) ? $storeId : Mage::app()->getStore()->getId();
+        $paymentCode = $code ?: $this->_code;
+        $customerId = $customerId ?: $this->getQuote()->getBillingAddress()->getCustomerId();
+        $storeId = $storeId ?: Mage::app()->getStore()->getId();
         if ($customerId == 0) {
             $visitorData = Mage::getSingleton('core/session')->getVisitorData();
             $customerId = $visitorData['visitor_id'];
             $storeId = 0;
         }
 
-        $this->log('StoreID :' . Mage::app()->getStore()->getId());
+        $this->log(
+            sprintf('PaymentCode: %s, Customer-ID: %d, Store-ID: %d', $paymentCode, $customerId, $storeId)
+        );
 
         /** @var HeidelpayCD_Edition_Model_Customer $customerData */
         $customerData = Mage::getModel('hcd/customer')
@@ -646,7 +650,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             ->addFieldToFilter('Storeid', $storeId)
             ->addFieldToFilter('Paymentmethode', $paymentCode);
 
-        $customerData->load($customerId);
+        $customerData->load();
         $data = $customerData->getData();
 
         /* return empty array if no customer data is present */
