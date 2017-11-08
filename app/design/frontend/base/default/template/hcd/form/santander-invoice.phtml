@@ -54,7 +54,7 @@ if (array_key_exists('payment_data', $userData) &&
 <div class="form-list fieldset hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
     <p class="required"><?php echo $this->htmlEscape($this->__('* Required Fields')) ?></p>
     <div>
-        <img src="<?php echo $form->imgLink ?>" alt="Rechnungskauf von Santander" title="Rechnungskauf von Santander" />
+        <img src="<?php echo $form->getImgLink() ?>" alt="Rechnungskauf von Santander" title="Rechnungskauf von Santander" />
     </div>
     <!-- Select Input for salutation -->
     <div class="input-box">
@@ -142,7 +142,7 @@ if (array_key_exists('payment_data', $userData) &&
             <h4>Werbezustimmung</h4>
             <p class="control">
                 <input type="checkbox" class="checkbox" name="payment[<?php echo $code ?>_adv_optout]" id="<?php echo $code ?>-adv-optout" />
-                <label for="<?php echo $code ?>-adv-optout"><?php echo $form->advText; ?></label>
+                <label for="<?php echo $code ?>-adv-optout"><?php echo $form->getAdvText(); ?></label>
             </p>
         </div>
 
@@ -151,7 +151,7 @@ if (array_key_exists('payment_data', $userData) &&
             <h4>Datenschutzerklärung</h4>
             <p class="control">
                 <input type="checkbox" class="checkbox required-entry" name="payment[<?php echo $code ?>_privpol_optin]" id="<?php echo $code ?>-privpol-optin" />
-                <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->privpolText; ?></label>
+                <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->getPrivpolText(); ?></label>
             </p>
         </div>
         <div class="hcd-payment-desc">

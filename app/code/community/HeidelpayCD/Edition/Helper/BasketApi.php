@@ -65,20 +65,9 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
             $count++;
         }
 
-        if ($includingShipment && $this->getShippingNetPrice($quote) > 0) {
+        if ($includingShipment && $quote->getShippingInclTax() > 0) {
             // shipment counts as a single position and is also part of the itemCount.
             $shoppingCart['basket']['itemCount'] += 1;
-
-            // Shipping amount including tax
-            $shippingAmountInclTax = floor(
-                bcmul(
-                    (($quote->getShippingAmount() - $quote->getShippingRefunded())
-                        * (1 + $this->getShippingTaxPercent($quote) / 100)),
-                    100, 10
-                )
-            );
-
-            $this->log('shippingAmountInclTax: ' . $shippingAmountInclTax);
 
             /** @var Mage_Tax_Model_Calculation $taxCalculation */
             $taxCalculation = Mage::getModel('tax/calculation');
@@ -91,9 +80,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
 
             /** @var Mage_Tax_Model_Sales_Total_Quote_Shipping $taxRateId */
             $taxRateId = Mage::getStoreConfig('tax/classes/shipping_tax_class', $quote->getStore());
-            $percent = $taxCalculation->getRate($taxRateRequest->setProductClassId($taxRateId));
-
-            $this->log('Tax Percent: ' . $percent);
+            $taxPercent = $taxCalculation->getRate($taxRateRequest->setProductClassId($taxRateId));
 
             $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
@@ -101,17 +88,12 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'type' => 'shipment',
                 'title' => 'Shipping',
                 'quantity' => 1,
-                'vat' => (int) $this->getShippingTaxPercent($quote),
-                'amountVat' => (int) floor(
-                    bcmul(
-                        ($shippingAmountInclTax - $this->getShippingTaxPercent($quote)),
-                        100, 10
-                    )
-                ),
-                'amountGross' => $shippingAmountInclTax,
-                'amountNet' => $this->getShippingNetPrice($quote) * 100,
-                'amountPerUnit' => $shippingAmountInclTax,
-                'amountDiscount' => ''
+                'vat' => $taxPercent,
+                'amountVat' => (int) ($quote->getShippingTaxAmount() * 100),
+                'amountGross' => (int) ($quote->getShippingInclTax() * 100),
+                'amountNet' => (int) ($quote->getShippingAmount() * 100),
+                'amountPerUnit' => (int) ($quote->getShippingInclTax() * 100),
+                'amountDiscount' => (int) ($quote->getShippingDiscountAmount() * 100)
             );
         }
 

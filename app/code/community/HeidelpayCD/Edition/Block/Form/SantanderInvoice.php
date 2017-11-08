@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Invoice by Santander form Block class
  *
@@ -71,13 +72,13 @@ class HeidelpayCD_Edition_Block_Form_SantanderInvoice extends Mage_Payment_Block
                 // texts for checkboxes (accept policies, ...)
                 $this->advText = str_replace(
                     'hier',
-                    '<a href="'.$this->advLink.'" target="_blank" rel="nofollow">hier</a>',
+                    '<a href="' . $this->advLink . '" target="_blank" rel="nofollow">hier</a>',
                     $optinInformation->santander_iv_de_adv_text
                 );
 
                 $this->privpolText = str_replace(
                     'hier',
-                    '<a href="'.$this->privpolLink.'" target="_blank" rel="nofollow">hier</a>',
+                    '<a href="' . $this->privpolLink . '" target="_blank" rel="nofollow">hier</a>',
                     $optinInformation->santander_iv_de_privpol_text
                 );
             }
@@ -103,8 +104,64 @@ class HeidelpayCD_Edition_Block_Form_SantanderInvoice extends Mage_Payment_Block
                 . 'Santander Consumer Bank AG gemäß den näheren Bestimmungen des beigefügten '
                 . '<a href="">Einwilligungserklärungstextes</a> sowie an die darin genannten Auskunftsdateien und in '
                 . 'die Durchführung einer automatisierten Entscheidung ein.<br />Nähere Informationen finden Sie in den'
-                . ' <a href="'.$this->privpolLink.'" target="_blank" rel="nofollow">Datenschutzhinweisen</a>'
+                . ' <a href="' . $this->privpolLink . '" target="_blank" rel="nofollow">Datenschutzhinweisen</a>'
                 . ' der Santander für den Rechnungs-/Ratenkauf.';
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptin()
+    {
+        return $this->optin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivacyPolicy()
+    {
+        return $this->privacyPolicy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImgLink()
+    {
+        return $this->imgLink;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdvLink()
+    {
+        return $this->advLink;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdvText()
+    {
+        return $this->advText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivpolLink()
+    {
+        return $this->privpolLink;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivpolText()
+    {
+        return $this->privpolText;
     }
 }
