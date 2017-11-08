@@ -2,6 +2,8 @@
 /**
  * Yapital payment method
  *
+ * This payment method is deprecated and exists for backwards compatibility purposes only.
+ *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
  *
@@ -21,4 +23,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcdyt extends HeidelpayCD_Edition_Model_
     protected $_code = 'hcdyt';
     protected $_canRefund = false;
     protected $_canRefundInvoicePartial = false;
+
+    public function isAvailable($quote = null)
+    {
+        return false;
+    }
+
+
 }
