@@ -16,16 +16,21 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcddd';
-    protected $_canCapture = true;
-    protected $_canCapturePartial = true;
-    protected $_formBlockType = 'hcd/form_debit';
+
     /**
-     * over write existing info block
-     *
-     * @var string
+     * HeidelpayCD_Edition_Model_Payment_Hcdpp constructor.
      */
-    protected $_infoBlockType = 'hcd/info_directDebit';
+    public function __construct()
+    {
+        $this->_code = 'hcddd';
+        $this->_canCapture = true;
+        $this->_canCapturePartial = true;
+        $this->_formBlockType = 'hcd/form_debit';
+        $this->_infoBlockType = 'hcd/info_directDebit';
+        $this->_showAdditionalPaymentInformation = true;
+
+        parent::__construct();
+    }
 
     public function getFormBlockType()
     {

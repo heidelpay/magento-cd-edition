@@ -86,7 +86,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'type' => 'shipment',
                 'title' => 'Shipping',
                 'quantity' => 1,
-                'vat' => (int)$this->getShippingTaxPercent($quote),
+                'vat' => floor((int)$this->getShippingTaxPercent($quote)),
                 'amountVat' => floor(
                     bcmul(
                         $shippingAmountInclTax - $this->getShippingTaxPercent($quote),
@@ -99,7 +99,6 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'amountDiscount' => ''
                 );
         }
-
 
         return $shoppingCart;
     }

@@ -16,20 +16,25 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
+
     /**
-    * unique internal payment method identifier
-    *
-    * @var string [a-z0-9_]
-    **/
-    protected $_code = 'hcdmpa';
-    protected $_canCapture = true;
-    protected $_canCapturePartial = true;
-    protected $_canRefund = true;
-    protected $_canRefundInvoicePartial = true;
-    protected $_canBasketApi = true;
-    
-    protected $_formBlockType = 'hcd/form_masterpass';
-    protected $_infoBlockType = 'hcd/info_masterpass';
+     * HeidelpayCD_Edition_Model_Payment_Hcdpp constructor.
+     */
+    public function __construct()
+    {
+        $this->_code = 'hcdmpa';
+        $this->_canCapture = true;
+        $this->_canCapturePartial = true;
+        $this->_canRefund = true;
+        $this->_canRefundInvoicePartial = true;
+        $this->_canBasketApi = true;
+
+        $this->_formBlockType = 'hcd/form_masterpass';
+        $this->_infoBlockType = 'hcd/info_masterpass';
+        $this->_showAdditionalPaymentInformation = true;
+
+        parent::__construct();
+    }
     
     /**
     public function isAvailable($quote=null) {

@@ -17,26 +17,19 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
-    /**
-     * payment code
-     *
-     * @var string payment code
-     */
-    protected $_code = 'hcdddsec';
 
     /**
-     * set checkout form block
-     *
-     * @var string checkout form block
+     * HeidelpayCD_Edition_Model_Payment_Hcdpp constructor.
      */
-    protected $_formBlockType = 'hcd/form_directDebitSecured';
+    public function __construct()
+    {
+        $this->_code = 'hcdddsec';
+        $this->_formBlockType = 'hcd/form_directDebitSecured';
+        $this->_infoBlockType = 'hcd/info_directDebit';
+        $this->_showAdditionalPaymentInformation = true;
 
-    /**
-     * over write existing info block
-     *
-     * @var string
-     */
-    protected $_infoBlockType = 'hcd/info_directDebit';
+        parent::__construct();
+    }
 
     /**
      * Validate customer input on checkout

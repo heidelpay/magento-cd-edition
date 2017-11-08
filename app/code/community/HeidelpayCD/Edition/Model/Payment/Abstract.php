@@ -89,6 +89,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      */
     protected $_formBlockType = 'hcd/form_desconly';
 
+    protected $_showAdditionalPaymentInformation = false;
+
     /**
      * @return bool payment method will redirect the customer directly to heidelpay
      */
@@ -210,6 +212,16 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     public function getInfoBlockType()
     {
         return $this->_infoBlockType;
+    }
+
+    /**
+     * Show additional payment information for this payment method after checkout.
+     *
+     * @return bool
+     */
+    public function isShowAdditionalPaymentInformation()
+    {
+        return $this->_showAdditionalPaymentInformation;
     }
 
     /**

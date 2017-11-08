@@ -16,13 +16,21 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdpp';
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdpp constructor.
+     */
+    public function __construct()
+    {
+        $this->_code = 'hcdpp';
+        $this->_infoBlockType = 'hcd/info_prepayment';
+        $this->_showAdditionalPaymentInformation = true;
 
-    protected $_infoBlockType = 'hcd/info_prepayment';
-    
+        parent::__construct();
+    }
+
     public function showPaymentInfo($paymentData)
     {
-        $loadSnippet = $this->_getHelper()->__("Prepayment Info Text");
+        $loadSnippet = $this->_getHelper()->__('Prepayment Info Text');
         
         $repl = array(
                     '{AMOUNT}'                    => $paymentData['CLEARING_AMOUNT'],
