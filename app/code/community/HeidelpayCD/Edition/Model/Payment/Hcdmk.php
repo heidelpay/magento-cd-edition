@@ -1,6 +1,8 @@
 <?php
 /**
- *  MagirKart payment method
+ * MangirKart payment method
+ *
+ * This payment method is deprecated and exists for backwards compatibility purposes only.
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
@@ -24,11 +26,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmk extends HeidelpayCD_Edition_Model_
     
     public function isAvailable($quote=null)
     {
-        $currencyCode=$this->getQuote()->getQuoteCurrencyCode();
-        if (!empty($currencyCode) && $currencyCode != 'TRY') {
-            return false;
-        }
-
-        return parent::isAvailable($quote);
+        return false;
     }
 }
