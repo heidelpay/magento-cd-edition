@@ -35,7 +35,7 @@ if ($recognition == 1 and $cId != 0) {
     // only if shipping address is unchanged
     $hash = $this->getMethod()->getShippingHash();
     $userData = $this->getMethod()->getCustomerData();
-    if ($userData !== false and array_key_exists('payment_data', $userData)) {
+    if (!empty($userData) && array_key_exists('payment_data', $userData)) {
         if ($userData ['payment_data'] ['SHIPPPING_HASH'] != $hash) {
             $userData = array();
         }

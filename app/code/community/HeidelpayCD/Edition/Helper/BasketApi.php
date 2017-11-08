@@ -31,15 +31,11 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
         $shoppingCartItems = $quote->getAllVisibleItems();
 
         $shoppingCart = array(
-
             'authentication' => array(
-
                 'login' => trim(Mage::getStoreConfig('hcd/settings/user_id', $storeId)),
                 'sender' => trim(Mage::getStoreConfig('hcd/settings/security_sender', $storeId)),
                 'password' => trim(Mage::getStoreConfig('hcd/settings/user_pwd', $storeId)),
-
             ),
-
 
             'basket' => array(
                 'amountTotalNet' => floor(bcmul($quote->getGrandTotal(), 100, 10)),
@@ -47,8 +43,6 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'amountTotalDiscount' => floor(bcmul($quote->getDiscountAmount(), 100, 10)),
                 'itemCount' => count($shoppingCartItems)
             )
-
-
         );
 
         $count = 1;
@@ -84,6 +78,8 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 )
             );
 
+            $this->log('shippingAmountInclTax: ' . $shippingAmountInclTax);
+
             /** @var Mage_Tax_Model_Calculation $taxCalculation */
             $taxCalculation = Mage::getModel('tax/calculation');
             $taxRateRequest = $taxCalculation->getRateRequest(
@@ -97,8 +93,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
             $taxRateId = Mage::getStoreConfig('tax/classes/shipping_tax_class', $quote->getStore());
             $percent = $taxCalculation->getRate($taxRateRequest->setProductClassId($taxRateId));
 
-            $this->log('Tax Percent: ' . print_r($percent, true));
-
+            $this->log('Tax Percent: ' . $percent);
 
             $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
@@ -114,7 +109,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                     )
                 ),
                 'amountGross' => $shippingAmountInclTax,
-                'amountNet' => $this->getShippingNetPrice($quote) ,
+                'amountNet' => $this->getShippingNetPrice($quote) * 100,
                 'amountPerUnit' => $shippingAmountInclTax,
                 'amountDiscount' => ''
             );
@@ -137,6 +132,8 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
         $price = $order->getShippingInclTax() - $shippingTax;
         $price -= $order->getShippingRefunded();
         $price -= $order->getShippingCanceled();
+
+        $this->log('ShippingNetPrice: ' . $price);
         return $price;
     }
 
@@ -150,6 +147,9 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
     public function getShippingTaxPercent($order)
     {
         $tax = ($order->getShippingTaxAmount() * 100) / $order->getShippingAmount();
+
+        $this->log('ShippingTax: ' . $tax);
+
         return $this->format(round($tax));
     }
 }

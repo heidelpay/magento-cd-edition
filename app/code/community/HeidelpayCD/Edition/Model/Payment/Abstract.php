@@ -618,14 +618,16 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * Load additional payment information
      *
-     * @param bool $code       current payment method
-     * @param bool $customerId the customers identification number
-     * @param bool $storeId    magento store id
+     * @param string|null $code current payment method
+     * @param int|null $customerId the customers identification number
+     * @param int|null $storeId magento store id
      *
-     * @return array|bool additional payment information
+     * @return array additional payment information
      */
-    public function getCustomerData($code = false, $customerId = false, $storeId = false)
+    public function getCustomerData($code = null, $customerId = null, $storeId = null)
     {
+        $result = array();
+
         $paymentCode = ($code) ? $code : $this->_code;
         $customerId = ($customerId) ? $customerId : $this->getQuote()->getBillingAddress()->getCustomerId();
         $storeId = ($storeId) ? $storeId : Mage::app()->getStore()->getId();
@@ -637,36 +639,35 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         $this->log('StoreID :' . Mage::app()->getStore()->getId());
 
+        /** @var HeidelpayCD_Edition_Model_Customer $customerData */
         $customerData = Mage::getModel('hcd/customer')
             ->getCollection()
             ->addFieldToFilter('Customerid', $customerId)
             ->addFieldToFilter('Storeid', $storeId)
             ->addFieldToFilter('Paymentmethode', $paymentCode);
 
-        $customerData->load();
+        $customerData->load($customerId);
         $data = $customerData->getData();
 
-        /* retun false if not */
+        /* return empty array if no customer data is present */
         if (empty($data[0]['id'])) {
-            return false;
+            return $result;
         }
 
-        $return = array();
-
-        $return['id'] = $data[0]['id'];
+        $result['id'] = $data[0]['id'];
 
         if (!empty($data[0]['uniqeid'])) {
-            $return['uniqeid'] = $data[0]['uniqeid'];
+            $result['uniqeid'] = $data[0]['uniqeid'];
         }
 
         if (!empty($data[0]['payment_data'])) {
-            $return['payment_data'] = json_decode(
+            $result['payment_data'] = json_decode(
                 Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['payment_data']),
                 true
             );
         }
 
-        return $return;
+        return $result;
     }
 
     /**
@@ -910,7 +911,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         /** @var $customerData HeidelpayCD_Edition_Model_Customer */
         $customerData = Mage::getModel('hcd/customer');
 
-        if ($this->getCustomerData() !== false) {
+        if (!empty($this->getCustomerData())) {
             $lastdata = $this->getCustomerData();
             $customerData->load($lastdata['id']);
         }
