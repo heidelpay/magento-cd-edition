@@ -20,7 +20,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
     /**
      * collect items for basket api
      *
-     * @param $quote Mage_Sales_Model_Order quote object
+     * @param $quote Mage_Sales_Model_Quote|Mage_Sales_Model_Order quote object
      * @param $storeId integer current store id
      * @param $includingShipment boolean include
      *
@@ -56,16 +56,16 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'amountVat' => floor(bcmul($item->getTaxAmount(), 100, 10)),
                 'amountGross' => floor(bcmul($item->getRowTotalInclTax(), 100, 10)),
                 'amountNet' => floor(bcmul($item->getRowTotal(), 100, 10)),
-                'amountPerUnit' => floor(bcmul($item->getPrice(), 100, 10)),
+                'amountPerUnit' => floor(bcmul($item->getRowTotalInclTax(), 100, 10)),
                 'amountDiscount' => floor(bcmul($item->getDiscountAmount(), 100, 10)),
-                'type' => 'goods',
+                'type' => $item->getIsVirtual() ? 'digital' : 'goods',
                 'title' => $item->getName(),
                 'imageUrl' => (string)Mage::helper('catalog/image')->init($item->getProduct(), 'thumbnail')
             );
             $count++;
         }
 
-        if ($includingShipment && $quote->getShippingInclTax() > 0) {
+        if ($includingShipment && $quote->getShippingAddress()->getShippingInclTax() > 0) {
             // shipment counts as a single position and is also part of the itemCount.
             $shoppingCart['basket']['itemCount'] += 1;
 
@@ -89,49 +89,15 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'title' => 'Shipping',
                 'quantity' => 1,
                 'vat' => $taxPercent,
-                'amountVat' => (int) ($quote->getShippingTaxAmount() * 100),
-                'amountGross' => (int) ($quote->getShippingInclTax() * 100),
-                'amountNet' => (int) ($quote->getShippingAmount() * 100),
-                'amountPerUnit' => (int) ($quote->getShippingInclTax() * 100),
-                'amountDiscount' => (int) ($quote->getShippingDiscountAmount() * 100)
+                'amountVat' => (int) ($quote->getShippingAddress()->getShippingTaxAmount() * 100),
+                'amountGross' => (int) ($quote->getShippingAddress()->getShippingInclTax() * 100),
+                'amountNet' => (int) ($quote->getShippingAddress()->getShippingAmount() * 100),
+                'amountPerUnit' => (int) ($quote->getShippingAddress()->getShippingInclTax() * 100),
+                'amountDiscount' => (int) ($quote->getShippingAddress()->getShippingDiscountAmount() * 100)
             );
         }
 
 
         return $shoppingCart;
-    }
-
-    /**
-     * Calculate shipping net price
-     *
-     * @param $order Mage_Sales_Model_Order magento order object
-     *
-     * @return string shipping net price
-     */
-    public function getShippingNetPrice($order)
-    {
-        $shippingTax = $order->getShippingTaxAmount();
-        $price = $order->getShippingInclTax() - $shippingTax;
-        $price -= $order->getShippingRefunded();
-        $price -= $order->getShippingCanceled();
-
-        $this->log('ShippingNetPrice: ' . $price);
-        return $price;
-    }
-
-    /**
-     * Calculate shipping tax in percent for BillSafe
-     *
-     * @param $order Mage_Sales_Model_Order magentp order object
-     *
-     * @return string shipping tex in percent
-     */
-    public function getShippingTaxPercent($order)
-    {
-        $tax = ($order->getShippingTaxAmount() * 100) / $order->getShippingAmount();
-
-        $this->log('ShippingTax: ' . $tax);
-
-        return $this->format(round($tax));
     }
 }

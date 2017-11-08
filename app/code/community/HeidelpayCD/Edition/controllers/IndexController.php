@@ -299,6 +299,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             return $this;
         }
 
+        /** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
         $payment = $order->getPayment()->getMethodInstance();
 
         if ($session->getHcdWallet() !== false) {
@@ -309,7 +310,10 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
 
         if ($payment->canBasketApi() and empty($refId)) {
-            $shoppingCart = $this->_basketApiHelper->basketItems($order, $this->getStore(), $order->getIsNotVirtual());
+            // determine if shipping should be included to the basket for the heidelpay basket api
+            $includeShipping = $order->getShippingAddress() ? true : false;
+
+            $shoppingCart = $this->_basketApiHelper->basketItems($order, $this->getStore(), $includeShipping);
 
             $url = (Mage::getStoreConfig('hcd/settings/transactionmode', $this->getStore()) == 0)
                 ? $this->_liveBasketUrl : $this->_sandboxBasketUrl;
