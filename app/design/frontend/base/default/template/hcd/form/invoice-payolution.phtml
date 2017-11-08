@@ -26,8 +26,6 @@ if (array_key_exists('payment_data', $userData) &&
 ) {
     list($dobyear, $dobmounth, $dobday) = explode('-', $userData['payment_data']['NAME.BIRTHDATE']);
 }
-
-$payment->log(print_r($data,1));
 ?>
 
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
