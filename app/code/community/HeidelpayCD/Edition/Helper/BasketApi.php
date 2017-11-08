@@ -40,19 +40,17 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
 
             ),
 
-
             'basket' => array(
                 'amountTotalNet' => floor(bcmul($quote->getGrandTotal(), 100, 10)),
                 'currencyCode' => $quote->getGlobalCurrencyCode(),
                 'amountTotalDiscount' => floor(bcmul($quote->getDiscountAmount(), 100, 10)),
-                'itemCount' => count($shoppingCartItems)
+                'itemCount' => count($shoppingCartItems),
+                'amountTotalVat' => floor(bcmul($quote->getTaxAmount(), 100, 10))
             )
-
-
         );
 
         $count = 1;
-        /** @var  $item Mage_Sales_Model_Order_Item */
+        /** @var Mage_Sales_Model_Order_Item $item */
         foreach ($shoppingCartItems as $item) {
             $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
@@ -71,26 +69,27 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
             $count++;
         }
 
-        if ($includingShipment and $this->getShippingNetPrice($quote) > 0) {
+        if ($includingShipment && $this->getShippingNetPrice($quote) > 0) {
             // Shipping amount including tax
             $shippingAmountInclTax = floor(
                 bcmul(
-                    (($quote->getShippingAmount() - $quote->getShippingRefunded())
-                        * (1 + $this->getShippingTaxPercent($quote) / 100)),
+                    ($quote->getShippingAmount() - $quote->getShippingRefunded())
+                        * (1 + $this->getShippingTaxPercent($quote) / 100),
                     100, 10
                 )
             );
 
-            $shoppingCart['basket']['basketItems'][] = array(
+            $shoppingCart['basket']['basketItems'][] =
+                array(
                 'position' => $count,
                 'basketItemReferenceId' => $count,
-                "type" => "shipment",
-                "title" => "Shipping",
+                'type' => 'shipment',
+                'title' => 'Shipping',
                 'quantity' => 1,
-                'vat' => $this->getShippingTaxPercent($quote),
+                'vat' => (int)$this->getShippingTaxPercent($quote),
                 'amountVat' => floor(
                     bcmul(
-                        ($shippingAmountInclTax - $this->getShippingTaxPercent($quote)),
+                        $shippingAmountInclTax - $this->getShippingTaxPercent($quote),
                         100, 10
                     )
                 ),
@@ -98,7 +97,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'amountNet' => $this->getShippingNetPrice($quote) ,
                 'amountPerUnit' => $shippingAmountInclTax,
                 'amountDiscount' => ''
-            );
+                );
         }
 
 
@@ -124,7 +123,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
     /**
      * Calculate shipping tax in percent for BillSafe
      *
-     * @param $order Mage_Sales_Model_Order magentp order object
+     * @param $order Mage_Sales_Model_Order magento order object
      *
      * @return string shipping tex in percent
      */
