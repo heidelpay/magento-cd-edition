@@ -20,7 +20,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
     /**
      * collect items for basket api
      *
-     * @param $quote Mage_Sales_Model_Quote|Mage_Sales_Model_Order quote object
+     * @param $quote Mage_Sales_Model_Quote | Mage_Sales_Model_Order quote object
      * @param $storeId integer current store id
      * @param $includingShipment boolean include
      *
@@ -51,6 +51,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
             $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
                 'basketItemReferenceId' => $item->getItemId(),
+                'articleId' => $item->getSku(),
                 'quantity' => ($item->getQtyOrdered() !== false) ? floor($item->getQtyOrdered()) : $item->getQty(),
                 'vat' => floor($item->getTaxPercent()),
                 'amountVat' => floor(bcmul($item->getTaxAmount(), 100, 10)),
@@ -96,7 +97,6 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'amountDiscount' => (int) ($quote->getShippingAddress()->getShippingDiscountAmount() * 100)
             );
         }
-
 
         return $shoppingCart;
     }
