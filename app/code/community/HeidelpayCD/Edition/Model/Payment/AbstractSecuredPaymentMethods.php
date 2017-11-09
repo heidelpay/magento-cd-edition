@@ -212,7 +212,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $invoice->save();
         if ($this->_invoiceOrderEmail) {
             $code = $order->getPayment()->getMethodInstance()->getCode();
-            // Todo: entweder $invoiceMailComment auf einen defaultwert setzen oder sendEmail in die if group verschieben
+
+            $invoiceMailComment = '';
             if ($code == 'hcdiv' || $code == 'hcdivsec' || $code == 'hcdivpol') {
                 $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                 $invoiceMailComment = ($info === false) ? '' : '<h3>'
