@@ -197,7 +197,10 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(false);
 
-        $invoice = $order->prepareInvoice();
+
+        $invoice = Mage::getModel('sales/service_order', $order)
+            ->setConvertor(Mage::getModel('hcd/convert_order'))
+            ->prepareInvoice();
         $invoice->register();
         $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
         $order->setIsInProcess(true);
