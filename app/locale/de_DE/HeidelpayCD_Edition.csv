@@ -21,7 +21,7 @@
 "specific countries","L&auml;nderauswahl"
 "always","Immer"
 "no recognition","keine Wiedererkennung"
-"only if shippping adress is unchanged","nur bei gleichbleibender Lieferaddresse"
+"only if shippping adress is unchanged","nur bei gleichbleibender Lieferadresse"
 "Prepayment Info Text","Bitte &uuml;berweisen Sie uns den Betrag von <strong>{AMOUNT} {CURRENCY}</strong> auf folgendes Konto:<br/><br/>
 		Kontoinhaber: {CONNECTOR_ACCOUNT_HOLDER}<br/>
 		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/><br/>
@@ -33,13 +33,13 @@
 			und die Gl&auml;ubiger ID: {CreditorId}</i><br />
 			<br />
 			Bitte sorgen Sie f&uuml;r ausreichende Deckung auf dem entsprechenden Konto."
-"Invoice Info Text","Bitte &uuml;berweisen Sie uns den Betrag von <strong>{AMOUNT} {CURRENCY}</strong> nach erhalt der Ware auf folgendes Konto:<br/><br/>
+"Invoice Info Text","Bitte &uuml;berweisen Sie uns den Betrag von <strong>{AMOUNT} {CURRENCY}</strong> nach Erhalt der Ware auf folgendes Konto:<br/><br/>
 		Kontoinhaber: {CONNECTOR_ACCOUNT_HOLDER}<br/>
 		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/>
 		BIC: {CONNECTOR_ACCOUNT_BIC}<br/><br/>
 		<i>Geben Sie als Verwendungszweck bitte ausschlie&szlig;lich diese Identifikationsnummer an:</i><br/>
 		<strong>{IDENTIFICATION_SHORTID}</strong>"
-"An unexpected error occurred. Please contact us to get further information.","Es ist ein Fehler aufgetreten. Bitte kontaktieren Sie uns f&uumlr weitere Informationen."
+"An unexpected error occurred. Please contact us to get further information.","Es ist ein Fehler aufgetreten. Bitte kontaktieren Sie uns f&uuml;r weitere Informationen."
 "continue","Weiter"
 "Please enter additional payment information.","Geben Sie weitere Zahlungsinformationen ein."
 "recived amount ","eingegangener Betrag "
@@ -52,7 +52,7 @@
 "Debit Card","Debitkarte"
 "Debitcard","Debitkarte"
 "Direct Debit","Lastschrift"
-"SOFORT &Üuml;berweisung","SOFORT &Üuml;berweisung"
+"SOFORT &Üuml;berweisung","SOFORT &Uuml;berweisung"
 "Giropay","Giropay"
 "Pay Pal","PayPal"
 "EPS","EPS"
