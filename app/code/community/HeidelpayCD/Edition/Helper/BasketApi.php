@@ -20,7 +20,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
     /**
      * collect items for basket api
      *
-     * @param $quote Mage_Sales_Model_Quote | Mage_Sales_Model_Order quote object
+     * @param $quote Mage_Sales_Model_Quote|Mage_Sales_Model_Order quote object
      * @param $storeId integer current store id
      * @param $includingShipment boolean include
      *
@@ -66,7 +66,8 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
             $count++;
         }
 
-        if ($includingShipment && $quote->getShippingAddress()->getShippingInclTax() > 0) {
+        // include shipping as single position
+        if ($includingShipment && $this->getShippingInclTax($quote) > 0) {
             // shipment counts as a single position and is also part of the itemCount.
             $shoppingCart['basket']['itemCount'] += 1;
 
@@ -90,14 +91,78 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'title' => 'Shipping',
                 'quantity' => 1,
                 'vat' => $taxPercent,
-                'amountVat' => (int) ($quote->getShippingAddress()->getShippingTaxAmount() * 100),
-                'amountGross' => (int) ($quote->getShippingAddress()->getShippingInclTax() * 100),
-                'amountNet' => (int) ($quote->getShippingAddress()->getShippingAmount() * 100),
-                'amountPerUnit' => (int) ($quote->getShippingAddress()->getShippingInclTax() * 100),
-                'amountDiscount' => (int) ($quote->getShippingAddress()->getShippingDiscountAmount() * 100)
+                'amountVat' => (int) ($this->getShippingTaxAmount($quote) * 100),
+                'amountGross' => (int) ($this->getShippingInclTax($quote) * 100),
+                'amountNet' => (int) ($this->getShippingAmount($quote) * 100),
+                'amountPerUnit' => (int) ($this->getShippingInclTax($quote) * 100),
+                'amountDiscount' => (int) ($this->getShippingDiscountAmount($quote) * 100)
             );
         }
 
         return $shoppingCart;
+    }
+
+    /**
+     * Returns the net shipping cost amount depending on the order/quote type
+     *
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     * @return float
+     */
+    protected function getShippingAmount($quote)
+    {
+        if ($quote instanceof Mage_Sales_Model_Quote) {
+            return $quote->getShippingAddress()->getShippingAmount();
+        }
+
+        /** @var Mage_Sales_Model_Order $quote */
+        return $quote->getShippingAmount();
+    }
+
+    /**
+     * Returns the shipping discount amount depending on the order/quote type
+     *
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     * @return float
+     */
+    protected function getShippingDiscountAmount($quote)
+    {
+        if ($quote instanceof Mage_Sales_Model_Quote) {
+            return $quote->getShippingAddress()->getShippingDiscountAmount();
+        }
+
+        /** @var Mage_Sales_Model_Order $quote */
+        return $quote->getShippingDiscountAmount();
+    }
+
+    /**
+     * Returns the gross shipping cost amount depending on the order/quote type
+     *
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     * @return float
+     */
+    protected function getShippingInclTax($quote)
+    {
+        if ($quote instanceof Mage_Sales_Model_Quote) {
+            return $quote->getShippingAddress()->getShippingInclTax();
+        }
+
+        /** @var Mage_Sales_Model_Order $quote */
+        return $quote->getShippingInclTax();
+    }
+
+    /**
+     * Returns the shipping tax amount depending on the order/quote type
+     *
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     * @return float
+     */
+    protected function getShippingTaxAmount($quote)
+    {
+        if ($quote instanceof Mage_Sales_Model_Quote) {
+            return $quote->getShippingAddress()->getShippingTaxAmount();
+        }
+
+        /** @var Mage_Sales_Model_Order $quote */
+        return $quote->getShippingTaxAmount();
     }
 }
