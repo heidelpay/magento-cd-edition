@@ -154,8 +154,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         $this->getCheckout()->getQuote()->setIsActive(false)->save();
         $this->getCheckout()->clear();
 
-        $message = "";
-
         $data = Mage::getModel('hcd/transaction')
             ->loadLastTransactionDataByTransactionnr($session->getLastRealOrderId());
 
