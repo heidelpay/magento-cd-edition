@@ -56,6 +56,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
             return false;
         }
 
+        // prohibit payment method if the customer has already been rejected in the current session
+        if ($this->getCheckout()->getPayolutionCustomerRejected()) {
+            return false;
+        }
+
         return HeidelpayCD_Edition_Model_Payment_Abstract::isAvailable($quote);
     }
 

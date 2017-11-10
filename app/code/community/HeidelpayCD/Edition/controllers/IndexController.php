@@ -248,6 +248,18 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             $intMessage = (!empty($data['PROCESSING_RETURN'])) ? $data['PROCESSING_RETURN'] : $message;
         }
 
+        // remove payment method from selection if the customer has been rejected
+        $payment = $order->getPayment()->getMethodInstance();
+        if ($payment instanceof HeidelpayCD_Edition_Model_Payment_Hcdivpol) {
+            if ((array_key_exists('PROCESSING_REASON', $data) &&
+                    $data['PROCESSING_REASON'] === 'INSURANCE_ERROR') &&
+                (array_key_exists('CRITERION_INSURANCE-RESERVATION', $data) &&
+                    $data['CRITERION_INSURANCE-RESERVATION'] === 'DENIED')) {
+                $this->getCheckout()->setPayolutionCustomerRejected(true);
+                $this->log('Remove Payolution from payment methods, since the customer has been revoked!');
+            }
+        }
+
         $quoteId = ($session->getLastQuoteId() === false) ? $session->getQuoteId() : $session->getLastQuoteId();
         // last_quote_id workaround for trusted shop buyerprotection
 
