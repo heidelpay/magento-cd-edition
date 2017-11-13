@@ -1,5 +1,5 @@
 <?php
-
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Abstract payment method
  *
@@ -14,7 +14,6 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /**
@@ -40,11 +39,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
 
     /**
      * HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods constructor.
-     *
-     * @param $emptyArray array empty array from upstream
-     * @param HeidelpayCD_Edition_Helper_Validator $validatorHelper
      */
-    // @codingStandardsIgnoreLine magento sets an empty array
     public function __construct()
     {
         parent::__construct();
@@ -53,16 +48,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $this->_canRefund = false;
         $this->_canRefundInvoicePartial = false;
         $this->_validatorHelper = Mage::helper('hcd/validator');
-    }
-
-    /**
-     * Over wright from block
-     *
-     * @return string
-     */
-    public function getFormBlockType()
-    {
-        return $this->_formBlockType;
     }
 
     /**
@@ -78,12 +63,12 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $shipping = $this->getQuote()->getShippingAddress();
 
         /* billing and shipping address has to match */
-        if (($billing->getFirstname() != $shipping->getFirstname()) or
-            ($billing->getLastname() != $shipping->getLastname()) or
-            ($billing->getStreet() != $shipping->getStreet()) or
-            ($billing->getPostcode() != $shipping->getPostcode()) or
-            ($billing->getCity() != $shipping->getCity()) or
-            ($billing->getCountry() != $shipping->getCountry())
+        if (($billing->getFirstname() !== $shipping->getFirstname()) ||
+            ($billing->getLastname() !== $shipping->getLastname()) ||
+            ($billing->getStreet() !== $shipping->getStreet()) ||
+            ($billing->getPostcode() !== $shipping->getPostcode()) ||
+            ($billing->getCity() !== $shipping->getCity()) ||
+            ($billing->getCountry() !== $shipping->getCountry())
         ) {
             return false;
         }
@@ -100,17 +85,18 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      * Validate customer input on checkout
      *
      * @return $this
+     * @throws \Mage_Core_Exception
      */
     public function validate()
     {
         parent::validate();
 
-        if (isset($this->_postPayload['method']) and $this->_postPayload['method'] == $this->_code) {
+        if (isset($this->_postPayload['method']) && $this->_postPayload['method'] === $this->_code) {
             if (array_key_exists($this->_code . '_salutation', $this->_postPayload)) {
                 $this->_validatedParameters['NAME.SALUTATION'] =
                     (
-                        $this->_postPayload[$this->_code . '_salutation'] == 'MR' or
-                        $this->_postPayload[$this->_code . '_salutation'] == 'MRS'
+                        $this->_postPayload[$this->_code . '_salutation'] === 'MR' ||
+                        $this->_postPayload[$this->_code . '_salutation'] === 'MRS'
                     )
                         ? $this->_postPayload[$this->_code . '_salutation'] : '';
             }
@@ -120,16 +106,16 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
                 array_key_exists($this->_code . '_dobyear', $this->_postPayload)
             ) {
                 $day = (int)$this->_postPayload[$this->_code . '_dobday'];
-                $mounth = (int)$this->_postPayload[$this->_code . '_dobmonth'];
+                $month = (int)$this->_postPayload[$this->_code . '_dobmonth'];
                 $year = (int)$this->_postPayload[$this->_code . '_dobyear'];
 
-                if ($this->_validatorHelper->validateDateOfBirth($day, $mounth, $year)) {
+                if ($this->_validatorHelper->validateDateOfBirth($day, $month, $year)) {
                     $this->_validatedParameters['NAME.BIRTHDATE']
-                        = $year . '-' . sprintf("%02d", $mounth) . '-' . sprintf("%02d", $day);
+                        = $year . '-' . sprintf('%02d', $month) . '-' . sprintf('%02d', $day);
                 } else {
                     Mage::throwException(
                         $this->_getHelper()
-                            ->__('The minimum age is 18 years for this payment methode.')
+                            ->__('The minimum age is 18 years for this payment method.')
                     );
                 }
             }
@@ -150,7 +136,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      */
     public function showPaymentInfo($paymentData)
     {
-        $loadSnippet = $this->_getHelper()->__("Invoice Info Text");
+        $loadSnippet = $this->_getHelper()->__('Invoice Info Text');
 
         $replace = array(
             '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
@@ -172,6 +158,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     * @throws \Mage_Core_Exception
      */
     public function pendingTransaction($order, $data, $message = '')
     {
@@ -182,7 +169,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(false);
 
-
         $invoice = Mage::getModel('sales/service_order', $order)
             ->setConvertor(Mage::getModel('hcd/convert_order'))
             ->prepareInvoice();
@@ -190,14 +176,10 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
         $order->setIsInProcess(true);
         $invoice->setIsPaid(false);
-        $order->addStatusHistoryComment(
-            Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'),
-            false
-        );
+        $order->addStatusHistoryComment(Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'));
         $invoice->save();
         if ($this->_invoiceOrderEmail) {
             $code = $order->getPayment()->getMethodInstance()->getCode();
-
             $invoiceMailComment = '';
             if ($code == 'hcdiv' || $code == 'hcdivsec' || $code == 'hcdivpol') {
                 $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
@@ -239,6 +221,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     * @throws \Mage_Core_Exception
      */
     public function processingTransaction($order, $data, $message = '')
     {
@@ -255,8 +238,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(true);
 
-        if ($paymentHelper->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] and
-            $order->getOrderCurrencyCode() == $data['PRESENTATION_CURRENCY']
+        if ($order->getOrderCurrencyCode() === $data['PRESENTATION_CURRENCY'] &&
+            $paymentHelper->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT']
         ) {
             $order->setState(
                 $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
@@ -266,7 +249,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             $totallyPaid = true;
         } else {
             // in case rc is ack and amount is to low or currency miss match
-
             $order->setState(
                 $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
                 $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(true),
@@ -275,10 +257,13 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         }
 
         // Set invoice to paid when the total amount matches
-        if ($order->hasInvoices() and $totallyPaid) {
+        if ($totallyPaid && $order->hasInvoices()) {
+
+            /** @var Mage_Sales_Model_Resource_Order_Invoice_Collection $invoices */
+            $invoices = $order->getInvoiceCollection();
 
             /** @var  $invoice Mage_Sales_Model_Order_Invoice */
-            foreach ($order->getInvoiceCollection() as $invoice) {
+            foreach ($invoices as $invoice) {
                 $this->log('Set invoice ' . (string)$invoice->getIncrementId() . ' to paid.');
                 $invoice
                     ->capture()
