@@ -21,11 +21,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->_code = 'hcdpp';
         $this->_infoBlockType = 'hcd/info_prepayment';
         $this->_showAdditionalPaymentInformation = true;
-
-        parent::__construct();
     }
 
     public function showPaymentInfo($paymentData)

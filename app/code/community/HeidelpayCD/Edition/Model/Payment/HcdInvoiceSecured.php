@@ -17,12 +17,15 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
+
     /**
-     * payment code
-     *
-     * @var string payment code
+     * HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured constructor.
      */
-    protected $_code = 'hcdivsec';
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_code = 'hcdivsec';
+    }
 
     /**
      * @inheritdoc

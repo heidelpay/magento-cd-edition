@@ -30,7 +30,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdsu extends HeidelpayCD_Edition_Model_
         $this->_canRefundInvoicePartial = true;
     }
 
-
     /**
      * @inheritdoc
      */

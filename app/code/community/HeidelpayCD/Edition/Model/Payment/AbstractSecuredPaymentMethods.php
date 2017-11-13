@@ -23,26 +23,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      * @var $_validatorHelper HeidelpayCD_Edition_Helper_Validator
      */
     protected $_validatorHelper;
-    /**
-     * send basket information to basket api
-     *
-     * @var bool send basket information to basket api
-     */
-    protected $_canBasketApi = false;
-
-    /**
-     * set checkout form block
-     *
-     * @var string checkout form block
-     */
-    protected $_formBlockType = 'hcd/form_invoiceSecured';
-
-    /**
-     * over write existing info block
-     *
-     * @var string
-     */
-    protected $_infoBlockType = 'hcd/info_invoice';
 
     /**
      * validated parameter
@@ -69,6 +49,9 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     {
         parent::__construct();
 
+        $this->_code = 'hcdyt';
+        $this->_canRefund = false;
+        $this->_canRefundInvoicePartial = false;
         $this->_validatorHelper = Mage::helper('hcd/validator');
     }
 

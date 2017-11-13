@@ -22,7 +22,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
      */
     public function __construct()
     {
-        HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods::__construct();
+        parent::__construct();
 
         $this->_code = 'hcdivpol';
         $this->_formBlockType = 'hcd/form_invoicePayolution';

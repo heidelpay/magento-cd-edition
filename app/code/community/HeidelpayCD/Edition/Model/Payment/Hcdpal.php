@@ -16,15 +16,19 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
+
     /**
-    * unique internal payment method identifier
-    *
-    * @var string [a-z0-9_]
-    **/
-    protected $_code = 'hcdpal';
-    protected $_canCapture = true;
-    protected $_canCapturePartial = true;
-    
+     * HeidelpayCD_Edition_Model_Payment_Hcdpal constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdpal';
+        $this->_canCapture = true;
+        $this->_canCapturePartial = true;
+    }
+
     /*
      * PayPal seller protection, need shipping adress instead of billing (PAYPAL REV 20141215)
      */

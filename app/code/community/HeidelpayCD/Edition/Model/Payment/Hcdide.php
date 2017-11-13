@@ -16,17 +16,20 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdide extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
+
     /**
-    * unique internal payment method identifier
-    *
-    * @var string [a-z0-9_]
-    **/
-    protected $_code = 'hcdide';
-    protected $_canRefund = false;
-    protected $_canRefundInvoicePartial = false;
-    
-    protected $_formBlockType = 'hcd/form_ideal';
-    
+     * HeidelpayCD_Edition_Model_Payment_Hcdide constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdide';
+        $this->_canRefund = false;
+        $this->_canRefundInvoicePartial = false;
+        $this->_formBlockType = 'hcd/form_ideal';
+    }
+
     public function getFormBlockType()
     {
         return $this->_formBlockType;

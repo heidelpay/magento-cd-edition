@@ -20,14 +20,20 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdyt extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdyt';
-    protected $_canRefund = false;
-    protected $_canRefundInvoicePartial = false;
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdyt constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdyt';
+        $this->_canRefund = false;
+        $this->_canRefundInvoicePartial = false;
+    }
 
     public function isAvailable($quote = null)
     {
         return false;
     }
-
-
 }

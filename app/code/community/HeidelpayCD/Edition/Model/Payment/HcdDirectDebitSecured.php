@@ -23,12 +23,12 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->_code = 'hcdddsec';
         $this->_formBlockType = 'hcd/form_directDebitSecured';
         $this->_infoBlockType = 'hcd/info_directDebit';
         $this->_showAdditionalPaymentInformation = true;
-
-        parent::__construct();
     }
 
     /**

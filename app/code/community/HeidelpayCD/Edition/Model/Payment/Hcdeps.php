@@ -16,12 +16,20 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdeps';
-    protected $_canRefund = false;
-    protected $_canRefundInvoicePartial = false;
-    
-    protected $_formBlockType = 'hcd/form_eps';
-    
+
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdeps constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdeps';
+        $this->_canRefund = false;
+        $this->_canRefundInvoicePartial = false;
+        $this->_formBlockType = 'hcd/form_eps';
+    }
+
     public function getFormBlockType()
     {
         return $this->_formBlockType;

@@ -16,14 +16,16 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdiv';
-
     /**
-     * over write existing info block
-     *
-     * @var string
+     * HeidelpayCD_Edition_Model_Payment_Hcdiv constructor.
      */
-    protected $_infoBlockType = 'hcd/info_invoice';
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdiv';
+        $this->_infoBlockType = 'hcd/info_invoice';
+    }
 
     /**
      * Payment information for invoice mail

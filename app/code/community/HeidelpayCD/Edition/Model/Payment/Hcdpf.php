@@ -16,11 +16,19 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdpf extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdpf';
-    protected $_canRefund = false;
-    protected $_canRefundInvoicePartial = false;
-    protected $_formBlockType = 'hcd/form_postfinance';
-    
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdpf constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdpf';
+        $this->_canRefund = false;
+        $this->_canRefundInvoicePartial = false;
+        $this->_formBlockType = 'hcd/form_postfinance';
+    }
+
     public function getFormBlockType()
     {
         return $this->_formBlockType;

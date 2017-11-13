@@ -22,14 +22,14 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->_code = 'hcddd';
         $this->_canCapture = true;
         $this->_canCapturePartial = true;
         $this->_formBlockType = 'hcd/form_debit';
         $this->_infoBlockType = 'hcd/info_directDebit';
         $this->_showAdditionalPaymentInformation = true;
-
-        parent::__construct();
     }
 
     public function getFormBlockType()

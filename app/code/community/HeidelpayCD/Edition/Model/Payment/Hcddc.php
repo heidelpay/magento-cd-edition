@@ -16,9 +16,20 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcddc';
-    protected $_canCapture = true;
-    protected $_canCapturePartial = true;
+
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcddc constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcddc';
+        $this->_canCapture = true;
+        $this->_canCapturePartial = true;
+        $this->_formBlockType = 'hcd/form_creditcard';
+    }
+
 
     /**
      * @inheritdoc
@@ -42,11 +53,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_
 
         return false;
     }
-
-    /**
-     * @inheritdoc
-     */
-    protected $_formBlockType = 'hcd/form_creditcard';
 
     /**
      * @inheritdoc

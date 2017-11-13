@@ -22,6 +22,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->_code = 'hcdmpa';
         $this->_canCapture = true;
         $this->_canCapturePartial = true;
@@ -32,8 +34,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
         $this->_formBlockType = 'hcd/form_masterpass';
         $this->_infoBlockType = 'hcd/info_masterpass';
         $this->_showAdditionalPaymentInformation = true;
-
-        parent::__construct();
     }
     
     /**
