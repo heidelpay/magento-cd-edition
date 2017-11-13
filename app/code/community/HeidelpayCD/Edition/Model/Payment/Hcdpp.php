@@ -140,9 +140,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(true);
 
-        // TODO-Stephano: check for type-safety in format()
         if ($order->getOrderCurrencyCode() === $data['PRESENTATION_CURRENCY'] &&
-            (string)$paymentHelper->format($order->getGrandTotal()) === $data['PRESENTATION_AMOUNT']
+            $paymentHelper->format($order->getGrandTotal()) === $data['PRESENTATION_AMOUNT']
         ) {
             /** @noinspection PhpUndefinedMethodInspection */
             $order->setState(
