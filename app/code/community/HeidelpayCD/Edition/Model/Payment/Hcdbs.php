@@ -1,5 +1,6 @@
 <?php
 
+/** @noinspection LongInheritanceChainInspection */
 /**
  * BillSafe payment method
  *
@@ -14,7 +15,6 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /** @var $_basketApiHelper HeidelpayCD_Edition_Helper_BasketApi  */
@@ -26,6 +26,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     public function __construct()
     {
         parent::__construct();
+
         $this->_code = 'hcdbs';
         $this->_canRefund = false;
         $this->_canRefundInvoicePartial = false;
@@ -45,12 +46,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
         $billing = $this->getQuote()->getBillingAddress();
         $shipping = $this->getQuote()->getShippingAddress();
 
-        if (($billing->getFirstname() != $shipping->getFirstname()) or
-            ($billing->getLastname() != $shipping->getLastname()) or
-            ($billing->getStreet() != $shipping->getStreet()) or
-            ($billing->getPostcode() != $shipping->getPostcode()) or
-            ($billing->getCity() != $shipping->getCity()) or
-            ($billing->getCountry() != $shipping->getCountry())
+        if (($billing->getFirstname() !== $shipping->getFirstname()) ||
+            ($billing->getLastname() !== $shipping->getLastname()) ||
+            ($billing->getStreet() !== $shipping->getStreet()) ||
+            ($billing->getPostcode() !== $shipping->getPostcode()) ||
+            ($billing->getCity() !== $shipping->getCity()) ||
+            ($billing->getCountry() !== $shipping->getCountry())
         ) {
             return false;
         }
@@ -70,7 +71,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
      */
     public function showPaymentInfo($paymentData)
     {
-        $loadSnippet = $this->_getHelper()->__("BillSafe Info Text");
+        $loadSnippet = $this->_getHelper()->__('BillSafe Info Text');
 
         $replace = array(
             '{LEGALNOTE}' => $paymentData['CRITERION_BILLSAFE_LEGALNOTE'],
@@ -84,7 +85,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
         );
 
         $loadSnippet = strtr($loadSnippet, $replace);
-
 
         return $loadSnippet;
     }
@@ -100,8 +100,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
      */
     public function processingTransaction($order, $data, $message='')
     {
+        /** @noinspection SuspiciousAssignmentsInspection */
         $message = 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE'];
-        parent::processingTransaction($order, $data, $message);
+
+        return parent::processingTransaction($order, $data, $message);
     }
 
     /**
@@ -149,15 +151,15 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
             $parameters[$prefix . '.UNIT'] = 'Stk.'; // Liter oder so
             $parameters[$prefix . '.AMOUNT_UNIT_GROSS'] = floor(
                 bcmul(
-                    (($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100)),
+                    ($order->getShippingAmount() - $order->getShippingRefunded())
+                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100),
                     100, 10
                 )
             );
             $parameters[$prefix . '.AMOUNT_GROSS'] = floor(
                 bcmul(
-                    (($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100)),
+                    ($order->getShippingAmount() - $order->getShippingRefunded())
+                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100),
                     100, 10
                 )
             );

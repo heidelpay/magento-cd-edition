@@ -1,4 +1,6 @@
 <?php
+
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Invoice unsecured payment method
  *
@@ -13,7 +15,6 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /**
@@ -36,7 +37,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
      */
     public function showPaymentInfo($paymentData)
     {
-        $loadSnippet = $this->_getHelper()->__("Invoice Info Text");
+        $loadSnippet = $this->_getHelper()->__('Invoice Info Text');
 
         $repl = array(
             '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
@@ -51,12 +52,19 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
     }
 
     /**
-     * @inheritdoc
+     * Handle transaction with means processing
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $data HeidelpayCD_Edition_Model_Transaction
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
      */
     public function processingTransaction($order, $data, $message='')
     {
         $message = Mage::helper('hcd')->__('received amount ')
             . $data['PRESENTATION_AMOUNT'] . ' ' . $data['PRESENTATION_CURRENCY'] . ' ' . $message;
-        parent::processingTransaction($order, $data, $message);
+
+        return parent::processingTransaction($order, $data, $message);
     }
 }
