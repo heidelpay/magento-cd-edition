@@ -33,7 +33,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     }
 
     /**
-     * @inheritdoc
+     * Deactivate payment method in case of wrong currency or other credentials
+     *
+     * @param Mage_Quote
+     * @param null|mixed $quote
+     *
+     * @return bool
      */
     public function isAvailable($quote = null)
     {
@@ -54,7 +59,14 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     }
 
     /**
-     * @inheritdoc
+     * Generates a customer message for the success page
+     *
+     * Will be used for prepayment and direct debit to show the customer
+     * the billing information
+     *
+     * @param HeidelpayCD_Edition_Model_Transaction $paymentData transaction details form heidelpay api
+     *
+     * @return bool| string  customer message for the success page
      */
     public function showPaymentInfo($paymentData)
     {
@@ -78,7 +90,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     }
 
     /**
-     * @inheritdoc
+     * Handle transaction with means processing
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $data HeidelpayCD_Edition_Model_Transaction
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
      */
     public function processingTransaction($order, $data, $message='')
     {
