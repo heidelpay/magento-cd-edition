@@ -42,7 +42,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
     {
         $loadSnippet = $this->_getHelper()->__('Prepayment Info Text');
         
-        $repl = array(
+        $reply = array(
                     '{AMOUNT}'                    => $paymentData['CLEARING_AMOUNT'],
                     '{CURRENCY}'                  => $paymentData['CLEARING_CURRENCY'],
                     '{CONNECTOR_ACCOUNT_HOLDER}'  => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
@@ -50,7 +50,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
                     '{IDENTIFICATION_SHORTID}'    => $paymentData['IDENTIFICATION_SHORTID'],
                 );
                 
-        $loadSnippet= strtr($loadSnippet, $repl);
+        $loadSnippet= strtr($loadSnippet, $reply);
                 
         return $loadSnippet;
     }

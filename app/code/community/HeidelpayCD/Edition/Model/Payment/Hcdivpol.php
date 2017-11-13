@@ -29,6 +29,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         $this->_canBasketApi = true;
         $this->_canAuthorize = true;
         $this->_canRefund = true;
+        $this->_sendInvoiceMailComment = true;
     }
 
     /**
@@ -104,6 +105,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
      * Validate customer input on checkout
      *
      * @return HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
+     * @throws \Mage_Core_Exception
      */
     public function validate()
     {

@@ -25,6 +25,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
         parent::__construct();
 
         $this->_code = 'hcdiv';
+        $this->_sendInvoiceMailComment = true;
         $this->_infoBlockType = 'hcd/info_invoice';
     }
 
@@ -39,7 +40,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
     {
         $loadSnippet = $this->_getHelper()->__('Invoice Info Text');
 
-        $repl = array(
+        $reply = array(
             '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
             '{CURRENCY}' => $paymentData['CLEARING_CURRENCY'],
             '{CONNECTOR_ACCOUNT_HOLDER}' => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
@@ -48,7 +49,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
             '{IDENTIFICATION_SHORTID}' => $paymentData['IDENTIFICATION_SHORTID'],
         );
 
-        return strtr($loadSnippet, $repl);
+        return strtr($loadSnippet, $reply);
     }
 
     /**

@@ -25,12 +25,14 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
     {
         parent::__construct();
         $this->_code = 'hcdivsec';
+        $this->_sendInvoiceMailComment = true;
     }
 
     /**
      * Validate customer input on checkout
      *
      * @return HeidelpayCD_Edition_Model_Payment_Abstract
+     * @throws \Mage_Core_Exception
      */
     public function validate()
     {
