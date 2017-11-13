@@ -72,6 +72,11 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     }
 
     /**
+     * @var bool
+     */
+    protected $_reportsShippingToHeidelpay = false;
+
+    /**
      * @return bool payment method will redirect the customer directly to heidelpay
      */
     public function activeRedirect()
@@ -106,7 +111,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      *
      * @return Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
      */
-    public function getStatusPendig($param = false)
+    public function getStatusPending($param = false)
     {
         if ($param == false) {
             return Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
@@ -302,9 +307,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         }
 
         if ($isRegistration === true) {
+            $basketData['PRESENTATION.AMOUNT'] = Mage::helper('hcd/payment')
+                ->format($this->getQuote()->getGrandTotal());
             $basketData['PRESENTATION.CURRENCY'] = $this->getQuote()->getQuoteCurrencyCode();
-            $basketData['PRESENTATION.AMOUNT'] =
-                Mage::helper('hcd/payment')->format($this->getQuote()->getGrandTotal());
         }
 
         // add parameters for pci 3 iframe
@@ -606,25 +611,32 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * Load additional payment information
      *
-     * @param bool $code       current payment method
-     * @param bool $customerId the customers identification number
-     * @param bool $storeId    magento store id
+     * @param string|null $code current payment method
+     * @param int|null $customerId the customers identification number
+     * @param int|null $storeId magento store id
      *
-     * @return array|bool additional payment information
+     * @return array additional payment information
+     *
+     * @throws \Mage_Core_Model_Store_Exception
      */
-    public function getCustomerData($code = false, $customerId = false, $storeId = false)
+    public function getCustomerData($code = null, $customerId = null, $storeId = null)
     {
-        $paymentCode = ($code) ? $code : $this->_code;
-        $customerId = ($customerId) ? $customerId : $this->getQuote()->getBillingAddress()->getCustomerId();
-        $storeId = ($storeId) ? $storeId : Mage::app()->getStore()->getId();
+        $result = array();
+
+        $paymentCode = $code ?: $this->_code;
+        $customerId = $customerId ?: $this->getQuote()->getBillingAddress()->getCustomerId();
+        $storeId = $storeId ?: Mage::app()->getStore()->getId();
         if ($customerId == 0) {
             $visitorData = Mage::getSingleton('core/session')->getVisitorData();
             $customerId = $visitorData['visitor_id'];
             $storeId = 0;
         }
 
-        $this->log('StoreID :' . Mage::app()->getStore()->getId());
+        $this->log(
+            sprintf('PaymentCode: %s, Customer-ID: %d, Store-ID: %d', $paymentCode, $customerId, $storeId)
+        );
 
+        /** @var HeidelpayCD_Edition_Model_Customer $customerData */
         $customerData = Mage::getModel('hcd/customer')
             ->getCollection()
             ->addFieldToFilter('Customerid', $customerId)
@@ -634,27 +646,25 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         $customerData->load();
         $data = $customerData->getData();
 
-        /* retun false if not */
+        /* return empty array if no customer data is present */
         if (empty($data[0]['id'])) {
-            return false;
+            return $result;
         }
 
-        $return = array();
-
-        $return['id'] = $data[0]['id'];
+        $result['id'] = $data[0]['id'];
 
         if (!empty($data[0]['uniqeid'])) {
-            $return['uniqeid'] = $data[0]['uniqeid'];
+            $result['uniqeid'] = $data[0]['uniqeid'];
         }
 
         if (!empty($data[0]['payment_data'])) {
-            $return['payment_data'] = json_decode(
+            $result['payment_data'] = json_decode(
                 Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['payment_data']),
                 true
             );
         }
 
-        return $return;
+        return $result;
     }
 
     /**
@@ -898,7 +908,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         /** @var $customerData HeidelpayCD_Edition_Model_Customer */
         $customerData = Mage::getModel('hcd/customer');
 
-        if ($this->getCustomerData() !== false) {
+        if (!empty($this->getCustomerData())) {
             $lastdata = $this->getCustomerData();
             $customerData->load($lastdata['id']);
         }
@@ -969,7 +979,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         }
 
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
+            $order->getPayment()->getMethodInstance()->getStatusPending(false),
             true,
             $message
         );
@@ -1117,8 +1127,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         $this->log('Set Transaction to Pending : ');
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
-            $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+            $order->getPayment()->getMethodInstance()->getStatusPending(false),
+            $order->getPayment()->getMethodInstance()->getStatusPending(true),
             $message
         );
         $order->getPayment()->addTransaction(
@@ -1128,5 +1138,15 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             $message
         );
         return $order;
+    }
+
+    /**
+     * Returns if a shipment needs to be reported to heidelpay (Finalize request)
+     *
+     * @return bool
+     */
+    public function reportsShippingToHeidelpay()
+    {
+        return $this->_reportsShippingToHeidelpay;
     }
 }

@@ -28,6 +28,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
         $this->_code = 'hcdddsec';
         $this->_formBlockType = 'hcd/form_directDebitSecured';
         $this->_infoBlockType = 'hcd/info_directDebit';
+        $this->_reportsShippingToHeidelpay = true;
         $this->_showAdditionalPaymentInformation = true;
     }
 
@@ -89,12 +90,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
     }
 
     /**
-     * Handle charge back notices from heidelpay payment
-     *
-     * @param $order Mage_Sales_Model_Order
-     * @param $message string order history message
-     *
-     * @return Mage_Sales_Model_Order
+     * @inheritdoc
      */
     public function chargeBackTransaction($order, $message = '')
     {

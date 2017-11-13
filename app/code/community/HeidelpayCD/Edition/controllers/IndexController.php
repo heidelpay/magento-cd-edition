@@ -310,6 +310,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             return $this;
         }
 
+        /** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
         $payment = $order->getPayment()->getMethodInstance();
 
         if ($session->getHcdWallet() !== false) {
@@ -320,7 +321,10 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
 
         if ($payment->canBasketApi() and empty($refId)) {
-            $shoppingCart = $this->_basketApiHelper->basketItems($order, $this->getStore(), $order->getIsNotVirtual());
+            // determine if shipping should be included to the basket for the heidelpay basket api
+            $includeShipping = $order->getShippingAddress() ? true : false;
+
+            $shoppingCart = $this->_basketApiHelper->basketItems($order, $this->getStore(), $includeShipping);
 
             $url = (Mage::getStoreConfig('hcd/settings/transactionmode', $this->getStore()) == 0)
                 ? $this->_liveBasketUrl : $this->_sandboxBasketUrl;
@@ -360,7 +364,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         }
 
         // if order status is success redirect to success page
-        if ($order->getStatus() == $payment->getStatusSuccess() or $order->getStatus() == $payment->getStatusPendig()) {
+        if ($order->getStatus() == $payment->getStatusSuccess() or $order->getStatus() == $payment->getStatusPending()) {
             $this->_redirect(
                 'hcd/index/success',
                 array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true, 'no_mail' => true)
@@ -380,8 +384,8 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             }
 
             $order->setState(
-                $order->getPayment()->getMethodInstance()->getStatusPendig(false),
-                $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+                $order->getPayment()->getMethodInstance()->getStatusPending(false),
+                $order->getPayment()->getMethodInstance()->getStatusPending(true),
                 Mage::helper('hcd')->__('Get payment url from Heidelpay -> ') . $data['FRONTEND_REDIRECT_URL']
             );
             $order->getPayment()->addTransaction(

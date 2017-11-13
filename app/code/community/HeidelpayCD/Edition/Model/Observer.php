@@ -70,16 +70,15 @@ class HeidelpayCD_Edition_Model_Observer
             return $this;
         }
 
+        /** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
         $payment = $order->getPayment()->getMethodInstance();
 
-        $paymentCode = $payment->getCode();
-
-
-        $paymentMethod = array('hcdivsec', 'hcdbs', 'hcdivpol');
-
-
-        // return $this when reporting shipment is not needed
-        if (!in_array($paymentCode, $paymentMethod)) {
+        // TODO-Simon: set reportsShippingToHeidelpay in Payolution
+        // if no finalize needs to be sent to heidelpay, or the payment
+        // method instance is not a heidelpay one, stop here.
+        if (!$payment instanceof HeidelpayCD_Edition_Model_Payment_Abstract
+            || !$payment->reportsShippingToHeidelpay()
+        ) {
             return $this;
         }
 
@@ -105,7 +104,7 @@ class HeidelpayCD_Edition_Model_Observer
         }
 
         // set config parameter for request
-        $config = $payment->getMainConfig($paymentCode, $order->getStoreId());
+        $config = $payment->getMainConfig($payment->getCode(), $order->getStoreId());
         $config['PAYMENT.TYPE'] = 'FI';
 
         // set frontend parameter for request
@@ -164,8 +163,8 @@ class HeidelpayCD_Edition_Model_Observer
 
         $message = $heidelpayHelper->__('report shipment to heidelpay successful. Waiting for receipt of money');
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
-            $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+            $order->getPayment()->getMethodInstance()->getStatusPending(false),
+            $order->getPayment()->getMethodInstance()->getStatusPending(true),
             $message
         )->save();
 

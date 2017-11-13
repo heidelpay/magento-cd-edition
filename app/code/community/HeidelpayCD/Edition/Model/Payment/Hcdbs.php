@@ -30,16 +30,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
         $this->_code = 'hcdbs';
         $this->_canRefund = false;
         $this->_canRefundInvoicePartial = false;
+        $this->_reportsShippingToHeidelpay = true;
+
         $this->_basketApiHelper = Mage::helper('hcd/basketApi');
     }
 
     /**
-     * Deactivate payment method in case of wrong currency or other credentials
-     *
-     * @param Mage_Quote
-     * @param null|mixed $quote
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isAvailable($quote = null)
     {
@@ -60,14 +57,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     }
 
     /**
-     * Generates a customer message for the success page
-     *
-     * Will be used for prepayment and direct debit to show the customer
-     * the billing information
-     *
-     * @param HeidelpayCD_Edition_Model_Transaction $paymentData transaction details form heidelpay api
-     *
-     * @return bool| string  customer message for the success page
+     * @inheritdoc
      */
     public function showPaymentInfo($paymentData)
     {
@@ -90,13 +80,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     }
 
     /**
-     * Handle transaction with means processing
-     *
-     * @param $order Mage_Sales_Model_Order
-     * @param $data HeidelpayCD_Edition_Model_Transaction
-     * @param $message string order history message
-     *
-     * @return Mage_Sales_Model_Order
+     * @inheritdoc
      */
     public function processingTransaction($order, $data, $message='')
     {
@@ -151,15 +135,15 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
             $parameters[$prefix . '.UNIT'] = 'Stk.'; // Liter oder so
             $parameters[$prefix . '.AMOUNT_UNIT_GROSS'] = floor(
                 bcmul(
-                    ($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100),
+                    (($order->getShippingAmount() - $order->getShippingRefunded())
+                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100)),
                     100, 10
                 )
             );
             $parameters[$prefix . '.AMOUNT_GROSS'] = floor(
                 bcmul(
-                    ($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100),
+                    (($order->getShippingAmount() - $order->getShippingRefunded())
+                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100)),
                     100, 10
                 )
             );

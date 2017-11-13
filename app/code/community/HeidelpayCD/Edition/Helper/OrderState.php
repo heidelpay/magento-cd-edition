@@ -29,7 +29,6 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
 
         $message = ($message === '') ? $data['PROCESSING_RETURN'] : $message;
 
-
         // Set language for mail template etc
         if (strtoupper($data['CRITERION_LANGUAGE']) == 'DE') {
             $locale = 'de_DE';

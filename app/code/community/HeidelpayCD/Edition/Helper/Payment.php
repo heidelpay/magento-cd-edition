@@ -93,7 +93,6 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
 
         $params = array_merge($params, $this->_setPaymentMethod($config, $customer));
 
-
         /* debit on registration */
         if (array_key_exists('ACCOUNT.REGISTRATION', $config)) {
             $params['ACCOUNT.REGISTRATION'] = $config['ACCOUNT.REGISTRATION'];
@@ -223,6 +222,12 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
                 $params['PAYMENT.CODE'] = "WT." . $type;
                 $params['ACCOUNT.BRAND'] = "MASTERPASS";
                 break;
+            // Santander Invoice
+            case 'ivsan':
+                $params['PAYMENT.CODE'] = 'IV.' . (($type === 'RG') ? 'PA' : $type);
+                $params['ACCOUNT.BRAND'] = 'SANTANDER';
+                break;
+
             default:
                 $params['PAYMENT.CODE'] = strtoupper($config['PAYMENT.METHOD']) . '.' . $type;
                 break;
@@ -249,11 +254,72 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
     }
 
     /**
+     * Returns the customer's/guest's order count
+     *
+     * @param int|null $customerId
+     * @param bool $isGuest
+     * @param string $emailAddress
+     *
+     * @return int
+     */
+    public function getCustomerOrderCount($customerId, $isGuest, $emailAddress)
+    {
+        // guest = get the order count by e-mail address and customer_id = null
+        if ($isGuest || $customerId === null) {
+            /** @var Mage_Eav_Model_Entity_Collection_Abstract $orders */
+            $orders = Mage::getModel('sales/order')
+                ->getCollection()
+                ->addFieldToFilter('customer_id', null)
+                ->addFieldToFilter('customer_email', $emailAddress)
+                ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
+
+            return $orders->count();
+        }
+
+        /** @var Mage_Eav_Model_Entity_Collection_Abstract $orders */
+        $orders = Mage::getModel('sales/order')
+            ->getCollection()
+            ->addFieldToFilter('customer_id', $customerId)
+            ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
+
+        return $orders->count();
+    }
+
+    /**
+     * @param int|null $customerId
+     * @param bool $isGuest
+     *
+     * @return string
+     */
+    public function getCustomerRegistrationDate($customerId, $isGuest)
+    {
+        /** @var Mage_Core_Model_Date $dateHelper */
+        $dateHelper = Mage::getSingleton('core/date');
+
+        // if the customer is a guest, return today's date.
+        if ($isGuest || $customerId === null) {
+            return $dateHelper->date('Y-m-d');
+        }
+
+        /** @var Mage_Customer_Model_Customer $customer */
+        $customer = Mage::getModel('customer/customer')->load($customerId);
+
+        if ($customer->getCreatedAtTimestamp() !== null) {
+            return $dateHelper->date('Y-m-d', $customer->getCreatedAtTimestamp());
+        }
+
+        // fallback, if getCreatedAtTimestamp somehow returns null.
+        return $dateHelper->date('Y-m-d');
+    }
+
+    /**
      * helper to generate customer payment error messages
      *
      * @param mixed      $errorMsg
      * @param null|mixed $errorCode
      * @param null|mixed $orderNumber
+     *
+     * @return string
      */
     public function handleError($errorMsg, $errorCode = null, $orderNumber = null)
     {

@@ -51,9 +51,10 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     {
         parent::__construct();
 
-        $this->_code = 'hcdyt';
-        $this->_canRefund = false;
-        $this->_canRefundInvoicePartial = false;
+        $this->_canBasketApi = false;
+        $this->_infoBlockType = 'hcd/info_invoice';
+        $this->_formBlockType = 'hcd/form_invoiceSecured';
+
         $this->_validatorHelper = Mage::helper('hcd/validator');
     }
 
@@ -196,7 +197,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         if ($this->_invoiceOrderEmail) {
             $code = $order->getPayment()->getMethodInstance()->getCode();
             $invoiceMailComment = '';
-            if ($code == 'hcdiv' || $this->_sendInvoiceMailComment) {
+            // TODO-Simon: getter method for _sendInvoiceMailComment
+            if ($code === 'hcdiv' || $this->_sendInvoiceMailComment) {
                 /** @noinspection PhpUndefinedMethodInspection */
                 $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                 $invoiceMailComment = ($info === false) ? '' : '<h3>'
@@ -215,7 +217,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         /** @noinspection PhpUndefinedMethodInspection */
         $transactionSave->save();
 
-        $this->log('Set transaction to processed and generate invoice ');
+        $this->log('Set transaction to processed and generate invoice');
 
         /** @noinspection PhpUndefinedMethodInspection */
         $order->setState(
@@ -258,6 +260,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(true);
 
+        // TODO-Stephano: Check for type-safety in format method
         if ($order->getOrderCurrencyCode() === $data['PRESENTATION_CURRENCY'] &&
             $paymentHelper->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT']
         ) {

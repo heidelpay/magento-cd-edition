@@ -1,24 +1,28 @@
 <?php
 /**
- * Invoice secured form template
+ * Invoice by Santander form template
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
- * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ * @copyright Copyright © 2017-present Heidelberger Payment GmbH. All rights reserved.
  *
- * @link https://dev.heidelpay.de/magento
+ * @link https://dev.heidelpay.de/magento-cd-edition
  *
- * @author Jens Richter
+ * @author Stephano Vogel
  *
- * @package Heidelpay
- * @subpackage Magento
- * @category Magento
+ * @package heidelpay/magento-cd-edition/template/form/santander-invoice
  */
+
+/** @var HeidelpayCD_Edition_Block_Form_SantanderInvoice $form */
+$form = $this;
+// set santander fields
+$form->setSantanderInformation();
+
 $code = $this->getMethodCode();
 $dobyear = null;
 $dobmounth = null;
 $dobday = null;
 
-$path = "payment/" . $code . "/";
+$path = 'payment/' . $code . '/';
 $storeId = Mage::app()->getStore()->getId();
 $recognition = Mage::getStoreConfig($path . 'recognition', $storeId);
 
@@ -31,8 +35,8 @@ if ($recognition == 1 and $cId != 0) {
     // only if shipping address is unchanged
     $hash = $this->getMethod()->getShippingHash();
     $userData = $this->getMethod()->getCustomerData();
-    if ($userData !== false and array_key_exists('payment_data', $userData)) {
-        if ($userData ['payment_data']['SHIPPPING_HASH'] !== $hash) {
+    if (!empty($userData) && array_key_exists('payment_data', $userData)) {
+        if ($userData ['payment_data'] ['SHIPPPING_HASH'] != $hash) {
             $userData = array();
         }
     }
@@ -47,12 +51,18 @@ if (array_key_exists('payment_data', $userData) &&
 }
 
 ?>
-<div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+<div class="form-list fieldset hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+    <p class="required"><?php echo $this->htmlEscape($this->__('* Required Fields')) ?></p>
+    <div>
+        <img src="<?php echo $form->getImgLink() ?>" alt="Rechnungskauf von Santander" title="Rechnungskauf von Santander" />
+    </div>
+    <!-- Select Input for salutation -->
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
                class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('salutation')) ?>
         </label>
-        <select title="<?php echo $this->htmlEscape($this->__('salutation')) ?>"
+        <select class="required-entry"
+                title="<?php echo $this->htmlEscape($this->__('salutation')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_salutation]">
             <option value="MR"><?php echo $this->htmlEscape($this->__('mr')) ?></option>
             <option value="MRS" <?php if (array_key_exists('payment_data', $userData) and
@@ -63,13 +73,17 @@ if (array_key_exists('payment_data', $userData) &&
             </option>
         </select>
     </div>
+    <!-- Select Input for date of birth (day) -->
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_dob"
                class="required hcd-singleline-label"><em>*</em>
             <?php echo $this->htmlEscape($this->__('Date of birth')) ?></label>
-        <select title="<?php echo $this->htmlEscape($this->__('day')) ?>"
+        <select class="required-entry"
+                title="<?php echo $this->htmlEscape($this->__('day')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]">
-            <option><?php echo $this->htmlEscape($this->__('day')); ?></option>
+            <option disabled <?php echo $dobday === null ? 'selected' : ''; ?> value>
+                <?php echo $this->htmlEscape($this->__('day')); ?>
+            </option>
             <?php
             $i = 0;
             for ($i = 1; $i <= 31; $i++) {
@@ -81,10 +95,14 @@ if (array_key_exists('payment_data', $userData) &&
             ?>
         </select>
     </div>
+    <!-- Select Input for date of birth (month) -->
     <div class="input-box">
-        <select title="<?php echo $this->htmlEscape($this->__('month')) ?>"
+        <select class="required-entry"
+                title="<?php echo $this->htmlEscape($this->__('month')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobmonth]">
-            <option><?php echo $this->htmlEscape($this->__('month')); ?></option>
+            <option disabled <?php echo $dobmounth === null ? 'selected' : ''; ?> value>
+                <?php echo $this->htmlEscape($this->__('month')); ?>
+            </option>
             <?php
             $i = 0;
             for ($i = 1; $i <= 12; $i++) {
@@ -96,10 +114,14 @@ if (array_key_exists('payment_data', $userData) &&
             ?>
         </select>
     </div>
+    <!-- Select Input for date of birth (year) -->
     <div class="input-box">
-        <select title="<?php echo $this->htmlEscape($this->__('year')) ?>"
+        <select class="required-entry"
+                title="<?php echo $this->htmlEscape($this->__('year')) ?>"
                 name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]">
-            <option><?php echo $this->htmlEscape($this->__('year')); ?></option>
+            <option disabled <?php echo $dobyear === null ? 'selected' : ''; ?> value>
+                <?php echo $this->htmlEscape($this->__('year')); ?>
+            </option>
             <?php
             $i = 0;
             for ($i = 17; $i <= 80; $i++) {
@@ -112,7 +134,28 @@ if (array_key_exists('payment_data', $userData) &&
             ?>
         </select>
     </div>
-    <div class="hcd-payment-desc">
-        <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
+
+    <!-- Santander Agreements -->
+    <div class="<?php echo $code; ?>">
+        <!-- Santander advertising opt-out -->
+        <div class="input-box <?php echo $code ?>-adv-optout">
+            <h4>Werbezustimmung</h4>
+            <p class="control">
+                <input type="checkbox" class="checkbox" name="payment[<?php echo $code ?>_adv_optout]" id="<?php echo $code ?>-adv-optout" />
+                <label for="<?php echo $code ?>-adv-optout"><?php echo $form->getAdvText(); ?></label>
+            </p>
+        </div>
+
+        <!-- Santander privacy policy opt-in -->
+        <div class="input-box <?php echo $code ?>-privpol-optin">
+            <h4>Datenschutzerklärung</h4>
+            <p class="control">
+                <input type="checkbox" class="checkbox required-entry" name="payment[<?php echo $code ?>_privpol_optin]" id="<?php echo $code ?>-privpol-optin" />
+                <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->getPrivpolText(); ?></label>
+            </p>
+        </div>
+        <div class="hcd-payment-desc">
+            <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
+        </div>
     </div>
 </div>

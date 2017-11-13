@@ -17,7 +17,6 @@
 class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
     extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
-
     /**
      * HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured constructor.
      */
@@ -29,10 +28,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
     }
 
     /**
-     * Validate customer input on checkout
-     *
-     * @return HeidelpayCD_Edition_Model_Payment_Abstract
-     * @throws \Mage_Core_Exception
+     * @inheritdoc
      */
     public function validate()
     {

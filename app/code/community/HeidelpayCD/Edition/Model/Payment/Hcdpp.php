@@ -98,8 +98,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         $this->log('Set transaction to processed and generate invoice ');
         /** @noinspection PhpUndefinedMethodInspection */
         $order->setState(
-            $this->getStatusPendig(),
-            $this->getStatusPendig(true),
+            $order->getPayment()->getMethodInstance()->getStatusPending(false),
+            $order->getPayment()->getMethodInstance()->getStatusPending(true),
             $message
         );
 
@@ -140,6 +140,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(true);
 
+        // TODO-Stephano: check for type-safety in format()
         if ($order->getOrderCurrencyCode() === $data['PRESENTATION_CURRENCY'] &&
             (string)$paymentHelper->format($order->getGrandTotal()) === $data['PRESENTATION_AMOUNT']
         ) {
@@ -152,7 +153,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
             $totallyPaid = true;
         } else {
             // in case rc is ack and amount is to low or currency miss match
-
             /** @noinspection PhpUndefinedMethodInspection */
             $order->setState(
                 $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
