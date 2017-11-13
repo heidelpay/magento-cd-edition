@@ -32,6 +32,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdyt extends HeidelpayCD_Edition_Model_
         $this->_canRefundInvoicePartial = false;
     }
 
+    /**
+     * Deactivate payment method.
+     *
+     * @param null|mixed $quote
+     *
+     * @return bool
+     */
     public function isAvailable($quote = null)
     {
         return false;
