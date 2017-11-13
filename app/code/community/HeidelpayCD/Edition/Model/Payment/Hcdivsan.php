@@ -1,15 +1,19 @@
 <?php
-
+/** @noinspection LongInheritanceChainInspection */
 /**
- * Class HeidelpayCD_Edition_Model_Payment_Hcdivsan
+ * Invoice by Santander Class
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2017-present Heidelberger Payment GmbH. All rights reserved.
+ *
+ * @link https://dev.heidelpay.de/magento-cd-edition
+ *
+ * @author Stephano Vogel
+ *
+ * @package heidelpay/magento-cd-edition/template/form/santander-invoice
  */
 class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
-    /**
-     * @var string
-     */
-    const CODE = 'hcdivsan';
-
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdivsan constructor.
      */
@@ -17,9 +21,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
     {
         parent::__construct();
 
-        $this->_code = self::CODE;
+        $this->_code = 'hcdivsan';
         $this->_formBlockType = 'hcd/form_santanderInvoice';
         $this->_canBasketApi = true;
+        $this->_sendsInvoiceMailComment = true;
         $this->_reportsShippingToHeidelpay = true;
     }
 
@@ -30,7 +35,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
      */
     public function validate()
     {
-        $this->_postPayload = Mage::app()->getRequest()->getPOST('payment');
+        $this->_postPayload = Mage::app()->getRequest()->getPost('payment');
 
         // if the payment method code is not present in the request
         // or it is not equivalent to this class' payment code.
@@ -59,6 +64,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
 
     /**
      * @inheritdoc
+     * @throws \Mage_Core_Model_Store_Exception
      */
     public function getUser($order, $isReg = false)
     {
