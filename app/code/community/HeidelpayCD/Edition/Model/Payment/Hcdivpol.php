@@ -25,11 +25,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         parent::__construct();
 
         $this->_code = 'hcdivpol';
-        $this->_formBlockType = 'hcd/form_invoicePayolution';
         $this->_canBasketApi = true;
         $this->_canAuthorize = true;
         $this->_canRefund = true;
-        $this->_sendInvoiceMailComment = true;
+        $this->_sendsInvoiceMailComment = true;
+        $this->_reportsShippingToHeidelpay = true;
+        $this->_formBlockType = 'hcd/form_invoicePayolution';
     }
 
     /**

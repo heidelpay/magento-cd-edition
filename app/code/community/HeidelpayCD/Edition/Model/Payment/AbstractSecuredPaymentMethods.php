@@ -26,9 +26,9 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     /**
      * Append invoice info text to customer email.
      *
-     * @var bool $_sendInvoiceMailComment
+     * @var bool $_sendsInvoiceMailComment
      */
-    protected $_sendInvoiceMailComment = false;
+    protected $_sendsInvoiceMailComment = false;
 
     /**
      * validated parameter
@@ -197,8 +197,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         if ($this->_invoiceOrderEmail) {
             $code = $order->getPayment()->getMethodInstance()->getCode();
             $invoiceMailComment = '';
-            // TODO-Simon: getter method for _sendInvoiceMailComment
-            if ($code === 'hcdiv' || $this->_sendInvoiceMailComment) {
+            if ($code === 'hcdiv' || $this->isSendingInvoiceMailComment()) {
                 /** @noinspection PhpUndefinedMethodInspection */
                 $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                 $invoiceMailComment = ($info === false) ? '' : '<h3>'
@@ -321,5 +320,13 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $order->setIsInProcess(true);
 
         return $order;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendingInvoiceMailComment()
+    {
+        return $this->_sendsInvoiceMailComment;
     }
 }

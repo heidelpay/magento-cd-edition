@@ -73,7 +73,6 @@ class HeidelpayCD_Edition_Model_Observer
         /** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
         $payment = $order->getPayment()->getMethodInstance();
 
-        // TODO-Simon: set reportsShippingToHeidelpay in Payolution
         // if no finalize needs to be sent to heidelpay, or the payment
         // method instance is not a heidelpay one, stop here.
         if (!$payment instanceof HeidelpayCD_Edition_Model_Payment_Abstract
