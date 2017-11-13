@@ -69,6 +69,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
     {
         $message = 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] . ' ' . $message;
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $order->getPayment()
             ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
             ->setParentTransactionId($order->getPayment()->getLastTransId())
@@ -77,34 +78,28 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         $invoice = $order->prepareInvoice();
         $invoice->register();
         $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
+        /** @noinspection PhpUndefinedMethodInspection */
         $order->setIsInProcess(true);
+        /** @noinspection PhpUndefinedMethodInspection */
         $invoice->setIsPaid(false);
-        $order->addStatusHistoryComment(
-            Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'),
-            false
-        );
+        $order->addStatusHistoryComment(Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'));
         $invoice->save();
         if ($this->_invoiceOrderEmail) {
-            $code = $order->getPayment()->getMethodInstance()->getCode();
-            $invoiceMailComment = '';
-            if ($code === 'hcdiv' || $code === 'hcdivsec') {
-                $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
-                $invoiceMailComment = ($info === false) ? '' : '<h3>'
-                    . $this->_getHelper()->__('payment information') . '</h3><p>' . $info . '</p>';
-            }
-
-            $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
+            $invoice->sendEmail(); // send invoice mail
         }
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $transactionSave = Mage::getModel('core/resource_transaction')
             ->addObject($invoice)
             ->addObject($invoice->getOrder());
+        /** @noinspection PhpUndefinedMethodInspection */
         $transactionSave->save();
 
         $this->log('Set transaction to processed and generate invoice ');
+        /** @noinspection PhpUndefinedMethodInspection */
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
-            $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+            $this->getStatusPendig(),
+            $this->getStatusPendig(true),
             $message
         );
 
@@ -121,11 +116,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
     /**
      * Handle transaction with means processing
      *
-     * @param $order Mage_Sales_Model_Order
-     * @param $data HeidelpayCD_Edition_Model_Transaction
-     * @param $message string order history message
+     * @param Mage_Sales_Model_Order $order
+     * @param HeidelpayCD_Edition_Model_Transaction $data
+     * @param string $message order history message
      *
      * @return Mage_Sales_Model_Order
+     * @throws \Exception
      * @throws \Mage_Core_Exception
      */
     public function processingTransaction($order, $data, $message = '')
@@ -138,14 +134,16 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         $message = ($message === '') ? 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] : $message;
         $totallyPaid = false;
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $order->getPayment()
             ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(true);
 
-        if ($paymentHelper->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] &&
-            $order->getOrderCurrencyCode() === $data['PRESENTATION_CURRENCY']
+        if ($order->getOrderCurrencyCode() === $data['PRESENTATION_CURRENCY'] &&
+            (string)$paymentHelper->format($order->getGrandTotal()) === $data['PRESENTATION_AMOUNT']
         ) {
+            /** @noinspection PhpUndefinedMethodInspection */
             $order->setState(
                 $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
                 $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
@@ -155,6 +153,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         } else {
             // in case rc is ack and amount is to low or currency miss match
 
+            /** @noinspection PhpUndefinedMethodInspection */
             $order->setState(
                 $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
                 $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(true),
@@ -165,9 +164,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         // Set invoice to paid when the total amount matches
         if ($totallyPaid && $order->hasInvoices()) {
 
+            /** @var Mage_Sales_Model_Resource_Order_Invoice_Collection $invoices */
+            $invoices = $order->getInvoiceCollection();
+
             /** @var  $invoice Mage_Sales_Model_Order_Invoice */
-            foreach ($order->getInvoiceCollection() as $invoice) {
+            foreach ($invoices as $invoice) {
                 $this->log('Set invoice ' . (string)$invoice->getIncrementId() . ' to paid.');
+                /** @noinspection PhpUndefinedMethodInspection */
                 $invoice
                     ->capture()
                     ->setState(Mage_Sales_Model_Order_Invoice::STATE_PAID)
@@ -176,10 +179,11 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
                     // @codingStandardsIgnoreLine use of save in a loop
                     ->save();
 
-                $transactionSave = Mage::getModel('core/resource_transaction')
+                /** @var Mage_Core_Model_Resource_Transaction $transaction */
+                $transaction = Mage::getModel('core/resource_transaction');
+                $transactionSave = $transaction
                     ->addObject($invoice)
                     ->addObject($invoice->getOrder());
-                // @codingStandardsIgnoreLine use of save in a loop
                 $transactionSave->save();
             }
         }
@@ -196,6 +200,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
             $message
         );
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $order->setIsInProcess(true);
 
         return $order;
