@@ -248,7 +248,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             $totallyPaid = true;
         } else {
             // in case rc is ack and amount is to low or currency miss match
-
             $order->setState(
                 $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
                 $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(true),

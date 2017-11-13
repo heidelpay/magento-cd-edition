@@ -84,8 +84,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
 
         $this->log('Set transaction to processed and generate invoice ');
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
-            $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+            $order->getPayment()->getMethodInstance()->getStatusPending(false),
+            $order->getPayment()->getMethodInstance()->getStatusPending(true),
             $message
         );
 

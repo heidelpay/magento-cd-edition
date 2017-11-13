@@ -353,7 +353,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         }
 
         // if order status is success redirect to success page
-        if ($order->getStatus() == $payment->getStatusSuccess() or $order->getStatus() == $payment->getStatusPendig()) {
+        if ($order->getStatus() == $payment->getStatusSuccess() or $order->getStatus() == $payment->getStatusPending()) {
             $this->_redirect(
                 'hcd/index/success',
                 array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true, 'no_mail' => true)
@@ -373,8 +373,8 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             }
 
             $order->setState(
-                $order->getPayment()->getMethodInstance()->getStatusPendig(false),
-                $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+                $order->getPayment()->getMethodInstance()->getStatusPending(false),
+                $order->getPayment()->getMethodInstance()->getStatusPending(true),
                 Mage::helper('hcd')->__('Get payment url from Heidelpay -> ') . $data['FRONTEND_REDIRECT_URL']
             );
             $order->getPayment()->addTransaction(

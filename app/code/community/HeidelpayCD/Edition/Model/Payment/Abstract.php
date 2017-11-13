@@ -129,7 +129,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      *
      * @return Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
      */
-    public function getStatusPendig($param = false)
+    public function getStatusPending($param = false)
     {
         if ($param == false) {
             return Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
@@ -986,7 +986,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         }
 
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
+            $order->getPayment()->getMethodInstance()->getStatusPending(false),
             true,
             $message
         );
@@ -1134,8 +1134,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         $this->log('Set Transaction to Pending : ');
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
-            $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+            $order->getPayment()->getMethodInstance()->getStatusPending(false),
+            $order->getPayment()->getMethodInstance()->getStatusPending(true),
             $message
         );
         $order->getPayment()->addTransaction(

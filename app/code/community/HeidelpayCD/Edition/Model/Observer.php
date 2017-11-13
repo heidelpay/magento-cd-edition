@@ -162,8 +162,8 @@ class HeidelpayCD_Edition_Model_Observer
 
         $message = $heidelpayHelper->__('report shipment to heidelpay successful. Waiting for receipt of money');
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusPendig(false),
-            $order->getPayment()->getMethodInstance()->getStatusPendig(true),
+            $order->getPayment()->getMethodInstance()->getStatusPending(false),
+            $order->getPayment()->getMethodInstance()->getStatusPending(true),
             $message
         )->save();
 
