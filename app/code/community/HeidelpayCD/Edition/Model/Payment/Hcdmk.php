@@ -17,7 +17,6 @@
  *
  * @deprecated This payment method is not longer available
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdmk extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /**
@@ -32,7 +31,15 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmk extends HeidelpayCD_Edition_Model_
         $this->_canRefundInvoicePartial = false;
     }
 
-    public function isAvailable($quote=null)
+    /**
+     * Deactivate payment method in case of wrong currency or other credentials
+     *
+     * @param Mage_Quote
+     * @param null|mixed $quote
+     *
+     * @return bool
+     */
+    public function isAvailable($quote = null)
     {
         return false;
     }

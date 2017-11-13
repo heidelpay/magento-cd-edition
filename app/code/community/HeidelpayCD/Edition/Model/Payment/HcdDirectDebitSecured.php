@@ -1,5 +1,5 @@
 <?php
-
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Direct debit secured payment method
  *
@@ -14,8 +14,8 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
-class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
+class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
+    extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
 
     /**
@@ -35,12 +35,13 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
      * Validate customer input on checkout
      *
      * @return $this
+     * @throws \Mage_Core_Exception
      */
     public function validate()
     {
-        $this->_postPayload = Mage::app()->getRequest()->getPOST('payment');
+        $this->_postPayload = Mage::app()->getRequest()->getPost('payment');
 
-        if (isset($this->_postPayload['method']) and $this->_postPayload['method'] == $this->_code) {
+        if (isset($this->_postPayload['method']) && $this->_postPayload['method'] === $this->_code) {
             parent::validate();
 
             if (empty($this->_postPayload[$this->_code . '_holder'])) {
@@ -74,7 +75,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
      */
     public function showPaymentInfo($paymentData)
     {
-        $loadSnippet = $this->_getHelper()->__("Direct Debit Info Text");
+        $loadSnippet = $this->_getHelper()->__('Direct Debit Info Text');
 
         $repl = array(
             '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
@@ -88,11 +89,17 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
     }
 
     /**
-     * @inheritdoc
+     * Handle charge back notices from heidelpay payment
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
      */
-    public function chargeBack($order, $message = "")
+    public function chargeBackTransaction($order, $message = '')
     {
+        /** @noinspection SuspiciousAssignmentsInspection */
         $message = Mage::helper('hcd')->__('debit failed');
-        return parent::chargeBack($order, $message);
+        return parent::chargeBackTransaction($order, $message);
     }
 }

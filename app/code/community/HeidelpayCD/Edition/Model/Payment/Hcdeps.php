@@ -1,4 +1,5 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
 /**
  * EPS payment method
  *
@@ -13,7 +14,6 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
 
@@ -30,19 +30,19 @@ class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model
         $this->_formBlockType = 'hcd/form_eps';
     }
 
-    public function getFormBlockType()
-    {
-        return $this->_formBlockType;
-    }
-    
+    /**
+     * Validate input data from checkout
+     *
+     * @return HeidelpayCD_Edition_Model_Payment_Abstract
+     * @throws \Mage_Core_Exception
+     */
     public function validate()
     {
         parent::validate();
-        $payment = array();
         $params = array();
-        $payment = Mage::app()->getRequest()->getPOST('payment');
+        $payment = Mage::app()->getRequest()->getPost('payment');
         
-        if ($payment['method'] == $this->_code) {
+        if ($payment['method'] === $this->_code) {
             if (empty($payment[$this->_code.'_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }

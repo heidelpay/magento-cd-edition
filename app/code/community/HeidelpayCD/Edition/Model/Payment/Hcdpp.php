@@ -1,4 +1,5 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Prepayment payment method
  *
@@ -13,7 +14,6 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /**
@@ -28,6 +28,16 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         $this->_showAdditionalPaymentInformation = true;
     }
 
+    /**
+     * Generates a customer message for the success page
+     *
+     * Will be used for prepayment and direct debit to show the customer
+     * the billing information
+     *
+     * @param array $paymentData transaction details form heidelpay api
+     *
+     * @return bool| string  customer message for the success page
+     */
     public function showPaymentInfo($paymentData)
     {
         $loadSnippet = $this->_getHelper()->__('Prepayment Info Text');
@@ -53,6 +63,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     * @throws \Mage_Core_Exception
      */
     public function pendingTransaction($order, $data, $message = '')
     {
@@ -75,7 +86,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         $invoice->save();
         if ($this->_invoiceOrderEmail) {
             $code = $order->getPayment()->getMethodInstance()->getCode();
-            if ($code == 'hcdiv' or $code == 'hcdivsec') {
+            $invoiceMailComment = '';
+            if ($code === 'hcdiv' || $code === 'hcdivsec') {
                 $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                 $invoiceMailComment = ($info === false) ? '' : '<h3>'
                     . $this->_getHelper()->__('payment information') . '</h3><p>' . $info . '</p>';
@@ -83,7 +95,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
 
             $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
         }
-
 
         $transactionSave = Mage::getModel('core/resource_transaction')
             ->addObject($invoice)
@@ -115,6 +126,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     * @throws \Mage_Core_Exception
      */
     public function processingTransaction($order, $data, $message = '')
     {
@@ -131,8 +143,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(true);
 
-        if ($paymentHelper->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] and
-            $order->getOrderCurrencyCode() == $data['PRESENTATION_CURRENCY']
+        if ($paymentHelper->format($order->getGrandTotal()) == $data['PRESENTATION_AMOUNT'] &&
+            $order->getOrderCurrencyCode() === $data['PRESENTATION_CURRENCY']
         ) {
             $order->setState(
                 $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
@@ -151,7 +163,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         }
 
         // Set invoice to paid when the total amount matches
-        if ($order->hasInvoices() and $totallyPaid) {
+        if ($totallyPaid && $order->hasInvoices()) {
 
             /** @var  $invoice Mage_Sales_Model_Order_Invoice */
             foreach ($order->getInvoiceCollection() as $invoice) {

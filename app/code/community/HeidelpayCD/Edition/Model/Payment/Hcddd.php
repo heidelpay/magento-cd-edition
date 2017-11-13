@@ -1,4 +1,5 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Direct debit payment method
  *
@@ -13,10 +14,8 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdpp constructor.
      */
@@ -32,20 +31,19 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
         $this->_showAdditionalPaymentInformation = true;
     }
 
-    public function getFormBlockType()
-    {
-        return $this->_formBlockType;
-    }
-        
+    /**
+     * Validate input data from checkout
+     *
+     * @return HeidelpayCD_Edition_Model_Payment_Abstract
+     * @throws \Mage_Core_Exception
+     */
     public function validate()
     {
         parent::validate();
-        $payment = array();
         $params = array();
-        $payment = Mage::app()->getRequest()->getPOST('payment');
+        $payment = Mage::app()->getRequest()->getPost('payment');
 
-        
-        if (isset($payment['method']) and $payment['method'] == $this->_code) {
+        if (isset($payment['method']) && $payment['method'] === $this->_code) {
             if (empty($payment[$this->_code.'_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
@@ -55,19 +53,27 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
             }
 
             $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
-                
             $params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
 
-            
             $this->saveCustomerData($params);
         }
         
         return $this;
     }
-    
+
+    /**
+     * Generates a customer message for the success page
+     *
+     * Will be used for prepayment and direct debit to show the customer
+     * the billing information
+     *
+     * @param HeidelpayCD_Edition_Model_Transaction $paymentData transaction details form heidelpay api
+     *
+     * @return bool| string  customer message for the success page
+     */
     public function showPaymentInfo($paymentData)
     {
-        $loadSnippet = $this->_getHelper()->__("Direct Debit Info Text");
+        $loadSnippet = $this->_getHelper()->__('Direct Debit Info Text');
         
         $repl = array(
                     '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
@@ -77,15 +83,21 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
                     '{CreditorId}' => $paymentData['IDENTIFICATION_CREDITOR_ID'],
                 );
                 
-        return $loadSnippet= strtr($loadSnippet, $repl);
+        return strtr($loadSnippet, $repl);
     }
 
     /**
-     * @inheritdoc
+     * Handle charge back notices from heidelpay payment
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
      */
-    public function chargeBack($order, $message = "")
+    public function chargeBackTransaction($order, $message = '')
     {
+        /** @noinspection SuspiciousAssignmentsInspection */
         $message = Mage::helper('hcd')->__('debit failed');
-        return parent::chargeBack($order, $message);
+        return parent::chargeBackTransaction($order, $message);
     }
 }

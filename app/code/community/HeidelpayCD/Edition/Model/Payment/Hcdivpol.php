@@ -1,4 +1,5 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Invoice unsecured payment method
  *
@@ -13,7 +14,6 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
 
@@ -57,6 +57,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         }
 
         // prohibit payment method if the customer has already been rejected in the current session
+        /** @noinspection PhpUndefinedMethodInspection */
         if ($this->getCheckout()->getPayolutionCustomerRejected()) {
             return false;
         }
@@ -83,12 +84,18 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         $customer = Mage::getModel('customer/customer')->load($customerId);
 
         $customerSinceTimestamp = null;
+
+        // is registered customer
         if ($customerId !== 0) {
+            /** @noinspection PhpUndefinedMethodInspection */
             $customerSinceTimestamp = $customer->getCreatedAtTimestamp();
         }
 
+        /** @var Mage_Core_Model_Date $mageCoreModelAbstract */
+        $mageCoreModelAbstract = Mage::getSingleton('core/date');
         $user['RISKINFORMATION.CUSTOMERSINCE'] =
-            Mage::getSingleton('core/date')->date('Y-m-d', $customerSinceTimestamp);
+        $mageCoreModelAbstract =
+            $mageCoreModelAbstract->gmtDate('Y-m-d', $customerSinceTimestamp);
 
         return $user;
     }

@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection LongInheritanceChainInspection */
+
 /**
  * PayPal payment method
  *
@@ -13,7 +14,6 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
 
@@ -29,41 +29,52 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model
         $this->_canCapturePartial = true;
     }
 
-    /*
-     * PayPal seller protection, need shipping adress instead of billing (PAYPAL REV 20141215)
+    /**
+     * Customer parameter for heidelpay api call
+     * PayPal seller protection, need shipping address instead of billing (PAYPAL REV 20141215).
+     *
+     * @param $order Mage_Sales_Model_Order magento order object
+     * @param bool $isReg in case of registration
+     *
+     * @return array
+     *
      */
     public function getUser($order, $isReg=false)
     {
-        $user = array();
-        
         $user = parent::getUser($order, $isReg);
-        $adress    = ($order->getShippingAddress() == false)
+        $address    = ($order->getShippingAddress() === false)
             ? $order->getBillingAddress()  : $order->getShippingAddress();
-        $email = ($adress->getEmail()) ? $adress->getEmail() : $order->getCustomerEmail();
+        $email = $address->getEmail() ?: $order->getCustomerEmail();
         
         
-        $user['IDENTIFICATION.SHOPPERID']    = $adress->getCustomerId();
-        if ($adress->getCompany() == true) {
-            $user['NAME.COMPANY']    = trim($adress->getCompany());
+        $user['IDENTIFICATION.SHOPPERID']   = $address->getCustomerId();
+        if ($address->getCompany() === true) {
+            $user['NAME.COMPANY']           = trim($address->getCompany());
         }
 
-        $user['NAME.GIVEN']            = trim($adress->getFirstname());
-        $user['NAME.FAMILY']        = trim($adress->getLastname());
-        $user['ADDRESS.STREET']        = $adress->getStreet1()." ".$adress->getStreet2();
-        $user['ADDRESS.ZIP']        = $adress->getPostcode();
-        $user['ADDRESS.CITY']        = $adress->getCity();
-        $user['ADDRESS.COUNTRY']    = $adress->getCountry();
-        $user['CONTACT.EMAIL']        = $email;
+        $user['NAME.GIVEN']                 = trim($address->getFirstname());
+        $user['NAME.FAMILY']                = trim($address->getLastname());
+        $user['ADDRESS.STREET']             = $address->getStreet1() . ' ' . $address->getStreet2();
+        $user['ADDRESS.ZIP']                = $address->getPostcode();
+        $user['ADDRESS.CITY']               = $address->getCity();
+        $user['ADDRESS.COUNTRY']            = $address->getCountry();
+        $user['CONTACT.EMAIL']              = $email;
         
         return $user;
     }
 
     /**
-     * @inheritdoc
+     * Handle charge back notices from heidelpay payment
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
      */
-    public function chargeBack($order, $message = "")
+    public function chargeBackTransaction($order, $message = '')
     {
+        /** @noinspection SuspiciousAssignmentsInspection */
         $message = Mage::helper('hcd')->__('chargeback');
-        return parent::chargeBack($order, $message);
+        return parent::chargeBackTransaction($order, $message);
     }
 }
