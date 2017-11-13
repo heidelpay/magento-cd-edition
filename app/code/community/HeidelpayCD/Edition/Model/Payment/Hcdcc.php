@@ -17,17 +17,18 @@
 class HeidelpayCD_Edition_Model_Payment_Hcdcc extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /**
-     * @var string payment code of the method
+     * HeidelpayCD_Edition_Model_Payment_Hcdcc constructor.
      */
-    protected $_code = 'hcdcc';
-    /**
-     * @var bool this payment method is able to capture
-     */
-    protected $_canCapture = true;
-    /**
-     * @var bool this payment method is capable of partly capture
-     */
-    protected $_canCapturePartial = true;
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdbs';
+        $this->_canCapture = true;
+        $this->_canCapturePartial = true;
+        $this->_formBlockType = 'hcd/form_creditcard';
+    }
+
 
     /**
      * @inheritdoc
@@ -52,10 +53,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdcc extends HeidelpayCD_Edition_Model_
         return false;
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected $_formBlockType = 'hcd/form_creditcard';
 
     /**
      * @inheritdoc

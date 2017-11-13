@@ -18,9 +18,18 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdsu extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdsu';
-    protected $_canRefund = true;
-    protected $_canRefundInvoicePartial = true;
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdsu constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdsu';
+        $this->_canRefund = true;
+        $this->_canRefundInvoicePartial = true;
+    }
+
 
     /**
      * @inheritdoc

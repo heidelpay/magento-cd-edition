@@ -67,6 +67,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     // @codingStandardsIgnoreLine magento sets an empty array
     public function __construct()
     {
+        parent::__construct();
+
         $this->_validatorHelper = Mage::helper('hcd/validator');
     }
 

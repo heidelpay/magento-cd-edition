@@ -18,59 +18,15 @@
 class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Method_Abstract
 {
     /**
-     * @var string payment code of the method
-     */
-    protected $_code = 'abstract';
-    /**
      * @var Mage_Sales_Model_Order magento order object
      */
     protected $_order;
-    /**
-     * @var bool weather this payment method is a gateway method
-     */
-    protected $_isGateway = true;
-    /**
-     * @var bool this payment method allows authorisation
-     */
-    protected $_canAuthorize = false;
-    /**
-     * @var bool this payment method is able to capture
-     */
-    protected $_canCapture = false;
-    /**
-     * @var bool this payment method is capable of partly capture
-     */
-    protected $_canCapturePartial = false;
-    /**
-     * @var bool the chard amount can be reverted to the given account
-     */
-    protected $_canRefund = true;
-    /**
-     * @var bool even spear invoice can be reverted
-     */
-    protected $_canRefundInvoicePartial = true;
 
-    protected $_canVoid = true;
-    /**
-     * @var bool payment method can be used from backend
-     */
-    protected $_canUseInternal = false;
-    /**
-     * @var bool payment method can be used for checkout
-     */
-    protected $_canUseCheckout = true;
-    /**
-     * @var bool payment method supports multishipping checkout
-     */
-    protected $_canUseForMultishipping = false;
     /**
      * @var bool Basket details will be send to the payment server
      */
     protected $_canBasketApi = false;
-    /**
-     * @var bool payment method needs to be initialized
-     */
-    protected $_isInitializeNeeded = true;
+
     /**
      * @var bool invoice order mail send
      */
@@ -80,16 +36,40 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @var string productive payment server url
      */
     protected $_liveUrl = 'https://heidelpay.hpcgw.net/ngw/post';
+
     /**
      * @var string sandbox payment server url
      */
     protected $_sandboxUrl = 'https://test-heidelpay.hpcgw.net/ngw/post';
-    /**
-     * @var string checkout information and form
-     */
-    protected $_formBlockType = 'hcd/form_desconly';
 
+    /**
+     * Indicates whether to show payment information after successful checkout (e.g. remittance data).
+     *
+     * @var bool $_showAdditionalPaymentInformation
+     */
     protected $_showAdditionalPaymentInformation = false;
+
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Abstract constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'abstract';
+        $this->_isGateway = true;
+        $this->_canAuthorize = false;
+        $this->_canCapture = false;
+        $this->_canCapturePartial = false;
+        $this->_canRefund = true;
+        $this->_canRefundInvoicePartial = true;
+        $this->_canVoid = true;
+        $this->_canUseInternal = false;
+        $this->_canUseCheckout = true;
+        $this->_canUseForMultishipping = false;
+        $this->_isInitializeNeeded = true;
+        $this->_formBlockType = 'hcd/form_desconly';
+    }
 
     /**
      * @return bool payment method will redirect the customer directly to heidelpay
