@@ -95,9 +95,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
 
         /** @var Mage_Core_Model_Date $mageCoreModelAbstract */
         $mageCoreModelAbstract = Mage::getSingleton('core/date');
-        $user['RISKINFORMATION.CUSTOMERSINCE'] =
-        $mageCoreModelAbstract =
-            $mageCoreModelAbstract->gmtDate('Y-m-d', $customerSinceTimestamp);
+        $user['RISKINFORMATION.CUSTOMERSINCE'] = $mageCoreModelAbstract->gmtDate('Y-m-d', $customerSinceTimestamp);
 
         return $user;
     }
