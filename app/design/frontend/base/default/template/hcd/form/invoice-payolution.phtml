@@ -57,7 +57,7 @@ if (array_key_exists('payment_data', $userData) &&
                         array_key_exists('CONTACT.PHONE', $userData['payment_data'])) {
                        echo $userData['payment_data']['CONTACT.PHONE'];
                    } ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Telephone')) ?>"
-                   class="input-text validate-length minimum-length-6 maximum-length-20 validate-hcd-phone"
+                   class="required-entry input-text validate-length maximum-length-20 minimum-length-6 validate-hcd-phone"
                    id="<?php echo $this->htmlEscape($code) ?>_telephone" />
         </div>
     </div>

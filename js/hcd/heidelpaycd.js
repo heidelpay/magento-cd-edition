@@ -154,7 +154,8 @@ function receiveMessage(e)
 
 }
 
-Validation.add('validate-hcd-phone', 'Please enter a number starting from 7 or 8 or 9 and should be exactly 11 digits. For example 71234567890', function(v) {
-    return Validation.get('IsEmpty').test(v) || /^(\+)?[0-9 \-\/]*$/g.test(v)
+Validation.add('validate-hcd-phone', "Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.", function(v) {
+    return Validation.get('IsEmpty').test(v) || /^(\+)?[0-9 \-\/()]*$/g.test(v)
 });
+
 //]]>
