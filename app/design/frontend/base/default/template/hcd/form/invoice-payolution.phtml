@@ -20,12 +20,14 @@ $dobyear = $dobmonth = $dobday = null;
 $payment = $this->getMethod();
 $data = $payment->getHeidelpayUrl(true);
 
-$userData = $this->getMethod()->getCustomerData() ?: [];
+$userData = $payment->getCustomerData() ?: [];
 if (array_key_exists('payment_data', $userData) &&
     array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])
 ) {
     list($dobyear, $dobmonth, $dobday) = explode('-', $userData['payment_data']['NAME.BIRTHDATE']);
 }
+
+$customerCountryIsNl = $payment->getQuote()->getBillingAddress()->getCountry() === 'NL';
 ?>
 
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
@@ -47,20 +49,24 @@ if (array_key_exists('payment_data', $userData) &&
             </option>
         </select>
     </div>
+    <?php if ($customerCountryIsNl) {?>
     <div class="field">
         <label for="<?php echo $this->htmlEscape($code) ?>_telephone"
                class="required"><em>*</em><?php echo Mage::helper('core')->quoteEscape($this->__('Telephone')) ?></label>
         <div class="input-box">
-            <input type="text" name="<?php echo $this->htmlEscape($code) ?>_telephone"
+            <input type="text" name="payment[<?php echo $this->htmlEscape($code) ?>_telephone]"
                    value="<?php
                    if ( array_key_exists('payment_data', $userData) &&
                         array_key_exists('CONTACT.PHONE', $userData['payment_data'])) {
                        echo $userData['payment_data']['CONTACT.PHONE'];
+                   } else {
+                       echo $this->htmlEscape($payment->getQuote()->getBillingAddress()->getTelephone());
                    } ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Telephone')) ?>"
                    class="required-entry input-text validate-length maximum-length-20 minimum-length-6 validate-hcd-phone"
                    id="<?php echo $this->htmlEscape($code) ?>_telephone" />
         </div>
     </div>
+    <?php } // if ($customerCountryIsNl) ?>
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_dob"
                class="required hcd-singleline-label"><em>*</em>
