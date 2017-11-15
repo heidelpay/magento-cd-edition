@@ -256,16 +256,17 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
     /**
      * Returns the customer's/guest's order count
      *
-     * @param int|null $customerId
-     * @param bool $isGuest
-     * @param string $emailAddress
+     * @param $orderQuote Mage_Sales_Model_Quote|Mage_Sales_Model_Order
      *
      * @return int
      */
-    public function getCustomerOrderCount($customerId, $isGuest, $emailAddress)
+    public function getCustomerOrderCount($orderQuote)
     {
         // guest = get the order count by e-mail address and customer_id = null
-        if ($isGuest || $customerId === null) {
+        if ($this->getCustomerIsGuest($orderQuote)) {
+            /** @var string $emailAddress */
+            $emailAddress = $orderQuote->getCustomerEmail() ?: $orderQuote->getBillingAddress()->getEmail();
+
             /** @var Mage_Eav_Model_Entity_Collection_Abstract $orders */
             $orders = Mage::getModel('sales/order')
                 ->getCollection()
@@ -279,37 +280,48 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
         /** @var Mage_Eav_Model_Entity_Collection_Abstract $orders */
         $orders = Mage::getModel('sales/order')
             ->getCollection()
-            ->addFieldToFilter('customer_id', $customerId)
+            ->addFieldToFilter('customer_id', $orderQuote->getCustomerId())
             ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
 
         return $orders->count();
     }
 
     /**
-     * @param int|null $customerId
-     * @param bool $isGuest
+     * Returns a customer's registration date or today's date in case of guest customers.
+     *
+     * @param $orderQuote Mage_Sales_Model_Quote|Mage_Sales_Model_Order
      *
      * @return string
      */
-    public function getCustomerRegistrationDate($customerId, $isGuest)
+    public function getCustomerRegistrationDate($orderQuote)
     {
         /** @var Mage_Core_Model_Date $dateHelper */
         $dateHelper = Mage::getSingleton('core/date');
 
         // if the customer is a guest, return today's date.
-        if ($isGuest || $customerId === null) {
+        if ($this->getCustomerIsGuest($orderQuote)) {
             return $dateHelper->date('Y-m-d');
         }
 
         /** @var Mage_Customer_Model_Customer $customer */
-        $customer = Mage::getModel('customer/customer')->load($customerId);
+        $customer = Mage::getModel('customer/customer')->load($orderQuote->getCustomerId());
 
-        if ($customer->getCreatedAtTimestamp() !== null) {
+        if ($customer && $customer->getCreatedAtTimestamp() !== null) {
             return $dateHelper->date('Y-m-d', $customer->getCreatedAtTimestamp());
         }
 
-        // fallback, if getCreatedAtTimestamp somehow returns null.
+        // fallback, if customer is null or getCreatedAtTimestamp somehow returns null.
         return $dateHelper->date('Y-m-d');
+    }
+
+    /**
+     * @param $orderQuote Mage_Sales_Model_Quote|Mage_Sales_Model_Order
+     *
+     * @return bool
+     */
+    public function getCustomerIsGuest($orderQuote)
+    {
+        return $orderQuote->getCustomer()->getId() === null;
     }
 
     /**

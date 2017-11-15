@@ -83,20 +83,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
             $user['CUSTOMER.OPTIN_2'] = $hcdCustomerData['payment_data']['CUSTOMER.OPTIN_2'];
         }
 
-        /** @var  $paymentHelper HeidelpayCD_Edition_Helper_Payment */
+        /** @var $paymentHelper HeidelpayCD_Edition_Helper_Payment */
         $paymentHelper = Mage::helper('hcd/payment');
 
         // risk information to reduce the risk of rejection
         $user['RISKINFORMATION.CUSTOMERGUESTCHECKOUT'] = $user['CRITERION.GUEST']; // is already set by parent getUser()
-        $user['RISKINFORMATION.CUSTOMERORDERCOUNT'] = $paymentHelper->getCustomerOrderCount(
-            $order->getCustomerId(),
-            $order->getCustomerIsGuest() ? true : false,
-            $order->getCustomerEmail()
-        );
-        $user['RISKINFORMATION.CUSTOMERSINCE'] = $paymentHelper->getCustomerRegistrationDate(
-            $order->getCustomerId(),
-            $order->getCustomerIsGuest() ? true : false
-        );
+        $user['RISKINFORMATION.CUSTOMERORDERCOUNT'] = $paymentHelper->getCustomerOrderCount($order);
+        $user['RISKINFORMATION.CUSTOMERSINCE'] = $paymentHelper->getCustomerRegistrationDate($order);
 
         return $user;
     }
