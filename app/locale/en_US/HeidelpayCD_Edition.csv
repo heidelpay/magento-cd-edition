@@ -198,3 +198,4 @@
 "The booking contains:","The booking contains:"
 "mandate reference ID","mandate reference ID"
 "creditor identifier","creditor identifier"
+"Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace."

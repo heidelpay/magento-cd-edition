@@ -1,5 +1,6 @@
 <?php
 /** @noinspection LongInheritanceChainInspection */
+
 /**
  * Invoice unsecured payment method
  *
@@ -40,6 +41,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
      * @param null|mixed $quote
      *
      * @return bool
+     * @throws \Mage_Core_Model_Store_Exception
      */
     public function isAvailable($quote = null)
     {
@@ -74,30 +76,29 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
      * @param bool $isReg in case of registration
      *
      * @return array
-     *
+     * @throws \Mage_Core_Exception
      */
     public function getUser($order, $isReg = false)
     {
-        $user = parent::getUser($order, $isReg);
+        /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
+        $paymentHelper = Mage::helper('hcd/payment');
 
+        $user = parent::getUser($order, $isReg);
         $customerId = $order->getCustomerId();
 
-        /** @var HeidelpayCD_Edition_Model_Customer $customer */
-        $customer = Mage::getModel('customer/customer')->load($customerId);
+        $this->log(get_class($order));
 
-        $customerSinceTimestamp = null;
+        // check if the customer is a guest
+        // todo-simon: refactor
+        $customerGuestCheckout = $customerId === null;
 
-        // is registered customer
-        if ($customerId !== 0) {
-            /** @noinspection PhpUndefinedMethodInspection */
-            $customerSinceTimestamp = $customer->getCreatedAtTimestamp();
-        }
+        // todo-simon: refactor
+        $customerSinceTimestamp = $paymentHelper->getCustomerRegistrationDate($customerId, $customerGuestCheckout);
 
-        /** @var Mage_Core_Model_Date $mageCoreModelAbstract */
-        $mageCoreModelAbstract = Mage::getSingleton('core/date');
-        $user['RISKINFORMATION.CUSTOMERSINCE'] =
-        $mageCoreModelAbstract =
-            $mageCoreModelAbstract->gmtDate('Y-m-d', $customerSinceTimestamp);
+        $user['RISKINFORMATION.CUSTOMERSINCE'] = $customerSinceTimestamp;
+        $user['RISKINFORMATION.CUSTOMERGUESTCHECKOUT'] = $customerGuestCheckout ? 'TRUE' : 'FALSE';
+        $user['RISKINFORMATION.CUSTOMERORDERCOUNT'] =
+            $paymentHelper->getCustomerOrderCount($customerId, $customerGuestCheckout, $user['CONTACT.EMAIL']);
 
         return $user;
     }
@@ -111,6 +112,23 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
     public function validate()
     {
         $this->_postPayload = Mage::app()->getRequest()->getPost('payment');
+
+        /** @noinspection NotOptimalIfConditionsInspection */
+        if (array($this->_postPayload['method']) && $this->_postPayload['method'] === $this->_code &&
+            array_key_exists($this->_code . '_telephone', $this->_postPayload)) {
+            if (!empty($this->_postPayload[$this->_code . '_telephone'])) {
+                $this->_validatedParameters['CONTACT.PHONE'] = $this->_postPayload[$this->_code . '_telephone'];
+            } else {
+                Mage::throwException(
+                    $this->_getHelper()
+                        ->__(
+                            'Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols ' .
+                            'are +, /, -, (, ) and whitespace.'
+                        )
+                );
+            }
+        }
+
         return parent::validate();
     }
 }

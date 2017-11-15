@@ -13,9 +13,12 @@
  * @subpackage Magento
  * @category Magento
  */
+
+use HeidelpayCD_Edition_Model_System_Config_Source_Recognition as Recognition;
+
 $code = $this->getMethodCode();
 
-$path = "payment/" . $code . "/";
+$path = 'payment/' . $code . '/';
 $storeId = Mage::app()->getStore()->getId();
 $recognition = Mage::getStoreConfig($path . 'recognition', $storeId);
 
@@ -28,15 +31,19 @@ $userData = array ();
 
 $cId = $this->getMethod()->getCustomerId();
 
-if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
-    $hash = $this->getMethod()->getShippingHash();
-    $userData = $this->getMethod()->getCustomerData();
-    if ($userData !== false and array_key_exists('payment_data', $userData)) {
-        if ($userData ['payment_data'] ['SHIPPPING_HASH'] != $hash)
-            $userData = array ();
+if ($cId != 0) {
+    if ($recognition == Recognition::SAME_SHIPPING_ADDRESS) { // only if shipping address is unchanged
+        $hash = $this->getMethod()->getShippingHash();
+        $userData = $this->getMethod()->getCustomerData();
+        if ($userData !== false && array_key_exists('payment_data', $userData)) {
+            if ($userData ['payment_data'] ['SHIPPING_HASH'] != $hash)
+                $userData = array();
+        }
+    } elseif ($recognition == Recognition::ALWAYS) // always
+    {
+        $userData = $this->getMethod()->getCustomerData();
     }
-} elseif ($recognition == 2 and $cId != 0) // allways
-    $userData = $this->getMethod()->getCustomerData();
+}
     
     
     
@@ -52,7 +59,7 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
                class="input-text required-entry" id="<?php echo $this->htmlEscape($code); ?>_holder"
                name="payment[<?php echo $this->htmlEscape($code) ?>_holder]"
                value="<?php echo $this->htmlEscape(
-                   (isset($userData['payment_data']['ACCOUNT.HOLDER']))
+                   isset($userData['payment_data']['ACCOUNT.HOLDER'])
                    ? $userData['payment_data']['ACCOUNT.HOLDER']  :$this->getMethod()->getCustomerName()
                ) ?>" />
     </div>
@@ -63,8 +70,9 @@ if ($recognition == 1 and $cId != 0) { // only if shipping address is unchanged
         <input type="text" title="<?php echo $this->htmlEscape($this->__('IBAN')) ?>"
                class="input-text required-entry validate-alphanum" id="<?php echo $this->htmlEscape($code) ?>_iban"
             name="payment[<?php echo $this->htmlEscape($code) ?>_iban]"
-               value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN']))
-                   echo  $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']);?>"
+               value="<?php if (isset($userData['payment_data']['ACCOUNT.IBAN'])) {
+                   echo $this->htmlEscape($userData['payment_data']['ACCOUNT.IBAN']);
+               } ?>"
             size="25">
     </div>
 <div class="hcd-payment-desc">

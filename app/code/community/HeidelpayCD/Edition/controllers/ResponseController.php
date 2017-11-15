@@ -258,7 +258,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                     json_encode(
                         array(
                             'ACCOUNT.REGISTRATION' => $data['IDENTIFICATION_UNIQUEID'],
-                            'SHIPPPING_HASH' => $data['CRITERION_SHIPPPING_HASH'],
+                            'SHIPPING_HASH' => $data['CRITERION_SHIPPING_HASH'],
                             'ACCOUNT_BRAND' => $data['ACCOUNT_BRAND'],
                             'ACCOUNT_NUMBER' => $data['ACCOUNT_NUMBER'],
                             'ACCOUNT_HOLDER' => $data['ACCOUNT_HOLDER'],
