@@ -83,7 +83,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
         $paymentHelper = Mage::helper('hcd/payment');
         $user = parent::getUser($order, $isReg);
-        $this->log(get_class($order));
 
         $user['RISKINFORMATION.CUSTOMERSINCE'] = $paymentHelper->getCustomerRegistrationDate($order);
         $user['RISKINFORMATION.CUSTOMERGUESTCHECKOUT'] = $paymentHelper->getCustomerIsGuest($order) ? 'TRUE' : 'FALSE';
