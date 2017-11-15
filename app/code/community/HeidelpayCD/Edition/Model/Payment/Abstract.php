@@ -267,6 +267,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      */
     public function getHeidelpayUrl($isRegistration = false, $basketId = false, $refId = false)
     {
+        /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
+        $paymentHelper = Mage::helper('hcd/payment');
+
         $basketData = array();
         $criterion = array();
 
@@ -289,7 +292,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         }
 
         if ($isRegistration === true) {
-            $basketData['PRESENTATION.AMOUNT'] = Mage::helper('hcd/payment')
+            $basketData['PRESENTATION.AMOUNT'] = $paymentHelper
                 ->format($this->getQuote()->getGrandTotal());
             $basketData['PRESENTATION.CURRENCY'] = $this->getQuote()->getQuoteCurrencyCode();
         }
@@ -350,14 +353,13 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             )
         );
 
-        $params = Mage::helper('hcd/payment')->preparePostData(
-            $config, $frontend, $user, $basketData,
-            $criterion
-        );
+        $params = $paymentHelper->preparePostData($config, $frontend, $user, $basketData, $criterion);
+        ksort($params);
 
         $this->log('doRequest url : ' . $config['URL']);
         $this->log('doRequest params : ' . json_encode($params));
-        $src = Mage::helper('hcd/payment')->doRequest($config['URL'], $params);
+        $src = $paymentHelper->doRequest($config['URL'], $params);
+        ksort($src);
         $this->log('doRequest response : ' . json_encode($src));
 
         return $src;
@@ -505,9 +507,11 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         $user = array();
         $billing = $order->getBillingAddress();
         $email = $order->getBillingAddress()->getEmail() ?: $order->getCustomerEmail();
+        $phone = $order->getBillingAddress()->getTelephone();
+
         $customerId = $billing->getCustomerId();
         $user['CRITERION.GUEST'] = 'false';
-        if ($customerId === 0) {
+        if ($customerId === null) {
             $visitorData = Mage::getSingleton('core/session')->getVisitorData();
             $customerId = $visitorData['visitor_id'];
             $user['CRITERION.GUEST'] = 'true';
@@ -531,14 +535,14 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
                 trim(Mage::app()->getRequest()->getClientIp()), FILTER_VALIDATE_IP
             ) ? trim(Mage::app()->getRequest()->getClientIp()) : '127.0.0.1';
 
+        if (!empty($phone)) {
+            $user['CONTACT.PHONE'] = $phone;
+        }
 
         //load recognized data
-
         if ($this->getCustomerData($this->_code, $billing->getCustomerId()) &&
             !$isReg && $order->getPayment()->getMethodInstance()->activeRedirect()) {
-            $paymentData =
-                $this->getCustomerData($this->_code, $billing->getCustomerId());
-
+            $paymentData = $this->getCustomerData($this->_code, $billing->getCustomerId());
 
             $this->log('getUser Customer: ' . json_encode($paymentData));
 
