@@ -82,23 +82,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
     {
         /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
         $paymentHelper = Mage::helper('hcd/payment');
-
         $user = parent::getUser($order, $isReg);
-        $customerId = $order->getCustomerId();
-
         $this->log(get_class($order));
 
-        // check if the customer is a guest
-        // todo-simon: refactor
-        $customerGuestCheckout = $customerId === null;
-
-        // todo-simon: refactor
-        $customerSinceTimestamp = $paymentHelper->getCustomerRegistrationDate($customerId, $customerGuestCheckout);
-
-        $user['RISKINFORMATION.CUSTOMERSINCE'] = $customerSinceTimestamp;
-        $user['RISKINFORMATION.CUSTOMERGUESTCHECKOUT'] = $customerGuestCheckout ? 'TRUE' : 'FALSE';
-        $user['RISKINFORMATION.CUSTOMERORDERCOUNT'] =
-            $paymentHelper->getCustomerOrderCount($customerId, $customerGuestCheckout, $user['CONTACT.EMAIL']);
+        $user['RISKINFORMATION.CUSTOMERSINCE'] = $paymentHelper->getCustomerRegistrationDate($order);
+        $user['RISKINFORMATION.CUSTOMERGUESTCHECKOUT'] = $paymentHelper->getCustomerIsGuest($order) ? 'TRUE' : 'FALSE';
+        $user['RISKINFORMATION.CUSTOMERORDERCOUNT'] = $paymentHelper->getCustomerOrderCount($order);
 
         return $user;
     }
