@@ -21,21 +21,24 @@ $data = array(
 
 );
 
-$transactionId = ($this->getMethod()
-        ->getInfoInstance()
-        ->getLastTransId() === false) ?  false : $this->getMethod()->getInfoInstance()->getLastTransId();
+$transactionId = $this->getMethod()->getInfoInstance()->getLastTransId();
 
-if ($transactionId !== False)
-    $data = Mage::getModel('hcd/transaction')->loadLastTransactionDataByUniqeId((string)$transactionId);
+if ($transactionId !== False) {
+    /** @var HeidelpayCD_Edition_Model_Transaction $hcdTransaction */
+    $hcdTransaction = Mage::getModel('hcd/transaction');
+    $data = $hcdTransaction->loadLastTransactionDataByUniqeId((string)$transactionId);
+}
 
 // title of the payment method
 echo $this->escapeHtml($this->getMethod()->getTitle()); ?>
 {{pdf_row_separator}}
-<?php echo $this->escapeHtml($this->__('Holder') . " : " . $data['CONNECTOR_ACCOUNT_HOLDER']) ?>
+<?php echo $this->escapeHtml($this->__('Holder') . ': ' . $data['CONNECTOR_ACCOUNT_HOLDER']) ?>
 {{pdf_row_separator}}
-<?php echo $this->escapeHtml($this->__('IBAN') . " : "  . $data['CONNECTOR_ACCOUNT_IBAN']) ?>
+<?php echo $this->escapeHtml($this->__('IBAN') . ': ' . $data['CONNECTOR_ACCOUNT_IBAN']) ?>
 {{pdf_row_separator}}
-<?php echo $this->escapeHtml($this->__('BIC') . " : "  . $data['CONNECTOR_ACCOUNT_BIC']) ?>
+<?php echo $this->escapeHtml($this->__('BIC') . ': ' . $data['CONNECTOR_ACCOUNT_BIC']) ?>
 {{pdf_row_separator}}
-<?php echo $this->escapeHtml($this->__('Identification'). " : " . $data['IDENTIFICATION_SHORTID']) ?>
+<?php echo $this->escapeHtml($this->__('Identification'). ': ' . (array_key_exists('CONNECTOR_ACCOUNT_USAGE', $data) ?
+    $data['CONNECTOR_ACCOUNT_USAGE'] :
+    $data['IDENTIFICATION_SHORTID'])) ?>
 
