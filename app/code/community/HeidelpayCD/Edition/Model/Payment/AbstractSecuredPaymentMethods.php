@@ -64,6 +64,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      * @param null $quote
      *
      * @return bool is payment method available
+     * @throws \Mage_Core_Model_Store_Exception
      */
     public function isAvailable($quote = null)
     {
@@ -128,7 +129,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
                 }
             }
 
-
             $this->saveCustomerData($this->_validatedParameters);
         }
 
@@ -152,7 +152,9 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             '{CONNECTOR_ACCOUNT_HOLDER}' => $paymentData['CONNECTOR_ACCOUNT_HOLDER'],
             '{CONNECTOR_ACCOUNT_IBAN}' => $paymentData['CONNECTOR_ACCOUNT_IBAN'],
             '{CONNECTOR_ACCOUNT_BIC}' => $paymentData['CONNECTOR_ACCOUNT_BIC'],
-            '{IDENTIFICATION_SHORTID}' => $paymentData['IDENTIFICATION_SHORTID'],
+            '{IDENTIFICATION_SHORTID}' => array_key_exists('CONNECTOR_ACCOUNT_USAGE', $paymentData) ?
+                $paymentData['CONNECTOR_ACCOUNT_USAGE'] :
+                $paymentData['IDENTIFICATION_SHORTID']
         );
 
         return strtr($loadSnippet, $replace);
@@ -195,9 +197,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $order->addStatusHistoryComment(Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'));
         $invoice->save();
         if ($this->_invoiceOrderEmail) {
-            $code = $order->getPayment()->getMethodInstance()->getCode();
             $invoiceMailComment = '';
-            if ($code === 'hcdiv' || $this->isSendingInvoiceMailComment()) {
+            if ($this->isSendingInvoiceMailComment()) {
                 /** @noinspection PhpUndefinedMethodInspection */
                 $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                 $invoiceMailComment = ($info === false) ? '' : '<h3>'
