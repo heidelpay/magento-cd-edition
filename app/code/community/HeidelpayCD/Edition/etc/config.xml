@@ -80,6 +80,14 @@
                     </reportShippingToHeidelpay>
                 </observers>
             </sales_order_shipment_save_before>
+            <sales_order_payment_cancel_invoice>
+                <observers>
+                    <reportReversalToHeidelpay>
+                        <class>hcd/observer</class>
+                        <method>reportReversalToHeidelpay</method>
+                    </reportReversalToHeidelpay>
+                </observers>
+            </sales_order_payment_cancel_invoice>
         </events>
         <template>
             <email>

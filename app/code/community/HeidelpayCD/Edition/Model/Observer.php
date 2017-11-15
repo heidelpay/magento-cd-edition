@@ -61,6 +61,45 @@ class HeidelpayCD_Edition_Model_Observer
      * Observer on save shipment to report the shipment to heidelpay
      *
      * @param $observer
+     * @return $this
+     * @throws \Mage_Core_Exception
+     */
+    public function reportReversalToHeidelpay($observer)
+    {
+        /** @var Mage_Core_Model_Session $sessionModel */
+        $sessionModel = Mage::getSingleton('core/session');
+
+        /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
+        $paymentHelper = Mage::helper('hcd/payment');
+
+        $event = $observer->getEvent();
+        $invoice = $event->getInvoice();
+        $payment = $event->getPayment();
+
+        $paymentMethodInstance = $payment->getMethodInstance();
+        if (!$paymentMethodInstance instanceof HeidelpayCD_Edition_Model_Payment_Abstract) {
+            return $this;
+        }
+
+        // if reversal transaction fails
+        if (!$paymentMethodInstance->reversal($invoice, $payment)) {
+            $sessionModel->addError(
+                $paymentHelper->__(
+                    'Reversal transaction to heidelpay failed.'
+                )
+            );
+            return $this;
+        }
+
+        $sessionModel->addSuccess($paymentHelper->__('Reversal transaction to heidelpay succeeded.'));
+
+        return $this;
+    }
+
+    /**
+     * Observer on save shipment to report the shipment to heidelpay
+     *
+     * @param $observer
      */
     public function reportShippingToHeidelpay($observer)
     {
@@ -191,4 +230,5 @@ class HeidelpayCD_Edition_Model_Observer
         return Mage::helper('hcd/payment')
             ->realLog($callers[1]['function'] . ' ' . $message, $level, $file);
     }
+
 }

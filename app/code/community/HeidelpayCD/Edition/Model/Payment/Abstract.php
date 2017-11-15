@@ -864,6 +864,58 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     }
 
     /**
+     * Api call to issue a reversal on a given invoice
+     *
+     * @param Mage_Sales_Model_Order_Invoice $invoice
+     * @param Mage_Sales_Model_Order_Payment $payment
+     * @return bool
+     * @throws \Mage_Core_Exception
+     * @throws \Mage_Core_Model_Store_Exception
+     */
+    public function reversal(Mage_Sales_Model_Order_Invoice $invoice, Mage_Sales_Model_Order_Payment $payment)
+    {
+        /** @var $order Mage_Sales_Model_Order */
+        $order = $invoice->getOrder();
+
+        /**  @var $transaction HeidelpayCD_Edition_Model_Transaction */
+        $transaction = Mage::getModel('hcd/transaction');
+
+        $lastTransId = (string)$payment->getLastTransId();
+
+        // load authorisation form database
+        $authenticationTransaction = $transaction->getOneTransactionByMethode($order->getRealOrderId(), 'PA');
+
+        // build parameters
+        $config = $this->getMainConfig($this->_code, $authenticationTransaction['CRITERION_STOREID']);
+        $config['PAYMENT.TYPE'] = 'RV';
+        $frontend = $this->getFrontend($order->getRealOrderId(), $authenticationTransaction['CRITERION_STOREID']);
+        $frontend['FRONTEND.MODE'] = 'DEFAULT';
+        $frontend['FRONTEND.ENABLED'] = 'false';
+        $user = $this->getUser($order, true);
+
+        $basketData = $this->getBasketData($order); // gets presentation amount, currency and transactionId (order id)
+        $basketData['IDENTIFICATION.REFERENCEID'] = $lastTransId;
+        $params = Mage::helper('hcd/payment')->preparePostData(
+            $config, $frontend, $user, $basketData,
+            $criterion = array()
+        );
+
+        $this->log('Reversal url : ' . $config['URL']);
+        $this->log('Reversal params : ' . json_encode($params));
+
+        // send request
+        $src = Mage::helper('hcd/payment')->doRequest($config['URL'], $params);
+        $this->log('Reversal response : ' . json_encode($src));
+        if ($src['PROCESSING_RESULT'] === 'NOK') {
+            return false;
+        }
+
+        $payment->setTransactionId($src['IDENTIFICATION_UNIQUEID']);
+        Mage::getModel('hcd/transaction')->saveTransactionData($src);
+        return true;
+    }
+
+    /**
      * Getter for customer given plus family name
      *
      * @param bool|Mage_Checkout_Model_Session $session checkout session

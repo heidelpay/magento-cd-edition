@@ -178,6 +178,9 @@
 "Send delivery note to Heidelpay","Send delivery note to Heidelpay"
 "Successfully report delivery to Heidelpay.","Successfully report delivery to Heidelpay."
 "Delivery notes to Heidelpay fail, because of : ","Delivery notes to Heidelpay fail, because of : "
+"Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace."
+"Reversal transaction to heidelpay failed.","Reversal transaction to heidelpay failed. Please perform the reversal manually in your heidelpay Intelligence Platform account."
+"Reversal transaction to heidelpay succeeded.","Reversal transaction to heidelpay succeeded."
 
 "You have used the card %CARD% befor, would you like to use this again?","You have used the card %CARD% befor, would you like to use this again?"
 "HPError-100.100.101","Please verify your payment data"
@@ -198,4 +201,3 @@
 "The booking contains:","The booking contains:"
 "mandate reference ID","mandate reference ID"
 "creditor identifier","creditor identifier"
-"Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace."

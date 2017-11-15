@@ -170,6 +170,9 @@
 "Send delivery note to Heidelpay","Versandmeldung an Heidelpay"
 "Successfully report delivery to Heidelpay.","Lieferung erfolgreich an Heidelpay gemeldet."
 "Delivery notes to Heidelpay fail, because of : ","Versandmeldung an Heidelpay ist fehlgeschalgen. "
+"Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Bitte geben Sie eine gültige Telefonnummer ein z.B. +49 123 456-1222. Erlaubte Symbole sind +, /, -, (, ) und Leerzeichen."
+"Reversal transaction to heidelpay failed.","Die Stornierungsmeldung an heidelpay ist fehlgeschlagen. Bitte führen Sie das Reversal in der heidelpay Intelligence Platform durch."
+"Reversal transaction to heidelpay succeeded.","Die Stornierungsmeldung an heidelpay war erfolgreich."
 
 "You have used the card %CARD% befor, would you like to use this again?","Sie haben beim letzten Einkauf die Karte %CARD% verwendet, wollen Sie diese erneut benutzen?"
 "HPError-100.100.101","Bitte &uuml;berpr&uuml;fen Sie Ihre Eingaben"
@@ -190,4 +193,3 @@
 "The booking contains:","Die Abbuchung enthält:"
 "mandate reference ID","Mandatsreferenz-ID"
 "creditor identifier","Gläubiger ID"
-"Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Bitte geben Sie eine gültige Telefonnummer ein z.B. +49 123 456-1222. Erlaubte Symbole sind +, /, -, (, ) und Leerzeichen."
