@@ -110,11 +110,10 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         
         $securityHash = $response->getPost('CRITERION_SECRET');
 
-        $transactionId = $response->getPOST('IDENTIFICATION_TRANSACTIONID');
+        $transactionId = $response->getPost('IDENTIFICATION_TRANSACTIONID');
         $data['IDENTIFICATION_TRANSACTIONID'] =
-            (!empty($transactionId))
-                ? $response->getPOST('IDENTIFICATION_TRANSACTIONID')
-                : $response->getPOST('IDENTIFICATION_SHOPPERID');
+            $response->getPost((!empty($transactionId)) ? 'IDENTIFICATION_TRANSACTIONID' : 'IDENTIFICATION_SHOPPERID');
+
         /*
          * validate Hash to prevent manipulation
          */
@@ -133,28 +132,29 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                         )
             );
             $this->log(
-                "Get response form server "
+                'Got response form server '
                 . $response->getServer('REMOTE_ADDR')
-                . " with an invalid hash. This could be some kind of manipulation.",
+                . ' with an invalid hash. This could be some kind of manipulation.',
                 'WARN'
             );
             return;
         }
 
-        $data= $response->getParams();
-
-
+        $data = $response->getParams();
         $paymentCode = Mage::helper('hcd/payment')->splitPaymentCode($data['PAYMENT_CODE']);
 
-        $this->log("Post params: " . json_encode($data));
+        ksort($data);   // TODO-Stephano: might refactor ksort + log(json_encode($params)) into single helper?
+        $this->log('Post params: ' . json_encode($data));
 
-        if ($paymentCode[1] == 'RG') {
-            if ($data['PROCESSING_RESULT'] == 'NOK') {
+        if ($paymentCode[1] === 'RG') {
+            if ($data['PROCESSING_RESULT'] === 'NOK') {
                 $message = Mage::helper('hcd/payment')->handleError(
                     $data['PROCESSING_RETURN'],
                     $data['PROCESSING_RETURN_CODE']
                 );
-                $checkout = $this->getCheckout()->addError($message);
+
+                // add error message to the customer checkout.
+                $this->getCheckout()->addError($message);
                 $url = Mage::getUrl(
                     'hcd/index/error', array(
                     '_forced_secure' => true,
@@ -169,9 +169,9 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
 
                 $url = Mage::getUrl('hcd/', array('_secure' => true));
             }
-        } elseif ($paymentCode[1] == 'IN' and $response->getPost('WALLET_DIRECT_PAYMENT') == 'false') {
+        } elseif ($paymentCode[1] === 'IN' && $response->getPost('WALLET_DIRECT_PAYMENT') == 'false') {
             // Back to checkout after wallet init
-            if ($data['PROCESSING_RESULT'] == 'NOK') {
+            if ($data['PROCESSING_RESULT'] === 'NOK') {
                 $this->log(
                     'Wallet for basketId '
                     . $data['IDENTIFICATION_TRANSACTIONID']
@@ -193,20 +193,19 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
                 $payment = $order->getPayment()->getMethodInstance();
             }
 
-            $this->log('UniqeID: ' . $data['IDENTIFICATION_UNIQUEID']);
+            $this->log('UniqueID: ' . $data['IDENTIFICATION_UNIQUEID']);
 
-
-            if ($data['PROCESSING_RESULT'] == 'NOK') {
+            if ($data['PROCESSING_RESULT'] === 'NOK') {
                 if (isset($data['FRONTEND_REQUEST_CANCELLED'])) {
                     $url = $data['FRONTEND_FAILURE_URL'];
                 } else {
                     $url = $data['FRONTEND_FAILURE_URL'];
                 }
-            } elseif (($paymentCode[1] == 'CP' or
-                    $paymentCode[1] == 'DB' or
-                    $paymentCode[1] == 'FI' or
-                    $paymentCode[1] == 'RC')
-                and ($data['PROCESSING_RESULT'] == 'ACK' and $data['PROCESSING_STATUS_CODE'] != 80)
+            } elseif (($data['PROCESSING_RESULT'] === 'ACK' && $data['PROCESSING_STATUS_CODE'] != 80)
+                 &&($paymentCode[1] === 'CP' ||
+                    $paymentCode[1] === 'DB' ||
+                    $paymentCode[1] === 'FI' ||
+                    $paymentCode[1] === 'RC')
             ) {
                 $url = $data['FRONTEND_SUCCESS_URL'];
             } else {
@@ -235,7 +234,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         /** @var  $customerData HeidelpayCD_Edition_Model_Customer */
         $customerData = Mage::getModel('hcd/customer');
         $currentPayment = 'hcd' . strtolower($paymentCode[0]);
-        $storeId = ($data['CRITERION_GUEST'] == 'true')
+        $storeId = ($data['CRITERION_GUEST'] === 'true')
             ? 0 : trim($data['CRITERION_STOREID']);
         $registrationData = Mage::getModel('hcd/customer')
             ->getCollection()
