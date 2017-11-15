@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection LongInheritanceChainInspection */
+
 /**
  * Invoice info block
  *
@@ -13,9 +14,11 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Block_Info_Invoice extends Mage_Payment_Block_Info
 {
+    /**
+     * {@inheritDoc}
+     */
     public function toPdf()
     {
         $this->setTemplate('hcd/info/pdf/invoice.phtml');
