@@ -19,8 +19,8 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
 {
     protected $_sendNewOrderEmail = true;
     protected $_invoiceOrderEmail = true;
-    protected $_order = null;
-    protected $_paymentInst = null;
+    protected $_order;
+    protected $_paymentInst;
     protected $_debug = true;
 
     protected function _getHelper()
@@ -28,7 +28,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         return Mage::helper('hcd');
     }
 
-    protected function log($message, $level = "DEBUG", $file = false)
+    protected function log($message, $level = 'DEBUG', $file = false)
     {
         $callers = debug_backtrace();
         return Mage::helper('hcd/payment')->realLog($callers[1]['function'] . ' ' . $message, $level, $file);

@@ -59,13 +59,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpf extends HeidelpayCD_Edition_Model_
         $payment = Mage::app()->getRequest()->getPost('payment');
         
         
-        if (empty($payment[$this->_code.'_pf'])) {
+        if (empty($payment[$this->getCode().'_pf'])) {
             $errorMsg = $this->_getHelper()->__('No Postfinance method selected');
             Mage::throwException($errorMsg);
             return $this;
         }
         
-        $this->saveCustomerData(array('ACCOUNT.BRAND' => $payment[$this->_code.'_pf']));
+        $this->saveCustomerData(array('ACCOUNT.BRAND' => $payment[$this->getCode().'_pf']));
 
         return $this;
     }

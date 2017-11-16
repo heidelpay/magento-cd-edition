@@ -29,6 +29,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
         $this->_canCapturePartial = true;
         $this->_canRefund = true;
         $this->_canRefundInvoicePartial = true;
+        $this->_canReversal = true;
         $this->_canBasketApi = true;
 
         $this->_formBlockType = 'hcd/form_masterpass';
@@ -51,7 +52,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
             /** @noinspection PhpUndefinedMethodInspection */
             $hpdata = $session->getHcdWallet();
         
-            if ($hpdata['code'] !== $this->_code) {
+            if ($hpdata['code'] !== $this->getCode()) {
                 return '';
             }
             

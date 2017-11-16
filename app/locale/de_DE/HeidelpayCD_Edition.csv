@@ -173,6 +173,7 @@
 "Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Bitte geben Sie eine gültige Telefonnummer ein z.B. +49 123 456-1222. Erlaubte Symbole sind +, /, -, (, ) und Leerzeichen."
 "Reversal transaction to heidelpay failed.","Die Stornierungsmeldung an heidelpay ist fehlgeschlagen. Bitte führen Sie das Reversal in der heidelpay Intelligence Platform durch."
 "Reversal transaction to heidelpay succeeded.","Die Stornierungsmeldung an heidelpay war erfolgreich."
+"Reversal transaction is not possible here, since there was no Authorize transaction.","(Info) Eine Stornierungsmeldung an heidelpay wird nicht gesendet, weil keine Authorisierungstransaktion vorliegt."
 
 "You have used the card %CARD% befor, would you like to use this again?","Sie haben beim letzten Einkauf die Karte %CARD% verwendet, wollen Sie diese erneut benutzen?"
 "HPError-100.100.101","Bitte &uuml;berpr&uuml;fen Sie Ihre Eingaben"

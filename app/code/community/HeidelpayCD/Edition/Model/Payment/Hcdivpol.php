@@ -29,6 +29,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         $this->_canBasketApi = true;
         $this->_canAuthorize = true;
         $this->_canRefund = true;
+        $this->_canReversal = true;
         $this->_sendsInvoiceMailComment = true;
         $this->_reportsShippingToHeidelpay = true;
         $this->_formBlockType = 'hcd/form_invoicePayolution';
@@ -102,10 +103,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         $this->_postPayload = Mage::app()->getRequest()->getPost('payment');
 
         /** @noinspection NotOptimalIfConditionsInspection */
-        if (array($this->_postPayload['method']) && $this->_postPayload['method'] === $this->_code &&
-            array_key_exists($this->_code . '_telephone', $this->_postPayload)) {
-            if (!empty($this->_postPayload[$this->_code . '_telephone'])) {
-                $this->_validatedParameters['CONTACT.PHONE'] = $this->_postPayload[$this->_code . '_telephone'];
+        if (array($this->_postPayload['method']) && $this->_postPayload['method'] === $this->getCode() &&
+            array_key_exists($this->getCode() . '_telephone', $this->_postPayload)) {
+            if (!empty($this->_postPayload[$this->getCode() . '_telephone'])) {
+                $this->_validatedParameters['CONTACT.PHONE'] = $this->_postPayload[$this->getCode() . '_telephone'];
             } else {
                 Mage::throwException(
                     $this->_getHelper()

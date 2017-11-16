@@ -17,7 +17,7 @@
 class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
     /**
-     * HeidelpayCD_Edition_Model_Payment_Hcdpp constructor.
+     * HeidelpayCD_Edition_Model_Payment_Hcddd constructor.
      */
     public function __construct()
     {
@@ -26,6 +26,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
         $this->_code = 'hcddd';
         $this->_canCapture = true;
         $this->_canCapturePartial = true;
+        $this->_canReversal = true;
         $this->_formBlockType = 'hcd/form_debit';
         $this->_infoBlockType = 'hcd/info_directDebit';
         $this->_showAdditionalPaymentInformation = true;
@@ -43,17 +44,17 @@ class HeidelpayCD_Edition_Model_Payment_Hcddd extends HeidelpayCD_Edition_Model_
         $params = array();
         $payment = Mage::app()->getRequest()->getPost('payment');
 
-        if (isset($payment['method']) && $payment['method'] === $this->_code) {
-            if (empty($payment[$this->_code.'_holder'])) {
+        if (isset($payment['method']) && $payment['method'] === $this->getCode()) {
+            if (empty($payment[$this->getCode().'_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
 
-            if (empty($payment[$this->_code.'_iban'])) {
+            if (empty($payment[$this->getCode().'_iban'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
 
-            $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
-            $params['ACCOUNT.IBAN'] = $payment[$this->_code.'_iban'];
+            $params['ACCOUNT.HOLDER'] = $payment[$this->getCode().'_holder'];
+            $params['ACCOUNT.IBAN'] = $payment[$this->getCode().'_iban'];
 
             $this->saveCustomerData($params);
         }

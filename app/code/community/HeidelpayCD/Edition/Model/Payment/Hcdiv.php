@@ -25,7 +25,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
         parent::__construct();
 
         $this->_code = 'hcdiv';
-        $this->_sendInvoiceMailComment = true;
+        $this->_canReversal = true;
+        $this->_sendsInvoiceMailComment = true;
         $this->_infoBlockType = 'hcd/info_invoice';
     }
 

@@ -30,7 +30,7 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
         $message = ($message === '') ? $data['PROCESSING_RETURN'] : $message;
 
         // Set language for mail template etc
-        if (strtoupper($data['CRITERION_LANGUAGE']) == 'DE') {
+        if (strtoupper($data['CRITERION_LANGUAGE']) === 'DE') {
             $locale = 'de_DE';
             Mage::app()->getLocale()->setLocaleCode($locale);
             Mage::getSingleton('core/translate')->setLocale($locale)->init('frontend', true);
@@ -38,7 +38,7 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
 
 
         // handle charge back notifications for cc, dc and dd
-        if ($paymentCode[1] == 'CB') {
+        if ($paymentCode[1] === 'CB') {
             $this->log('charge back for order ' . $order->getIncrementId());
 
             $order->getPayment()->getMethodInstance()->chargeBackTransaction($order);
@@ -50,14 +50,14 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
         }
 
         // Do nothing if status is already successful
-        if ($order->getStatus() == $order->getPayment()->getMethodInstance()->getStatusSuccess()) {
+        if ($order->getStatus() === $order->getPayment()->getMethodInstance()->getStatusSuccess()) {
             return;
         }
 
         // If the order is canceled, closed or complete do not change order status
-        if ($order->getStatus() == Mage_Sales_Model_Order::STATE_CANCELED or
-            $order->getStatus() == Mage_Sales_Model_Order::STATE_CLOSED or
-            $order->getStatus() == Mage_Sales_Model_Order::STATE_COMPLETE
+        if ($order->getStatus() === Mage_Sales_Model_Order::STATE_CANCELED or
+            $order->getStatus() === Mage_Sales_Model_Order::STATE_CLOSED or
+            $order->getStatus() === Mage_Sales_Model_Order::STATE_COMPLETE
         ) {
             // you can use this event for example to get a notification when a canceled order has been paid
             $this->log('Order '.$order->getRealOrderId().' is canceled, closed or complete.');
@@ -66,7 +66,7 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
         }
 
         // Set status for transaction that are not ok
-        if ($data['PROCESSING_RESULT'] == 'NOK') {
+        if ($data['PROCESSING_RESULT'] === 'NOK') {
             $order->getPayment()->getMethodInstance()->canceledTransaction($order, $message);
             Mage::dispatchEvent('heidelpay_after_map_status_canceled', array('order' => $order));
             $order->save();
@@ -78,10 +78,10 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
         $paidTransactionTypes = array('CP', 'DB', 'RC', 'FI');
 
         if (in_array($paymentCode[1], $paidTransactionTypes)
-            and    ($data['PROCESSING_RESULT'] == 'ACK' and $data['PROCESSING_STATUS_CODE'] != 80)
+            && ($data['PROCESSING_RESULT'] === 'ACK' && $data['PROCESSING_STATUS_CODE'] != 80)
         ) {
             // only Billsafe finalize will have impacted on the order status
-            if ($paymentCode[1] === 'FI' and $data['ACCOUNT_BRAND'] !== 'BILLSAFE') {
+            if ($paymentCode[1] === 'FI' && $data['ACCOUNT_BRAND'] !== 'BILLSAFE') {
                 return;
             }
 

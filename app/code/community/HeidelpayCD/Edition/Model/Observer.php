@@ -20,8 +20,6 @@ class HeidelpayCD_Edition_Model_Observer
 
     /**
      * Unset session variable hcdWallet if the customers return to backet
-     *
-     * @param $observer
      */
     public function removeWalletDataFromCheckout()
     {
@@ -34,20 +32,23 @@ class HeidelpayCD_Edition_Model_Observer
     /**
      * Unset session variable hcdWallet if the customers return to backet
      *
-     * @param $observer
+     * @param Varien_Event_Observer $observer
      */
     public function handleWalletDataDuringCheckout($observer)
     {
+        if ($observer === null) {
+            return;
+        }
+
         $controller = $observer->getControllerAction();
 
         $controllerName = $controller->getRequest()->getControllerName();
 
         $actionName = $controller->getRequest()->getActionName();
 
-        if (($controllerName == "cart" and $actionName == "index")
-            or ($controllerName == "onepage" and $actionName == "index")
+        if (($controllerName == 'cart' and $actionName == 'index')
+            or ($controllerName == 'onepage' and $actionName == 'index')
         ) {
-
             /**
              * remove wallet information from session (currently only masterpass)
              */
@@ -60,24 +61,54 @@ class HeidelpayCD_Edition_Model_Observer
     /**
      * Observer on save shipment to report the shipment to heidelpay
      *
-     * @param $observer
+     * @param Varien_Event_Observer $observer
      * @return $this
      * @throws \Mage_Core_Exception
      */
     public function reportReversalToHeidelpay($observer)
     {
+        if ($observer === null) {
+            return $this;
+        }
+
         /** @var Mage_Core_Model_Session $sessionModel */
         $sessionModel = Mage::getSingleton('core/session');
 
         /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
         $paymentHelper = Mage::helper('hcd/payment');
 
+        /** @var Varien_Event $event */
         $event = $observer->getEvent();
+        /** @var Mage_Sales_Model_Order_Invoice $invoice */
         $invoice = $event->getInvoice();
         $payment = $event->getPayment();
 
+        /** @var Mage_Payment_Model_Method_Abstract $paymentMethodInstance */
         $paymentMethodInstance = $payment->getMethodInstance();
         if (!$paymentMethodInstance instanceof HeidelpayCD_Edition_Model_Payment_Abstract) {
+            return $this;
+        }
+
+        // if the payment method is not supporting reversals, stop here.
+        if (!$paymentMethodInstance->canReversal()) {
+            return $this;
+        }
+
+        /**  @var $transaction HeidelpayCD_Edition_Model_Transaction */
+        $transaction = Mage::getModel('hcd/transaction');
+
+        // load authorisation transaction form database
+        $authenticationTransaction = $transaction->getOneTransactionByMethode(
+            $invoice->getOrder()->getRealOrderId(),
+            'PA'
+        );
+
+        if ($authenticationTransaction === false) {
+            $sessionModel->addNotice(
+                $paymentHelper->__(
+                    'Reversal transaction is not possible here, since there was no Authorize transaction.'
+                )
+            );
             return $this;
         }
 
@@ -92,7 +123,6 @@ class HeidelpayCD_Edition_Model_Observer
         }
 
         $sessionModel->addSuccess($paymentHelper->__('Reversal transaction to heidelpay succeeded.'));
-
         return $this;
     }
 
@@ -103,6 +133,10 @@ class HeidelpayCD_Edition_Model_Observer
      */
     public function reportShippingToHeidelpay($observer)
     {
+        if ($observer === null) {
+            return $this;
+        }
+
         $shipment = $observer->getEvent()->getShipment();
         $order = $shipment->getOrder();
         if (empty($order)) {
@@ -173,15 +207,15 @@ class HeidelpayCD_Edition_Model_Observer
         // prepare shipment report
         $params = $paymentHelper->preparePostData($config, $frontend, $user, $basketData, $criterion);
 
-        $this->log("doRequest url : " . $config['URL']);
-        $this->log("doRequest params : " . json_encode($params));
+        $this->log('doRequest url : ' . $config['URL']);
+        $this->log('doRequest params : ' . json_encode($params));
         // send shipment report to heidelpay api
         $src = $paymentHelper->doRequest($config['URL'], $params);
 
-        $this->log("doRequest response : " . json_encode($src));
+        $this->log('doRequest response : ' . json_encode($src));
 
         // generate error message in case of api error
-        if ($src['PROCESSING_RESULT'] == "NOK") {
+        if ($src['PROCESSING_RESULT'] === 'NOK') {
             $sessionModel
                 ->addError(
                     $heidelpayHelper
@@ -224,7 +258,7 @@ class HeidelpayCD_Edition_Model_Observer
      *
      * @return mixed
      */
-    protected function log($message, $level = "DEBUG", $file = false)
+    protected function log($message, $level = 'DEBUG', $file = false)
     {
         $callers = debug_backtrace();
         return Mage::helper('hcd/payment')

@@ -24,6 +24,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
     {
         parent::__construct();
         $this->_code = 'hcdivsec';
+        $this->_canReversal = true;
         $this->_sendsInvoiceMailComment = true;
     }
 

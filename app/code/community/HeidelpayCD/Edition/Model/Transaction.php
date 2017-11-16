@@ -64,7 +64,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         foreach ($data as $k => $v) {
             $temp[] =  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[$k]['jsonresponse']), true);
         }
-                
+
         return $temp;
     }
        
@@ -106,25 +106,29 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
             return false;
         }
     }
-       
-    public function getOneTransactionByMethode($transid, $methode)
+
+    /**
+     * @param $transid
+     * @param $method
+     * @return bool|array
+     */
+    public function getOneTransactionByMethode($transid, $method)
     {
         $data = false;
         $trans = $this->getCollection();
         $trans->addFieldToFilter('transactionid', $transid)
-                     ->addFieldToFilter('Payment_Type', $methode);
+            ->addFieldToFilter('Payment_Type', $method);
         $trans->getSelect()->order('id DESC');
         // @codingStandardsIgnoreLine should be refactored - issue #6
         $trans->getSelect()->limit(1);
         $trans->load();
-                
-                
+
         $data = $trans->getData();
-            
+
         if (isset($data[0])) {
             return  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['jsonresponse']), true);
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

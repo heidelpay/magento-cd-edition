@@ -42,14 +42,14 @@ class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model
         $params = array();
         $payment = Mage::app()->getRequest()->getPost('payment');
         
-        if ($payment['method'] === $this->_code) {
-            if (empty($payment[$this->_code.'_holder'])) {
+        if ($payment['method'] === $this->getCode()) {
+            if (empty($payment[$this->getCode().'_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
         
-            $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
+            $params['ACCOUNT.HOLDER'] = $payment[$this->getCode().'_holder'];
             
-            $params['ACCOUNT.BANKNAME'] = $payment[$this->_code.'_bank'];
+            $params['ACCOUNT.BANKNAME'] = $payment[$this->getCode().'_bank'];
             $params['ACCOUNT.COUNTRY'] = $this->getQuote()->getBillingAddress()->getCountry();
             
             

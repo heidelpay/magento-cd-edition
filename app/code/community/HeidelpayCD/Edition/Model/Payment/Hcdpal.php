@@ -16,7 +16,6 @@
  */
 class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdpal constructor.
      */
@@ -27,6 +26,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpal extends HeidelpayCD_Edition_Model
         $this->_code = 'hcdpal';
         $this->_canCapture = true;
         $this->_canCapturePartial = true;
+        $this->_canReversal = true;
     }
 
     /**

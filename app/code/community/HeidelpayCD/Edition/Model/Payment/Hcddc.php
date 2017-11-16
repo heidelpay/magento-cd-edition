@@ -27,6 +27,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_
         $this->_code = 'hcddc';
         $this->_canCapture = true;
         $this->_canCapturePartial = true;
+        $this->_canReversal = true;
         $this->_formBlockType = 'hcd/form_debitcard';
     }
 
@@ -37,7 +38,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_
      */
     public function isRecognition()
     {
-        $path = 'payment/' . $this->_code . '/';
+        $path = 'payment/' . $this->getCode() . '/';
         $storeId =  Mage::app()->getStore()->getId();
         return Mage::getStoreConfig($path.'recognition', $storeId);
     }

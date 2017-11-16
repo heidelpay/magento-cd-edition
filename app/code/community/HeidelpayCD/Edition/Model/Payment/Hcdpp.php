@@ -84,7 +84,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         $invoice->setIsPaid(false);
         $order->addStatusHistoryComment(Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'));
         $invoice->save();
-        if ($this->_invoiceOrderEmail) {
+        if ($this->canInvoiceOrderEmail()) {
             $invoice->sendEmail(); // send invoice mail
         }
 

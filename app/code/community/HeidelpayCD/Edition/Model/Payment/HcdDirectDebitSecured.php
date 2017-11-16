@@ -26,6 +26,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
         parent::__construct();
 
         $this->_code = 'hcdddsec';
+        $this->_canReversal = true;
         $this->_formBlockType = 'hcd/form_directDebitSecured';
         $this->_infoBlockType = 'hcd/info_directDebit';
         $this->_reportsShippingToHeidelpay = true;
@@ -42,23 +43,23 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
     {
         $this->_postPayload = Mage::app()->getRequest()->getPost('payment');
 
-        if (isset($this->_postPayload['method']) && $this->_postPayload['method'] === $this->_code) {
+        if (isset($this->_postPayload['method']) && $this->_postPayload['method'] === $this->getCode()) {
             parent::validate();
 
-            if (empty($this->_postPayload[$this->_code . '_holder'])) {
+            if (empty($this->_postPayload[$this->getCode() . '_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
 
-            if (empty($this->_postPayload[$this->_code . '_iban'])) {
+            if (empty($this->_postPayload[$this->getCode() . '_iban'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
 
-            $this->_validatedParameters['ACCOUNT.HOLDER'] = $this->_postPayload[$this->_code . '_holder'];
+            $this->_validatedParameters['ACCOUNT.HOLDER'] = $this->_postPayload[$this->getCode() . '_holder'];
 
-            if (preg_match('#^[\d]#', $this->_postPayload[$this->_code . '_iban'])) {
-                $this->_validatedParameters['ACCOUNT.NUMBER'] = $this->_postPayload[$this->_code . '_iban'];
+            if (preg_match('#^[\d]#', $this->_postPayload[$this->getCode() . '_iban'])) {
+                $this->_validatedParameters['ACCOUNT.NUMBER'] = $this->_postPayload[$this->getCode() . '_iban'];
             } else {
-                $this->_validatedParameters['ACCOUNT.IBAN'] = $this->_postPayload[$this->_code . '_iban'];
+                $this->_validatedParameters['ACCOUNT.IBAN'] = $this->_postPayload[$this->getCode() . '_iban'];
             }
 
             parent::validate();

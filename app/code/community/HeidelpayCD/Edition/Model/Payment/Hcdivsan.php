@@ -24,6 +24,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
         $this->_code = 'hcdivsan';
         $this->_formBlockType = 'hcd/form_santanderInvoice';
         $this->_canBasketApi = true;
+        $this->_canReversal = true;
         $this->_sendsInvoiceMailComment = true;
         $this->_reportsShippingToHeidelpay = true;
     }
@@ -39,13 +40,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
 
         // if the payment method code is not present in the request
         // or it is not equivalent to this class' payment code.
-        if (!isset($this->_postPayload['method']) || $this->_postPayload['method'] !== $this->_code) {
+        if (!isset($this->_postPayload['method']) || $this->_postPayload['method'] !== $this->getCode()) {
             $this->log('Request payment method code does not match "hcdivsan".', 'WARNING');
             Mage::throwException($this->_getHelper()->__('Something went wrong. Please try again.'));
         }
 
-        $advField = $this->_code . '_adv_optout';
-        $privPolField = $this->_code . '_privpol_optin';
+        $advField = $this->getCode() . '_adv_optout';
+        $privPolField = $this->getCode() . '_privpol_optin';
 
         // Privacy Policy terms & conditions must be accepted, so if frontend validation
         // fails, throw an exception here to cancel further processing in checkout.
@@ -73,7 +74,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
 
         // retrieve heidelpay customer data (which was saved in checkout)
         $billing = $order->getBillingAddress();
-        $hcdCustomerData = $this->getCustomerData($this->_code, $billing->getCustomerId());
+        $hcdCustomerData = $this->getCustomerData($this->getCode(), $billing->getCustomerId());
 
         if (isset($hcdCustomerData['payment_data']['CUSTOMER.OPTIN'])) {
             $user['CUSTOMER.OPTIN'] = $hcdCustomerData['payment_data']['CUSTOMER.OPTIN'];

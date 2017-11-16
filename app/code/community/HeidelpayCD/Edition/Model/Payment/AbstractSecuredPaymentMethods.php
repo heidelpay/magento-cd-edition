@@ -24,13 +24,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     protected $_validatorHelper;
 
     /**
-     * Append invoice info text to customer email.
-     *
-     * @var bool $_sendsInvoiceMailComment
-     */
-    protected $_sendsInvoiceMailComment = false;
-
-    /**
      * validated parameter
      *
      * @var array validated parameter
@@ -51,7 +44,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     {
         parent::__construct();
 
-        $this->_canBasketApi = false;
         $this->_infoBlockType = 'hcd/info_invoice';
         $this->_formBlockType = 'hcd/form_invoiceSecured';
 
@@ -100,23 +92,23 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     {
         parent::validate();
 
-        if (isset($this->_postPayload['method']) && $this->_postPayload['method'] === $this->_code) {
-            if (array_key_exists($this->_code . '_salutation', $this->_postPayload)) {
+        if (isset($this->_postPayload['method']) && $this->_postPayload['method'] === $this->getCode()) {
+            if (array_key_exists($this->getCode() . '_salutation', $this->_postPayload)) {
                 $this->_validatedParameters['NAME.SALUTATION'] =
                     (
-                        $this->_postPayload[$this->_code . '_salutation'] === 'MR' ||
-                        $this->_postPayload[$this->_code . '_salutation'] === 'MRS'
+                        $this->_postPayload[$this->getCode() . '_salutation'] === 'MR' ||
+                        $this->_postPayload[$this->getCode() . '_salutation'] === 'MRS'
                     )
-                        ? $this->_postPayload[$this->_code . '_salutation'] : '';
+                        ? $this->_postPayload[$this->getCode() . '_salutation'] : '';
             }
 
-            if (array_key_exists($this->_code . '_dobday', $this->_postPayload) &&
-                array_key_exists($this->_code . '_dobmonth', $this->_postPayload) &&
-                array_key_exists($this->_code . '_dobyear', $this->_postPayload)
+            if (array_key_exists($this->getCode() . '_dobday', $this->_postPayload) &&
+                array_key_exists($this->getCode() . '_dobmonth', $this->_postPayload) &&
+                array_key_exists($this->getCode() . '_dobyear', $this->_postPayload)
             ) {
-                $day = (int)$this->_postPayload[$this->_code . '_dobday'];
-                $month = (int)$this->_postPayload[$this->_code . '_dobmonth'];
-                $year = (int)$this->_postPayload[$this->_code . '_dobyear'];
+                $day = (int)$this->_postPayload[$this->getCode() . '_dobday'];
+                $month = (int)$this->_postPayload[$this->getCode() . '_dobmonth'];
+                $year = (int)$this->_postPayload[$this->getCode() . '_dobyear'];
 
                 if ($this->_validatorHelper->validateDateOfBirth($day, $month, $year)) {
                     $this->_validatedParameters['NAME.BIRTHDATE']
@@ -196,7 +188,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $invoice->setIsPaid(false);
         $order->addStatusHistoryComment(Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'));
         $invoice->save();
-        if ($this->_invoiceOrderEmail) {
+        if ($this->canInvoiceOrderEmail()) {
             $invoiceMailComment = '';
             if ($this->isSendingInvoiceMailComment()) {
                 /** @noinspection PhpUndefinedMethodInspection */
@@ -321,13 +313,5 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $order->setIsInProcess(true);
 
         return $order;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSendingInvoiceMailComment()
-    {
-        return $this->_sendsInvoiceMailComment;
     }
 }
