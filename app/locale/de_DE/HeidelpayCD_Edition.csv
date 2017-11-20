@@ -171,7 +171,7 @@
 "Send delivery note to Heidelpay","Versandmeldung an Heidelpay"
 "Successfully report delivery to Heidelpay.","Lieferung erfolgreich an Heidelpay gemeldet."
 "Delivery notes to Heidelpay fail, because of : ","Versandmeldung an Heidelpay ist fehlgeschalgen. "
-"Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Bitte geben Sie eine gültige Telefonnummer ein z.B. +49 123 456-1222. Erlaubte Symbole sind +, /, -, (, ) und Leerzeichen."
+"Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Bitte geben Sie eine gültige Telefonnummer ein z.B. +49 123 456-1222.<br/>Erlaubte Symbole sind +, /, -, (, ) und Leerzeichen."
 "Due to technical circumstances the Shipping Notice cannot be sent to heidelpay.","Aufgrund von technischen Umständen kann die Sendungsmeldung nicht an heidelpay gesendet werden - Bitte führen Sie das Finalize in der heidelpay Intelligence Platform durch."
 "Due to technical circumstances the Reversal Notice cannot be sent to heidelpay.","Aufgrund von technischen Umständen kann die Stornierungsmeldung nicht an heidelpay gesendet werden - Bitte führen Sie das Reversal in der heidelpay Intelligence Platform durch."
 "Reversal transaction to heidelpay failed.","Die Stornierungsmeldung an heidelpay ist fehlgeschlagen. Bitte führen Sie das Reversal in der heidelpay Intelligence Platform durch."

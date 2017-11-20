@@ -179,7 +179,7 @@
 "Send delivery note to Heidelpay","Send delivery note to Heidelpay"
 "Successfully report delivery to Heidelpay.","Successfully report delivery to Heidelpay."
 "Delivery notes to Heidelpay fail, because of : ","Delivery notes to Heidelpay fail, because of : "
-"Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace."
+"Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.","Please enter a valid phone number e.g. +49 123 456-1222.<br/>Allowed symbols are +, /, -, (, ) and whitespace."
 "Due to technical circumstances the Shipping Notice cannot be sent to heidelpay.","Due to technical circumstances the Shipping Notice cannot be sent to heidelpay - Please perform the finalize manually in your heidelpay Intelligence Platform account."
 "Due to technical circumstances the Reversal Notice cannot be sent to heidelpay.","Due to technical circumstances the Reversal Notice cannot be sent to heidelpay - Please perform the reversal manually in your heidelpay Intelligence Platform account."
 "Reversal transaction to heidelpay failed.","Reversal transaction to heidelpay failed. Please perform the reversal manually in your heidelpay Intelligence Platform account."
