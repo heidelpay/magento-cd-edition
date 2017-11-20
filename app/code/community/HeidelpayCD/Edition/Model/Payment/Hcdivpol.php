@@ -9,7 +9,7 @@
  *
  * @link  https://dev.heidelpay.de/magento
  *
- * @author  Simon Gabriel
+ * @author Simon Gabriel
  *
  * @package  Heidelpay
  * @subpackage Magento
@@ -17,7 +17,6 @@
  */
 class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
-
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdivpol constructor.
      */
