@@ -20,11 +20,7 @@
     }
   ],
   "require": {
-    "php" : ">=5.6.0",
-    "magento-hackathon/magento-composer-installer": "*",
-    "ext-bcmath" : "*",
-    "ext-simplexml": "*"
-
+    "magento-hackathon/magento-composer-installer": "*"
   },
   "require-dev": {
     "magento/marketplace-eqp": "*",
