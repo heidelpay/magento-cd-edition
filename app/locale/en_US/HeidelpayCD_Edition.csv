@@ -185,6 +185,7 @@
 "Reversal transaction to heidelpay failed.","Reversal transaction to heidelpay failed. Please perform the reversal manually in your heidelpay Intelligence Platform account."
 "Reversal transaction to heidelpay succeeded.","Reversal transaction to heidelpay succeeded."
 "Reversal transaction is not possible here, since there was no Authorize transaction.","(Information) A reversal transaction to heidelpay is not possible here, since there was no authorize transaction."
+"The minimum age is 18 years for this payment method.","The minimum age is 18 years for this payment method."
 
 "You have used the card %CARD% befor, would you like to use this again?","You have used the card %CARD% befor, would you like to use this again?"
 "HPError-100.100.101","Please verify your payment data"
