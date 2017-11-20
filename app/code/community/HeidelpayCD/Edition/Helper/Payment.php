@@ -213,6 +213,10 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'];
                 $params['PAYMENT.CODE'] = 'DD.' . $type;
                 break;
+            /* payolution invoice */
+            case 'ivpd':
+                $params['PAYMENT.CODE'] = "IV." . $type;
+                break;
             /* BillSafe */
             case 'bs':
                 $params['PAYMENT.CODE'] = 'IV.' . $type;
