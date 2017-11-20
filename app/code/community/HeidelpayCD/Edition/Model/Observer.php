@@ -30,7 +30,7 @@ class HeidelpayCD_Edition_Model_Observer
     }
 
     /**
-     * Unset session variable hcdWallet if the customers return to backet
+     * Unset session variable hcdWallet if the customers returns to basket.
      *
      * @param Varien_Event_Observer $observer
      */
@@ -46,8 +46,8 @@ class HeidelpayCD_Edition_Model_Observer
 
         $actionName = $controller->getRequest()->getActionName();
 
-        if (($controllerName == 'cart' and $actionName == 'index')
-            or ($controllerName == 'onepage' and $actionName == 'index')
+        if (($controllerName === 'cart' && $actionName === 'index')
+            or ($controllerName === 'onepage' && $actionName === 'index')
         ) {
             /**
              * remove wallet information from session (currently only masterpass)
@@ -130,6 +130,8 @@ class HeidelpayCD_Edition_Model_Observer
      * Observer on save shipment to report the shipment to heidelpay
      *
      * @param $observer
+     * @throws \Mage_Core_Exception
+     * @throws \Mage_Core_Model_Store_Exception
      */
     public function reportShippingToHeidelpay($observer)
     {
