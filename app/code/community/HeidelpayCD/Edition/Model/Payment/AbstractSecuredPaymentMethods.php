@@ -38,6 +38,13 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     protected $_postPayload = array();
 
     /**
+     * This payment method allows business to business
+     *
+     * @var bool
+     */
+    protected $_allowsBusinessToBusiness = false;
+
+    /**
      * HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods constructor.
      */
     public function __construct()
@@ -75,7 +82,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         }
 
         /* payment method is b2c only */
-        if (!empty($billing->getCompany())) {
+        if (!$this->allowsBusinessToBusiness() && !empty($billing->getCompany())) {
             return false;
         }
 
@@ -313,5 +320,15 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $order->setIsInProcess(true);
 
         return $order;
+    }
+
+    /**
+     * Returns true if the payment method supports business to business.
+     *
+     * @return bool
+     */
+    public function allowsBusinessToBusiness()
+    {
+        return $this->_allowsBusinessToBusiness;
     }
 }

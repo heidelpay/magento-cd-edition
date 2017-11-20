@@ -32,6 +32,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         $this->_canReversal = true;
         $this->_sendsInvoiceMailComment = true;
         $this->_reportsShippingToHeidelpay = true;
+        $this->_allowsBusinessToBusiness = true;
         $this->_formBlockType = 'hcd/form_invoicePayolution';
     }
 
@@ -46,28 +47,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
      */
     public function isAvailable($quote = null)
     {
-        // check shipping address is same as before
-        $billing = $this->getQuote()->getBillingAddress();
-        $shipping = $this->getQuote()->getShippingAddress();
-
-        /* billing and shipping address has to match */
-        if (($billing->getFirstname() !== $shipping->getFirstname()) ||
-            ($billing->getLastname() !== $shipping->getLastname()) ||
-            ($billing->getStreet() !== $shipping->getStreet()) ||
-            ($billing->getPostcode() !== $shipping->getPostcode()) ||
-            ($billing->getCity() !== $shipping->getCity()) ||
-            ($billing->getCountry() !== $shipping->getCountry())
-        ) {
-            return false;
-        }
-
         // prohibit payment method if the customer has already been rejected in the current session
         /** @noinspection PhpUndefinedMethodInspection */
         if ($this->getCheckout()->getPayolutionCustomerRejected()) {
             return false;
         }
 
-        return HeidelpayCD_Edition_Model_Payment_Abstract::isAvailable($quote);
+        return parent::isAvailable($quote);
     }
 
     /**
