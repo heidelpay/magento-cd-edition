@@ -67,15 +67,19 @@ class HeidelpayCD_Edition_Model_Observer
      */
     public function reportReversalToHeidelpay($observer)
     {
-        if ($observer === null) {
-            return $this;
-        }
-
         /** @var Mage_Core_Model_Session $sessionModel */
         $sessionModel = Mage::getSingleton('core/session');
 
         /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
         $paymentHelper = Mage::helper('hcd/payment');
+
+        if ($observer === null) {
+            $sessionModel->addNotice(
+                $paymentHelper->__('Due to technical circumstances the Reversal Notice cannot be sent to heidelpay.')
+            );
+
+            return $this;
+        }
 
         /** @var Varien_Event $event */
         $event = $observer->getEvent();
@@ -129,11 +133,21 @@ class HeidelpayCD_Edition_Model_Observer
     /**
      * Observer on save shipment to report the shipment to heidelpay
      *
-     * @param $observer
+     * @param Varien_Event_Observer $observer
      */
     public function reportShippingToHeidelpay($observer)
     {
+        /** @var Mage_Core_Model_Session $sessionModel */
+        $sessionModel = Mage::getSingleton('core/session');
+
+        /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
+        $paymentHelper = Mage::helper('hcd/payment');
+
         if ($observer === null) {
+            $sessionModel->addNotice(
+                $paymentHelper->__('Due to technical circumstances the Shipping Notice cannot be sent to heidelpay.')
+            );
+
             return $this;
         }
 
@@ -156,10 +170,10 @@ class HeidelpayCD_Edition_Model_Observer
 
         /** @var $transactionModel HeidelpayCD_Edition_Model_Transaction */
         $transactionModel = Mage::getModel('hcd/transaction');
-        /** @var $sessionModel Mage_Core_Model_Session */
-        $sessionModel = Mage::getSingleton('core/session');
+
         /** @var  $heidelpayHelper HeidelpayCD_Edition_Helper_Data */
         $heidelpayHelper = Mage::helper('hcd');
+
         /** @var  $paymentHelper HeidelpayCD_Edition_Helper_Payment */
         $paymentHelper = Mage::helper('hcd/payment');
 

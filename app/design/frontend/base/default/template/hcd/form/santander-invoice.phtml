@@ -34,7 +34,7 @@ $recognition = Mage::getStoreConfig($path . 'recognition', $storeId);
 $userData = array();
 $customerId = $paymentMethod->getCustomerId();
 
-if ($recognition === Recognition::SAME_SHIPPING_ADDRESS && $customerId != 0) {
+if ($recognition == Recognition::SAME_SHIPPING_ADDRESS && $customerId != 0) {
     // only if shipping address is unchanged
     $hash = $paymentMethod->getShippingHash();
     $userData = $paymentMethod->getCustomerData();
@@ -45,7 +45,7 @@ if ($recognition === Recognition::SAME_SHIPPING_ADDRESS && $customerId != 0) {
     ) {
         $userData = array();
     }
-} elseif ($recognition === Recognition::ALWAYS && $customerId != 0) {
+} elseif ($recognition == Recognition::ALWAYS && $customerId != 0) {
     $userData = $paymentMethod->getCustomerData();
 }
 
