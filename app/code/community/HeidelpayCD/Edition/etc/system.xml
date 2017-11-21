@@ -138,6 +138,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -155,6 +158,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <bookingmode translate="label">
                             <label>Bookingmode</label>
@@ -164,6 +170,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </bookingmode>
                         <recognition translate="label">
                             <label>Recognition</label>
@@ -173,6 +182,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </recognition>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -182,17 +194,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
-                        <!--<capture_on_delivery translate="label">
-                          <label>Automatically capture on delivery</label>
-                          <frontend_type>select</frontend_type>
-                          <source_model>adminhtml/system_config_source_yesno</source_model>
-                          <comment>please note that capture on delivery is only possible, when you set bookingmode to preauthorisation</comment>
-                          <sort_order>80</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                        </capture_on_delivery>-->
                         <sort_order translate="label">
                             <label>Sort order</label>
                             <frontend_type>text</frontend_type>
@@ -200,6 +205,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -208,6 +216,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -216,6 +227,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -225,6 +239,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -234,13 +251,17 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdcc>
                 <hcddc translate="label">
                     <label>Heidelpay Debit Card (hcd)</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>130</sort_order>
+                    <sort_order>135</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -252,6 +273,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -269,6 +293,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <bookingmode translate="label">
                             <label>Bookinnmode</label>
@@ -278,6 +305,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </bookingmode>
                         <recognition translate="label">
                             <label>Recognition</label>
@@ -287,6 +317,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </recognition>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -296,6 +329,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -304,6 +340,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -312,6 +351,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -320,6 +362,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -329,6 +374,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -338,6 +386,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcddc>
@@ -356,6 +408,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -373,6 +428,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <bookingmode translate="label">
                             <label>Bookingmode</label>
@@ -382,6 +440,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </bookingmode>
                         <recognition translate="label">
                             <label>Recognition</label>
@@ -391,6 +452,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </recognition>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -400,6 +464,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -408,6 +475,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -416,6 +486,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -424,6 +497,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -433,6 +509,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -442,6 +521,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcddd>
@@ -460,6 +543,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -477,6 +563,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <recognition translate="label">
                             <label>Recognition</label>
@@ -486,6 +575,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </recognition>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -495,6 +587,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -503,6 +598,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -511,6 +609,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -519,6 +620,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -528,6 +632,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -537,6 +644,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdddsec>
@@ -555,6 +666,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -572,6 +686,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -581,6 +698,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -589,6 +709,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -597,6 +720,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -605,6 +731,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -614,6 +743,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -623,6 +755,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdsu>
@@ -641,6 +777,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -658,6 +797,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <recognition translate="label">
                             <label>Recognition</label>
@@ -667,6 +809,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </recognition>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -676,6 +821,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -684,6 +832,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -692,6 +843,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -700,6 +854,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -709,6 +866,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -718,13 +878,17 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdgp>
                 <hcdbs translate="label">
                     <label>Heidelpay Billsafe (hcd)</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>100</sort_order>
+                    <sort_order>105</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -736,6 +900,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -753,6 +920,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -761,6 +931,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -769,6 +942,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -777,6 +953,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -786,6 +965,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -795,6 +977,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdbs>
@@ -813,6 +999,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -830,6 +1019,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <bookingmode translate="label">
                             <label>Bookingmode</label>
@@ -839,6 +1031,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </bookingmode>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -848,17 +1043,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
-                        <!--<capture_on_delivery translate="label">
-                          <label>Automatically capture on delivery</label>
-                          <frontend_type>select</frontend_type>
-                          <source_model>adminhtml/system_config_source_yesno</source_model>
-                          <comment>please note that capture on delivery is only possible, when you set bookingmode to preauthorisation</comment>
-                          <sort_order>80</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                        </capture_on_delivery>-->
                         <sort_order translate="label">
                             <label>Sort order</label>
                             <frontend_type>text</frontend_type>
@@ -866,6 +1054,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -874,6 +1065,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -882,6 +1076,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -891,6 +1088,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -900,6 +1100,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdpal>
@@ -918,6 +1122,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -935,6 +1142,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -944,6 +1154,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -952,6 +1165,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -960,6 +1176,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -968,6 +1187,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -977,6 +1199,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -986,6 +1211,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdeps>
@@ -1004,6 +1233,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -1021,6 +1253,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -1030,6 +1265,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -1038,6 +1276,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -1046,6 +1287,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -1054,6 +1298,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -1063,6 +1310,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -1072,6 +1322,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdide>
@@ -1213,6 +1467,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -1230,6 +1487,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -1239,6 +1499,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -1247,6 +1510,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -1255,6 +1521,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -1263,6 +1532,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -1272,6 +1544,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -1281,6 +1556,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdpp>
@@ -1299,6 +1578,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -1316,6 +1598,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -1325,6 +1610,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -1333,6 +1621,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -1341,6 +1632,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -1349,6 +1643,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -1358,6 +1655,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -1367,6 +1667,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdiv>
@@ -1385,6 +1689,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -1402,6 +1709,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <recognition translate="label">
                             <label>Recognition</label>
@@ -1411,6 +1721,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </recognition>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -1420,6 +1733,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -1428,6 +1744,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -1436,6 +1755,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -1444,6 +1766,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -1453,6 +1778,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -1462,6 +1790,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdivsec>
@@ -1480,6 +1812,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -1497,6 +1832,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -1506,6 +1844,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
                         <sort_order translate="label">
                             <label>Sort order</label>
@@ -1514,6 +1855,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -1522,6 +1866,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -1530,6 +1877,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -1539,6 +1889,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -1548,6 +1901,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdpf>
@@ -1566,6 +1923,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -1583,6 +1943,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <bookingmode translate="label">
                             <label>Bookingmode</label>
@@ -1592,6 +1955,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </bookingmode>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -1601,17 +1967,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
-                        <!--<capture_on_delivery translate="label">
-                          <label>Automatically capture on delivery</label>
-                          <frontend_type>select</frontend_type>
-                          <source_model>adminhtml/system_config_source_yesno</source_model>
-                          <comment>please note that capture on delivery is only possible, when you set bookingmode to preauthorisation</comment>
-                          <sort_order>80</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                        </capture_on_delivery>-->
                         <sort_order translate="label">
                             <label>Sort order</label>
                             <frontend_type>text</frontend_type>
@@ -1619,6 +1978,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -1627,6 +1989,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -1635,6 +2000,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -1644,6 +2012,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -1653,6 +2024,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdmpa>
@@ -1671,6 +2046,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </title>
                         <active translate="label">
                             <label>Enabled</label>
@@ -1688,6 +2066,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </channel>
                         <recognition translate="label">
                             <label>Recognition</label>
@@ -1697,6 +2078,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </recognition>
                         <invioce translate="label">
                             <label>Automatically invoiced</label>
@@ -1706,17 +2090,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </invioce>
-                        <!--<capture_on_delivery translate="label">
-                          <label>Automatically capture on delivery</label>
-                          <frontend_type>select</frontend_type>
-                          <source_model>adminhtml/system_config_source_yesno</source_model>
-                          <comment>please note that capture on delivery is only possible, when you set bookingmode to preauthorisation</comment>
-                          <sort_order>80</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                        </capture_on_delivery>-->
                         <sort_order translate="label">
                             <label>Sort order</label>
                             <frontend_type>text</frontend_type>
@@ -1724,6 +2101,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </sort_order>
                         <min_amount translate="label">
                             <label>Minimum Amount (CENT)</label>
@@ -1732,6 +2112,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </min_amount>
                         <max_amount translate="label">
                             <label>Maximum Amount (CENT)</label>
@@ -1740,6 +2123,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </max_amount>
                         <allowspecific translate="label">
                             <label>allow specific countries</label>
@@ -1749,6 +2135,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>specific countries</label>
@@ -1758,6 +2147,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                                <allowspecific>1</allowspecific>
+                            </depends>
                         </specificcountry>
                     </fields>
                 </hcdivsan>
