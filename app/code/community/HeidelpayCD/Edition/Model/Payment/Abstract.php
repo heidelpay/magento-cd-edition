@@ -1131,15 +1131,11 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             );
         }
 
-        $code = $order->getPayment()->getMethodInstance()->getCode();
+        $code = $this->getCode();
 
-        $path = 'payment/' . $code . '/';
-        $autoInvoice = Mage::getStoreConfig($path . 'invioce', $data['CRITERION_STOREID']) == 1;
-
-        $this->log('Auto invoiced :'. (string) $autoInvoice);
-
-        // todo: flag statt code
-        if ($totallyPaid && ($autoInvoice || $code === 'hcdbs') && $order->canInvoice()) {
+        if ($totallyPaid
+            && $order->canInvoice()
+            && ($this->isSendingInvoiceAutomatically($data) || $code === 'hcdbs')) { // todo: flag statt code
             $invoice = $order->prepareInvoice();
             $invoice->register()->capture();
             $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
@@ -1152,13 +1148,14 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             if ($this->canInvoiceOrderEmail()) {
                 $invoiceMailComment = '';
                 // todo: flag statt code
-                if ($code !== 'hcdpp' && $code !== 'hcdiv') {
+                if ($code !== 'hcdiv') {
                     $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
                     $invoiceMailComment = ($info === false) ? '' : '<h3>'
                         . $this->_getHelper()->__('Payment Information') . '</h3>' . $info . '<br/>';
                 }
 
-                $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
+                $this->log('Sending invoice email for order #' . $order->getRealOrderId() . '...');
+                $invoice->sendEmail(true, $invoiceMailComment);
             }
 
 
@@ -1235,5 +1232,19 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     public function isSendingInvoiceMailComment()
     {
         return $this->_sendsInvoiceMailComment;
+    }
+
+    /**
+     * Returns true if the payment method is configured to automatically send an invoice email.
+     *
+     * @param $data
+     * @return bool
+     */
+    protected function isSendingInvoiceAutomatically($data)
+    {
+        $path = 'payment/' . $this->getCode() . '/invioce';
+        $autoInvoice = Mage::getStoreConfig($path, $data['CRITERION_STOREID']) === '1';
+        $this->log('Auto invoiced: ' . ($autoInvoice ? 'enabled' : 'disabled'));
+        return $autoInvoice;
     }
 }

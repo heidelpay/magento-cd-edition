@@ -195,7 +195,9 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $invoice->setIsPaid(false);
         $order->addStatusHistoryComment(Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'));
         $invoice->save();
-        if ($this->canInvoiceOrderEmail()) {
+
+        // send invoice email if payment method is configured to do so
+        if ($this->canInvoiceOrderEmail() && $this->isSendingInvoiceAutomatically($data)) {
             $invoiceMailComment = '';
             if ($this->isSendingInvoiceMailComment()) {
                 /** @noinspection PhpUndefinedMethodInspection */
@@ -204,7 +206,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
                     . $this->_getHelper()->__('payment information') . '</h3><p>' . $info . '</p>';
             }
 
-            $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
+            $this->log('Sending invoice email for order #' . $order->getRealOrderId() . '...');
+            $invoice->sendEmail(true, $invoiceMailComment);
         }
 
 
