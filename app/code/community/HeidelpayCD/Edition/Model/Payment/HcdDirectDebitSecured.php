@@ -31,6 +31,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
         $this->_infoBlockType = 'hcd/info_directDebit';
         $this->_reportsShippingToHeidelpay = true;
         $this->_showAdditionalPaymentInformation = true;
+        $this->_canBasketApi = true;
     }
 
     /**
