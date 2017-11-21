@@ -36,26 +36,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
     }
 
     /**
-     * Deactivate payment method in case of wrong currency or other credentials
-     *
-     * @param Mage_Quote
-     * @param null|mixed $quote
-     *
-     * @return bool
-     * @throws \Mage_Core_Model_Store_Exception
-     */
-    public function isAvailable($quote = null)
-    {
-        // prohibit payment method if the customer has already been rejected in the current session
-        /** @noinspection PhpUndefinedMethodInspection */
-        if ($this->getCheckout()->getPayolutionCustomerRejected()) {
-            return false;
-        }
-
-        return parent::isAvailable($quote);
-    }
-
-    /**
      * Customer parameter for heidelpay api call
      *
      * @param $order Mage_Sales_Model_Order magento order object

@@ -45,6 +45,13 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     protected $_allowsBusinessToBusiness = false;
 
     /**
+     * Controls whether an insurance denial should be stored to make the payment method unavailable.
+     *
+     * @var bool
+     */
+    protected $_remembersInsuranceDenial = true;
+
+    /**
      * HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods constructor.
      */
     public function __construct()
@@ -83,6 +90,12 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
 
         /* payment method is b2c only */
         if (!$this->allowsBusinessToBusiness() && !empty($billing->getCompany())) {
+            return false;
+        }
+
+        // prohibit payment method if the customer has already been rejected in the current session
+        $hasCustomerBeenRejected = 'get' . $this->getCode() . 'CustomerRejected';
+        if ($this->remembersInsuranceDenial() && $this->getCheckout()->$hasCustomerBeenRejected()) {
             return false;
         }
 
@@ -333,5 +346,15 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     public function allowsBusinessToBusiness()
     {
         return $this->_allowsBusinessToBusiness;
+    }
+
+    /**
+     * Returns true if an insurance denial should be stored to make the payment method unavailable.
+     *
+     * @return bool
+     */
+    public function remembersInsuranceDenial()
+    {
+        return $this->_remembersInsuranceDenial;
     }
 }
