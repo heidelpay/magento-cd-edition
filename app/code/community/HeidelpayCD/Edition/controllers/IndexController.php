@@ -65,7 +65,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         $this->_basketApiHelper =    Mage::helper('hcd/basketApi');
     }
 
-    protected function log($message, $level = "DEBUG", $file = false)
+    protected function log($message, $level = 'DEBUG', $file = false)
     {
         $callers = debug_backtrace();
         return Mage::helper('hcd/payment')->realLog($callers[1]['function'] . ' ' . $message, $level, $file);
@@ -300,6 +300,8 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
     /**
      * redirect return from Heidelpay payment (iframe)
+     *
+     * @throws \Mage_Core_Exception
      */
     public function indexAction()
     {
@@ -326,8 +328,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             $this->log('Wallet reference id :' . $refId);
         }
 
-
-        if ($payment->canBasketApi() and empty($refId)) {
+        if ($payment->canBasketApi() && empty($refId)) {
             // determine if shipping should be included to the basket for the heidelpay basket api
             $includeShipping = $order->getShippingAddress() ? true : false;
 
@@ -336,11 +337,11 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             $url = (Mage::getStoreConfig('hcd/settings/transactionmode', $this->getStore()) == 0)
                 ? $this->_liveBasketUrl : $this->_sandboxBasketUrl;
 
-            $this->log("doRequest shoppingcart : " . json_encode($shoppingCart), 'DEBUG');
+            $this->log('Generated Basket : ' . json_encode($shoppingCart));
 
             $result = Mage::helper('hcd/payment')->doRequest($url, array('raw' => $shoppingCart));
 
-            if (array_key_exists('result', $result) && $result['result'] == 'NOK') {
+            if (array_key_exists('result', $result) && $result['result'] === 'NOK') {
                 $this->log(
                     'Send basket to payment  fail, because of : ' .
                     json_encode($result), 'ERROR'
@@ -353,37 +354,36 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                 return;
             }
 
-            $this->log(
-                "doRequest shopping cart response : " .
-                json_encode($result), 'DEBUG'
-            );
-            $basketId = (array_key_exists('basketId', $result)) ? $result['basketId'] : false;
+            $this->log('Basket API Response :' . json_encode($result));
+            $basketId = array_key_exists('basketId', $result) ? $result['basketId'] : false;
         }
 
+        $orderStatus = $order->getStatus();
 
         // if order status is cancel redirect to cancel page
-        if ($order->getStatus() == $payment->getStatusError()) {
+        if ($orderStatus === $payment->getStatusError()) {
             $this->_redirect(
                 'hcd/index/error',
                 array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true)
             );
+
             return;
         }
 
         // if order status is success redirect to success page
-        if ($order->getStatus() == $payment->getStatusSuccess() or $order->getStatus() == $payment->getStatusPending()) {
+        if ($orderStatus === $payment->getStatusSuccess() || $orderStatus === $payment->getStatusPending()) {
             $this->_redirect(
                 'hcd/index/success',
                 array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true, 'no_mail' => true)
             );
+
             return;
         }
 
-
         $data = $payment->getHeidelpayUrl(false, $basketId, $refId);
 
-        if ($data['POST_VALIDATION'] == 'ACK' and $data['PROCESSING_RESULT'] == 'ACK') {
-            if ($data['PAYMENT_CODE'] == "OT.PA") {
+        if ($data['POST_VALIDATION'] === 'ACK' && $data['PROCESSING_RESULT'] === 'ACK') {
+            if ($data['PAYMENT_CODE'] === 'OT.PA') {
                 $quoteID = ($session->getLastQuoteId() === false) ? $session->getQuoteId() : $session->getLastQuoteId();
                 // last_quote_id workaround for trusted shop buyerprotection
                 $order->getPayment()->setTransactionId($quoteID);
@@ -391,8 +391,8 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             }
 
             $order->setState(
-                $order->getPayment()->getMethodInstance()->getStatusPending(false),
-                $order->getPayment()->getMethodInstance()->getStatusPending(true),
+                $payment->getStatusPending(),
+                $payment->getStatusPending(true),
                 Mage::helper('hcd')->__('Get payment url from Heidelpay -> ') . $data['FRONTEND_REDIRECT_URL']
             );
             $order->getPayment()->addTransaction(
@@ -423,7 +423,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                 array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true)
             );
         }
-
 
         $this->renderLayout();
         return $this;
@@ -528,7 +527,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         $basketData = array(
             'PRESENTATION.AMOUNT' => Mage::helper('hcd/payment')->format($quote->getGrandTotal()),
-            'PRESENTATION.CURRENCY' => $quote->getGlobalCurrencyCode(),
+            'PRESENTATION.CURRENCY' => $quote->getQuoteCurrencyCode(),
             'IDENTIFICATION.TRANSACTIONID' => $mageBasketId,
             'BASKET.ID' => (array_key_exists('basketId', $result)) ? $result['basketId'] : ''
         );
@@ -539,13 +538,13 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         );
 
 
-        $this->log("doRequest url : " . $config['URL'], 'DEBUG');
-        $this->log("doRequest params : " . json_encode($params), 'DEBUG');
+        $this->log('doRequest url : ' . $config['URL']);
+        $this->log('doRequest params : ' . json_encode($params));
         $data = Mage::helper('hcd/payment')->doRequest($config['URL'], $params);
-        $this->log("doRequest response : " . json_encode($data), 'DEBUG');
+        $this->log('doRequest response : ' . json_encode($data));
 
 
-        if ($data['POST_VALIDATION'] == 'ACK' and $data['PROCESSING_RESULT'] == 'ACK') {
+        if ($data['POST_VALIDATION'] === 'ACK' and $data['PROCESSING_RESULT'] === 'ACK') {
             /** Redirect on Success */
             $this->_redirectUrl(trim($data['FRONTEND_REDIRECT_URL']));
             return;

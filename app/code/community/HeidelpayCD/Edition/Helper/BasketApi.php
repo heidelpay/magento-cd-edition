@@ -37,8 +37,8 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'password' => trim(Mage::getStoreConfig('hcd/settings/user_pwd', $storeId)),
             ),
             'basket' => array(
-                'amountTotalNet' => floor(bcmul($quote->getGrandTotal(), 100, 10)),
-                'currencyCode' => $quote->getGlobalCurrencyCode(),
+                'amountTotalNet' => (int) ($this->getBasketTotalNet($quote) * 100),
+                'currencyCode' => $quote->getQuoteCurrencyCode(),
                 'amountTotalDiscount' => floor(bcmul($quote->getDiscountAmount(), 100, 10)),
                 'itemCount' => count($shoppingCartItems),
                 'amountTotalVat' => floor(bcmul($quote->getTaxAmount(), 100, 10))
@@ -100,6 +100,18 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
         }
 
         return $shoppingCart;
+    }
+
+    /**
+     * Returns the total net amount of the quote/order.
+     *
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     *
+     * @return float
+     */
+    protected function getBasketTotalNet($quote)
+    {
+        return $quote->getSubtotal() + $this->getShippingAmount($quote);
     }
 
     /**

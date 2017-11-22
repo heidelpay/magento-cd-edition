@@ -35,7 +35,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         $this->loadLayout();
         $this->getLayout()->getBlock('head')->setTitle($this->__('MasterPass Checkout'));
         
-        $session->setCurrency($quote->getGlobalCurrencyCode());
+        $session->setCurrency($quote->getQuoteCurrencyCode());
         $session->setTotalamount($quote->getGrandTotal());
         
         $data = Mage::getModel('hcd/transaction')
