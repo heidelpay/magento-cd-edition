@@ -38,7 +38,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
             ),
             'basket' => array(
                 'amountTotalNet' => (int) ($this->getBasketTotalNet($quote) * 100),
-                'currencyCode' => $quote->getQuoteCurrencyCode(),
+                'currencyCode' => $quote->getQuoteCurrencyCode() ?: $quote->getOrderCurrencyCode(),
                 'amountTotalDiscount' => floor(bcmul($quote->getDiscountAmount(), 100, 10)),
                 'itemCount' => count($shoppingCartItems),
                 'amountTotalVat' => floor(bcmul($quote->getTaxAmount(), 100, 10))
