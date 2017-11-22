@@ -219,12 +219,8 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     }
 
     /**
-     * Deactivate payment method in case of wrong currency or other credentials
+     * @inheritdoc
      *
-     * @param Mage_Quote
-     * @param null|mixed $quote
-     *
-     * @return bool
      * @throws \Mage_Core_Model_Store_Exception
      */
     public function isAvailable($quote = null)
@@ -690,12 +686,15 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      */
     public function getBasketData($order, $completeBasket = false, $amount = false)
     {
+        /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
+        $paymentHelper = Mage::helper('hcd/payment');
+
         $data = array(
-            'PRESENTATION.AMOUNT' => $amount ?: Mage::helper('hcd/payment')
-                    ->format($order->getGrandTotal()),
+            'PRESENTATION.AMOUNT' => $amount ?: $paymentHelper->format($order->getGrandTotal()),
             'PRESENTATION.CURRENCY' => $order->getOrderCurrencyCode(),
             'IDENTIFICATION.TRANSACTIONID' => $order->getRealOrderId()
         );
+
         // Add basket details in case of BillSafe or invoicing over heidelpay
         $basket = array();
         if ($completeBasket) {
@@ -859,6 +858,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         /** @var $order Mage_Sales_Model_Order */
         $order = $payment->getOrder();
 
+        /** @var HeidelpayCD_Edition_Helper_Payment $paymentHelper */
+        $paymentHelper = Mage::helper('hcd/payment');
+
         /**  @var $transaction HeidelpayCD_Edition_Model_Transaction */
         $transaction = Mage::getModel('hcd/transaction');
         $captureData = $transaction->loadLastTransactionDataByUniqeId((string)$payment->getRefundTransactionId());
@@ -869,17 +871,17 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         $frontend['FRONTEND.MODE'] = 'DEFAULT';
         $frontend['FRONTEND.ENABLED'] = 'false';
         $user = $this->getUser($order, true);
-        $basketData = $this->getBasketData($order, false, $amount);
+        $basketData = $this->getBasketData($order, false, $paymentHelper->format($amount));
         $basketData['IDENTIFICATION.REFERENCEID'] = (string)$payment->getRefundTransactionId();
-        $params = Mage::helper('hcd/payment')->preparePostData(
+        $params = $paymentHelper->preparePostData(
             $config, $frontend, $user, $basketData,
             $criterion = array()
         );
-        $this->log('doRequest url : ' . $config['URL']);
-        $this->log('doRequest params : ' . json_encode($params));
+        $this->log('Refund url : ' . $config['URL']);
+        $this->log('Refund params : ' . json_encode($params));
 
-        $src = Mage::helper('hcd/payment')->doRequest($config['URL'], $params);
-        $this->log('doRequest response : ' . json_encode($src));
+        $src = $paymentHelper->doRequest($config['URL'], $params);
+        $this->log('Refund response : ' . json_encode($src));
         if ($src['PROCESSING_RESULT'] === 'NOK') {
             Mage::throwException('Heidelpay Error: ' . $src['PROCESSING_RETURN']);
             return $this;
@@ -1101,7 +1103,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         /** @var  $paymentHelper HeidelpayCD_Edition_Helper_Payment */
         $paymentHelper = Mage::helper('hcd/payment');
-
 
         $message = ($message === '') ? 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] : $message;
         $totallyPaid = false;

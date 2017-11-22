@@ -27,7 +27,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         $this->_code = 'hcdivpol';
         $this->_canBasketApi = true;
         $this->_canAuthorize = true;
-        $this->_canRefund = true;
         $this->_canReversal = true;
         $this->_sendsInvoiceMailComment = true;
         $this->_reportsShippingToHeidelpay = true;

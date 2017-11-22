@@ -27,8 +27,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
         $this->_code = 'hcdmpa';
         $this->_canCapture = true;
         $this->_canCapturePartial = true;
-        $this->_canRefund = true;
-        $this->_canRefundInvoicePartial = true;
         $this->_canReversal = true;
         $this->_canBasketApi = true;
 

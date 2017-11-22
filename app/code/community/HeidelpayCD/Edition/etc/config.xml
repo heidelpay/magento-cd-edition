@@ -270,7 +270,7 @@
             </hcdbs>
             <hcdpal>
                 <group>hcd</group>
-                <title>Pay Pal</title>
+                <title>PayPal</title>
                 <active>0</active>
                 <channel>31HA07BC8142C5A171749A60D979B6E4</channel>
                 <bookingmode>DB</bookingmode>

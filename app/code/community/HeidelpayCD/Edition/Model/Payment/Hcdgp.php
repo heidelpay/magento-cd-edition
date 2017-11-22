@@ -16,7 +16,6 @@
  */
 class HeidelpayCD_Edition_Model_Payment_Hcdgp extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdgp constructor.
      */
@@ -25,7 +24,5 @@ class HeidelpayCD_Edition_Model_Payment_Hcdgp extends HeidelpayCD_Edition_Model_
         parent::__construct();
 
         $this->_code = 'hcdgp';
-        $this->_canRefund = true;
-        $this->_canRefundInvoicePartial = true;
     }
 }

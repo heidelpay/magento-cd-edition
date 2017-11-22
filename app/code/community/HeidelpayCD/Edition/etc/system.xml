@@ -517,7 +517,7 @@
                     </fields>
                 </hcdddsec> <!-- sort order = 65 -->
                 <hcdpal translate="label">
-                    <label>Heidelpay Pay Pal (hcd)</label>
+                    <label>Heidelpay PayPal (hcd)</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>70</sort_order>
                     <show_in_default>1</show_in_default>

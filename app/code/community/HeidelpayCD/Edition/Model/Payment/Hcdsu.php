@@ -26,8 +26,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdsu extends HeidelpayCD_Edition_Model_
         parent::__construct();
 
         $this->_code = 'hcdsu';
-        $this->_canRefund = true;
-        $this->_canRefundInvoicePartial = true;
     }
 
     /**

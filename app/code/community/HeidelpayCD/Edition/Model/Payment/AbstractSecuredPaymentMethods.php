@@ -65,11 +65,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
     }
 
     /**
-     * is payment method available
+     * @inheritdoc
      *
-     * @param null $quote
-     *
-     * @return bool is payment method available
      * @throws \Mage_Core_Model_Store_Exception
      */
     public function isAvailable($quote = null)

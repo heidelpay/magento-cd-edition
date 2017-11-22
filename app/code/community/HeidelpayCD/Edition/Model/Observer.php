@@ -202,7 +202,7 @@ class HeidelpayCD_Edition_Model_Observer
         $user = $payment->getUser($order, true);
 
         $basketData = $payment->getBasketData($order);
-        $basketData['IDENTIFICATION.REFERENCEID'] = $authorisation['IDENTIFICATION_UNIQUEID'];#
+        $basketData['IDENTIFICATION.REFERENCEID'] = $authorisation['IDENTIFICATION_UNIQUEID'];
 
         $criterion = array();
 
@@ -221,12 +221,12 @@ class HeidelpayCD_Edition_Model_Observer
         // prepare shipment report
         $params = $paymentHelper->preparePostData($config, $frontend, $user, $basketData, $criterion);
 
-        $this->log('doRequest url : ' . $config['URL']);
-        $this->log('doRequest params : ' . json_encode($params));
+        $this->log('Finalize url : ' . $config['URL']);
+        $this->log('Finalize params : ' . json_encode($params));
         // send shipment report to heidelpay api
         $src = $paymentHelper->doRequest($config['URL'], $params);
 
-        $this->log('doRequest response : ' . json_encode($src));
+        $this->log('Finalize response : ' . json_encode($src));
 
         // generate error message in case of api error
         if ($src['PROCESSING_RESULT'] === 'NOK') {
