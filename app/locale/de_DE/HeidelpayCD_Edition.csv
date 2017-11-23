@@ -179,7 +179,7 @@
 "Reversal transaction is not possible here, since there was no Authorize transaction.","(Info) Eine Stornierungsmeldung an heidelpay wird nicht gesendet, weil keine Authorisierungstransaktion vorliegt."
 "The minimum age is 18 years for this payment method.","Das Mindestalter für diese Zahlart ist 18 Jahre."
 
-"You have used the card %CARD% befor, would you like to use this again?","Sie haben beim letzten Einkauf die Karte %CARD% verwendet, wollen Sie diese erneut benutzen?"
+"You have used the card %CARD% before, would you like to use this again?","Sie haben beim letzten Einkauf die Karte %CARD% verwendet, wollen Sie diese erneut benutzen?"
 "HPError-100.100.101","Bitte &uuml;berpr&uuml;fen Sie Ihre Eingaben"
 "HPError-100.100.303","Die Karte ist abgelaufen"
 "HPError-100.100.500","Bitte &uuml;berpr&uuml;fen Sie Ihre Eingaben"

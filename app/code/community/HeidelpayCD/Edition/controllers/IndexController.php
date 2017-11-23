@@ -502,7 +502,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             'CRITERION.SECRET' => Mage::getModel('hcd/resource_encryption')->getHash($mageBasketId),
             'CRITERION.LANGUAGE' => strtolower(Mage::helper('hcd/payment')->getLang()),
             'CRITERION.STOREID' => $storeId,
-            'SHOP.TYPE' => 'Magento ' . Mage::getVersion(),
+            'SHOP.TYPE' => sprintf('Magento %s %s', Mage::getEdition(), Mage::getVersion()),
             'SHOPMODULE.VERSION' => 'HeidelpayCD Edition - '
                 . (string)Mage::getConfig()->getNode()->modules->HeidelpayCD_Edition->version,
             'WALLET.DIRECT_PAYMENT' => 'false'

@@ -489,7 +489,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
                     ->getHash((string)$orderNumber),
             'CRITERION.LANGUAGE' => strtolower(Mage::helper('hcd/payment')->getLang()),
             'CRITERION.STOREID' => $storeId ?: Mage::app()->getStore()->getId(),
-            'SHOP.TYPE' => 'Magento ' . Mage::getVersion(),
+            'SHOP.TYPE' => sprintf('Magento %s %s', Mage::getEdition(), Mage::getVersion()),
             'SHOPMODULE.VERSION' => 'HeidelpayCD Edition - ' .
                 (string)Mage::getConfig()->getNode()->modules->HeidelpayCD_Edition->version
         );
@@ -821,7 +821,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         }
 
         // prevent frontend to capture an amount in case of direct booking with auto invoice
-        if (Mage::app()->getStore()->getId() !== 0) {
+        if (Mage::app()->getStore()->getId() !== '0') {
             $this->log('try to capture amount in frontend ... this is not necessary !');
             return false;
         }
@@ -1202,7 +1202,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             null
         );
 
-        $this->log('Set Transaction to Pending : ');
+        $this->log('Setting Status/State for Order # ' . $order->getRealOrderId() . 'to Pending.');
         $order->setState(
             $order->getPayment()->getMethodInstance()->getStatusPending(false),
             $order->getPayment()->getMethodInstance()->getStatusPending(true),
