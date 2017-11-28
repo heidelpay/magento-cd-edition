@@ -284,6 +284,12 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             return $order;
         }
 
+        /** @noinspection PhpUndefinedMethodInspection */
+        $orderPayment
+            ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
+            ->setParentTransactionId($order->getPayment()->getLastTransId())
+            ->setIsTransactionClosed(true);
+
         $paidAmount = (float) $data['PRESENTATION_AMOUNT'];
         $dueLeft = $order->getTotalDue() - $paidAmount;
         $totalPaid = $order->getTotalPaid() + $paidAmount;
@@ -352,12 +358,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $order->setTotalInvoiced($totalPaid)
             ->setTotalPaid($totalPaid)
             ->setTotalDue($dueLeft);
-
-        /** @noinspection PhpUndefinedMethodInspection */
-        $orderPayment
-            ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
-            ->setParentTransactionId($order->getPayment()->getLastTransId())
-            ->setIsTransactionClosed(true);
 
         $orderPayment->addTransaction(
             Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE,
