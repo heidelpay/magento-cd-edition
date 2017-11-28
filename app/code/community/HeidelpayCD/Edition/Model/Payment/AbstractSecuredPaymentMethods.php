@@ -229,7 +229,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         /** @noinspection PhpUndefinedMethodInspection */
         $transactionSave->save();
 
-        $this->log('Set transaction to processed and generate invoice');
+        $this->log('Setting order status/state to processed and generate invoice.');
 
         /** @noinspection PhpUndefinedMethodInspection */
         $order->setState(
@@ -266,30 +266,48 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $message = ($message === '') ? 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] : $message;
         $totallyPaid = false;
 
+        /** @var Mage_Sales_Model_Order_Payment $orderPayment */
+        $orderPayment = $order->getPayment();
+        /** @var HeidelpayCD_Edition_Model_Payment_Abstract $paymentMethodInstance */
+        $paymentMethodInstance = $orderPayment->getMethodInstance();
+
         /** @noinspection PhpUndefinedMethodInspection */
-        $order->getPayment()
+        $orderPayment
             ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
             ->setParentTransactionId($order->getPayment()->getLastTransId())
             ->setIsTransactionClosed(true);
 
-        if ($order->getOrderCurrencyCode() === $data['PRESENTATION_CURRENCY'] &&
-            $paymentHelper->format($order->getGrandTotal()) === $data['PRESENTATION_AMOUNT']
-        ) {
-            /** @noinspection PhpUndefinedMethodInspection */
+        // if we have a currency mismatch, log the issue and don't go on.
+        if ($order->getOrderCurrencyCode() !== $data['PRESENTATION_CURRENCY']) {
+            $this->log(
+                sprintf(
+                    'Currency mismatch for order #%s. expected: [%s], actual: [%s]',
+                    $order->getRealOrderId(),
+                    $order->getOrderCurrencyCode(),
+                    $data['PRESENTATION_CURRENCY']
+                )
+            );
+
+            return $order;
+        }
+
+        $paidAmount = (float) $data['PRESENTATION_AMOUNT'];
+        $dueLeft = $order->getTotalDue() - $paidAmount;
+        $totalPaid = $order->getTotalPaid() + $paidAmount;
+
+        if ($dueLeft > 0.00) {
             $order->setState(
-                $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
-                $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
+                $paymentMethodInstance->getStatusPartlyPaid(),
+                $paymentMethodInstance->getStatusPartlyPaid(true),
+                $message
+            );
+        } else {
+            $order->setState(
+                $paymentMethodInstance->getStatusSuccess(),
+                $paymentMethodInstance->getStatusSuccess(true),
                 $message
             );
             $totallyPaid = true;
-        } else {
-            // in case rc is ack and amount is to low or currency miss match
-            /** @noinspection PhpUndefinedMethodInspection */
-            $order->setState(
-                $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(false),
-                $order->getPayment()->getMethodInstance()->getStatusPartlyPaid(true),
-                $message
-            );
         }
 
         // Set invoice to paid when the total amount matches
@@ -319,10 +337,11 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         }
 
         // Set total paid and invoice to the connector amount
-        $order->setTotalInvoiced($data['PRESENTATION_AMOUNT']);
-        $order->setTotalPaid($data['PRESENTATION_AMOUNT']);
+        $order->setTotalInvoiced($totalPaid)
+            ->setTotalPaid($totalPaid)
+            ->setTotalDue($dueLeft);
 
-        $order->getPayment()->addTransaction(
+        $orderPayment->addTransaction(
             Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE,
             null,
             true,

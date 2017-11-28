@@ -112,4 +112,15 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
 
         return $user;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function processingTransaction($order, $data, $message='')
+    {
+        $message = Mage::helper('hcd')->__('Received amount ')
+            . $data['PRESENTATION_AMOUNT'] . ' ' . $data['PRESENTATION_CURRENCY'] . ' ' . $message;
+
+        return parent::processingTransaction($order, $data, $message);
+    }
 }
