@@ -233,9 +233,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
 
         /** @noinspection PhpUndefinedMethodInspection */
         $order->setState(
-            $order->getPayment()->getMethodInstance()->getStatusSuccess(false),
-            $order->getPayment()->getMethodInstance()->getStatusSuccess(true),
-            $message
+            $order->getPayment()->getMethodInstance()->getStatusSuccess(),
+            $order->getPayment()->getMethodInstance()->getStatusSuccess(true)
         );
 
         $order->getPayment()->addTransaction(
@@ -295,24 +294,38 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         $dueLeft = $order->getTotalDue() - $paidAmount;
         $totalPaid = $order->getTotalPaid() + $paidAmount;
 
+        if ($dueLeft === 0.00) {
+            $order->setState(
+                $paymentMethodInstance->getStatusSuccess(),
+                $paymentMethodInstance->getStatusSuccess(true)
+            );
+
+            $totallyPaid = true;
+        }
+
+        if ($dueLeft < 0.00) {
+            $comment = sprintf(
+                'Customer paid too much: %.2f', $dueLeft * -1
+            );
+
+            $order->setState(
+                $paymentMethodInstance->getStatusPartlyPaid(),
+                $paymentMethodInstance->getStatusPartlyPaid(),
+                $comment
+            );
+
+            $totallyPaid = true;
+        }
+
         if ($dueLeft > 0.00) {
             $order->setState(
                 $paymentMethodInstance->getStatusPartlyPaid(),
-                $paymentMethodInstance->getStatusPartlyPaid(true),
-                $message
+                $paymentMethodInstance->getStatusPartlyPaid(true)
             );
-        } else {
-            $order->setState(
-                $paymentMethodInstance->getStatusSuccess(),
-                $paymentMethodInstance->getStatusSuccess(true),
-                $message
-            );
-            $totallyPaid = true;
         }
 
         // Set invoice to paid when the total amount matches
         if ($totallyPaid && $order->hasInvoices()) {
-
             /** @var Mage_Sales_Model_Resource_Order_Invoice_Collection $invoices */
             $invoices = $order->getInvoiceCollection();
 
@@ -332,6 +345,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
                 $transactionSave = Mage::getModel('core/resource_transaction')
                     ->addObject($invoice)
                     ->addObject($invoice->getOrder());
+
                 $transactionSave->save();
             }
         }
@@ -347,6 +361,12 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             true,
             $message
         );
+
+        // close the parent transaction if no due is left.
+        if ($totallyPaid) {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $orderPayment->setShouldCloseParentTransaction(true);
+        }
 
         /** @noinspection PhpUndefinedMethodInspection */
         $order->setIsInProcess(true);
