@@ -270,12 +270,6 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         /** @var HeidelpayCD_Edition_Model_Payment_Abstract $paymentMethodInstance */
         $paymentMethodInstance = $orderPayment->getMethodInstance();
 
-        /** @noinspection PhpUndefinedMethodInspection */
-        $orderPayment
-            ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
-            ->setParentTransactionId($order->getPayment()->getLastTransId())
-            ->setIsTransactionClosed(true);
-
         // if we have a currency mismatch, log the issue and don't go on.
         if ($order->getOrderCurrencyCode() !== $data['PRESENTATION_CURRENCY']) {
             $this->log(
@@ -297,7 +291,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         if ($dueLeft === 0.00) {
             $order->setState(
                 $paymentMethodInstance->getStatusSuccess(),
-                $paymentMethodInstance->getStatusSuccess(true)
+                $paymentMethodInstance->getStatusSuccess(true),
+                $message
             );
 
             $totallyPaid = true;
@@ -305,7 +300,9 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
 
         if ($dueLeft < 0.00) {
             $comment = sprintf(
-                'Customer paid too much: %.2f', $dueLeft * -1
+                'Customer paid too much: %s%.2f',
+                Mage::app()->getLocale()->currency($order->getOrderCurrencyCode())->getSymbol(),
+                $dueLeft * -1
             );
 
             $order->setState(
@@ -320,7 +317,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         if ($dueLeft > 0.00) {
             $order->setState(
                 $paymentMethodInstance->getStatusPartlyPaid(),
-                $paymentMethodInstance->getStatusPartlyPaid(true)
+                $paymentMethodInstance->getStatusPartlyPaid(true),
+                $message
             );
         }
 
@@ -355,11 +353,16 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
             ->setTotalPaid($totalPaid)
             ->setTotalDue($dueLeft);
 
+        /** @noinspection PhpUndefinedMethodInspection */
+        $orderPayment
+            ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
+            ->setParentTransactionId($order->getPayment()->getLastTransId())
+            ->setIsTransactionClosed(true);
+
         $orderPayment->addTransaction(
             Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE,
             null,
-            true,
-            $message
+            true
         );
 
         // close the parent transaction if no due is left.
