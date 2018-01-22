@@ -20,13 +20,17 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
     /**
      * send request to heidelpay apo
      *
-     * @param $url string url for the heidelpay api
+     * @param       $url string url for the heidelpay api
      * @param array $params post parameter
      *
-     * @return mixed|null|Zend_Http_Response response from heidelpay api
+     * @return array response from heidelpay api
+     *
+     * @throws Zend_Http_Client_Exception
+     * @throws Mage_Core_Model_Store_Exception
      */
-    public function doRequest($url, $params = array())
+    public function doRequest($url, array $params = array())
     {
+        $result = array();
         $client = new Zend_Http_Client(trim($url), array());
 
         if (array_key_exists('raw', $params)) {
@@ -43,25 +47,47 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
             $client->setAdapter($adapter);
         }
 
-        $response = $client->request('POST');
-        $res = $response->getBody();
+        $response = null;
+        $responseBody = null;
 
-        if ($response->isError()) {
-            $this->log('Request fail. Http code : ' . $response->getStatus() . ' Message : ' . $res, 'ERROR');
-            $this->log('Request data : ' . json_encode($params), 'ERROR');
-            if (array_key_exists('raw', $params)) {
-                return $response;
+        try {
+            $response = $client->request('POST');
+            $responseBody = $response->getBody();
+        } catch (Zend_Http_Client_Exception $e) {
+            $message = sprintf(
+                'doRequest failed, because on exception occured. Message: %s, Code: %s, Stacktrace: %s',
+                $e->getMessage(),
+                $e->getCode(),
+                $e->getTraceAsString()
+            );
+            $this->log($message, 'ERROR');
+
+            // return an empty array on error.
+            return $result;
+        }
+
+        if (!empty($responseBody)) {
+            if ($response->isError()) {
+                $this->log(
+                    'Request fail. Http code : ' . $response->getStatus() . ' Message : ' . $responseBody,
+                    'ERROR'
+                );
+
+                $this->log('Request data : ' . json_encode($params), 'ERROR');
+                if (array_key_exists('raw', $params)) {
+                    return $result;
+                }
             }
+
+            if (array_key_exists('raw', $params)) {
+                return json_decode($responseBody, true);
+            }
+
+            // @codingStandardsIgnoreLine parse_str is discouraged
+            parse_str($responseBody, $result);
+            ksort($result); // TODO-Stephano: might refactor ksort + log(json_encode($params)) into single helper?
         }
 
-        if (array_key_exists('raw', $params)) {
-            return json_decode($res, true);
-        }
-
-        $result = null;
-        // @codingStandardsIgnoreLine parse_str is discouraged
-        parse_str($res, $result);
-        ksort($result); // TODO-Stephano: might refactor ksort + log(json_encode($params)) into single helper?
         return $result;
     }
 
@@ -107,8 +133,8 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
             $params['SHOP.TYPE'] = $config['SHOP.TYPE'];
         }
 
-        if (array_key_exists('SHOPMODUL.VERSION', $config)) {
-            $params['SHOPMODUL.VERSION'] = $config['SHOPMODUL.VERSION'];
+        if (array_key_exists('SHOPMODULE.VERSION', $config)) {
+            $params['SHOPMODULE.VERSION'] = $config['SHOPMODULE.VERSION'];
         }
 
         /* frontend configuration */

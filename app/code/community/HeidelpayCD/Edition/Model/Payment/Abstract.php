@@ -672,6 +672,14 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             );
         }
 
+        // get the birth date if it is available in the quote.
+        if (!empty($result['payment_data'])
+            && !isset($result['payment_data']['NAME.BIRTHDATE'])
+            && !empty($this->getQuote()->getCustomerDob())
+        ) {
+            $result['payment_data']['NAME.BIRTHDATE'] = $this->getQuote()->getCustomerDob();
+        }
+
         return $result;
     }
 

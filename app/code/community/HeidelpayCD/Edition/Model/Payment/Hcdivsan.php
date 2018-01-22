@@ -82,8 +82,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
     }
 
     /**
-     * @inheritdoc
+     * @param Mage_Sales_Model_Order $order magento order object
+     * @param bool                   $isReg in case of registration
+     *
+     * @return array
      * @throws \Mage_Core_Model_Store_Exception
+     * @throws Mage_Core_Exception
      */
     public function getUser($order, $isReg = false)
     {

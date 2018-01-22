@@ -23,8 +23,12 @@ class HeidelpayCD_Edition_Helper_AbstractHelper extends Mage_Core_Helper_Abstrac
      * @param mixed $message
      * @param mixed $level
      * @param mixed $file
+     *
+     * @return bool
+     *
+     * @throws Mage_Core_Model_Store_Exception
      */
-    public function log($message, $level = "DEBUG", $file = false)
+    public function log($message, $level = 'DEBUG', $file = false)
     {
         $callers = debug_backtrace();
         return $this->realLog($callers[1]['function'] . ' ' . $message, $level, $file);
@@ -36,39 +40,42 @@ class HeidelpayCD_Edition_Helper_AbstractHelper extends Mage_Core_Helper_Abstrac
      * @param mixed $message
      * @param mixed $level
      * @param mixed $file
+     *
+     * @return bool
+     *
+     * @throws Mage_Core_Model_Store_Exception
      */
-    public function realLog($message, $level = "DEBUG", $file = false)
+    public function realLog($message, $level = 'DEBUG', $file = false)
     {
         $storeId = Mage::app()->getStore()->getId();
-        $path = "hcd/settings/";
-
+        $path = 'hcd/settings/';
 
         switch ($level) {
-            case "CRIT":
+            case 'CRIT':
                 $lev = Zend_Log::CRIT;
                 break;
-            case "ERR":
-            case "ERROR":
+            case 'ERR':
+            case 'ERROR':
                 $lev = Zend_Log::ERR;
                 break;
-            case "WARN":
+            case 'WARN':
                 $lev = Zend_Log::WARN;
                 break;
-            case "NOTICE":
+            case 'NOTICE':
                 $lev = Zend_Log::NOTICE;
                 break;
-            case "INFO":
+            case 'INFO':
                 $lev = Zend_Log::INFO;
                 break;
             default:
                 $lev = Zend_Log::DEBUG;
-                if (Mage::getStoreConfig($path . "log", $storeId) == 0) {
+                if (Mage::getStoreConfig($path . 'log', $storeId) == 0) {
                     return true;
                 }
                 break;
         }
 
-        $file = ($file === false) ? "Heidelpay.log" : $file;
+        $file = ($file === false) ? 'Heidelpay.log' : $file;
 
         Mage::log($message, $lev, $file);
         return true;
@@ -90,6 +97,8 @@ class HeidelpayCD_Edition_Helper_AbstractHelper extends Mage_Core_Helper_Abstrac
      * function to format amount
      *
      * @param mixed $number
+     *
+     * @return string
      */
     public function format($number)
     {

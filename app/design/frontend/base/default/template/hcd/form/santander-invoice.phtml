@@ -27,6 +27,8 @@ $dobyear = null;
 $dobmonth = null;
 $dobday = null;
 
+$userSalutation = null;
+
 $path = 'payment/' . $code . '/';
 $storeId = Mage::app()->getStore()->getId();
 $recognition = Mage::getStoreConfig($path . 'recognition', $storeId);
@@ -38,6 +40,13 @@ if ($recognition == Recognition::SAME_SHIPPING_ADDRESS && $customerId != 0) {
     // only if shipping address is unchanged
     $hash = $paymentMethod->getShippingHash();
     $userData = $paymentMethod->getCustomerData();
+
+    if (array_key_exists('payment_data', $userData) &&
+        array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])
+    ) {
+        list($dobyear, $dobmonth, $dobday) = explode('-', $userData['payment_data']['NAME.BIRTHDATE']);
+    }
+
     // if a shipping hash is present, but not the same as a one saved before, do not use recognized data.
     if (!empty($userData) && array_key_exists('payment_data', $userData)
         && isset($userData['payment_data']['SHIPPING_HASH'])
@@ -47,58 +56,62 @@ if ($recognition == Recognition::SAME_SHIPPING_ADDRESS && $customerId != 0) {
     }
 } elseif ($recognition == Recognition::ALWAYS && $customerId != 0) {
     $userData = $paymentMethod->getCustomerData();
+
+    if (array_key_exists('payment_data', $userData) &&
+        array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])
+    ) {
+        list($dobyear, $dobmonth, $dobday) = explode('-', $userData['payment_data']['NAME.BIRTHDATE']);
+    }
 }
 
-if (array_key_exists('payment_data', $userData) &&
-    array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])
-) {
-    list($dobyear, $dobmonth, $dobday) = explode('-', $userData['payment_data']['NAME.BIRTHDATE']);
+
+if (isset($userData['payment_data']['NAME.SALUTATION'])) {
+    $userSalutation = $userData['payment_data']['NAME.SALUTATION'];
 }
 
 ?>
-<div class="form-list fieldset hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
-    <p class="required"><?php echo $this->htmlEscape($this->__('* Required Fields')) ?></p>
+<div class="form-list fieldset hcd-payment-info" id="payment_form_<?php echo $form->escapeHtml($code) ?>" style="display: none;">
+    <p class="required"><?php echo $form->escapeHtml($form->__('* Required Fields')) ?></p>
     <div>
         <img src="<?php echo $form->getImgLink() ?>" alt="Rechnungskauf von Santander" title="Rechnungskauf von Santander" />
     </div>
     <!-- Select Input for salutation -->
     <div class="input-box">
-        <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
-               class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('salutation')) ?>
+        <label for="<?php echo $form->escapeHtml($code) ?>_salutation"
+               class="required hcd-singleline-label"><em>*</em><?php echo $form->escapeHtml($form->__('salutation')) ?>
         </label>
         <select class="required-entry"
-                title="<?php echo $this->htmlEscape($this->__('salutation')) ?>"
-                name="payment[<?php echo $this->htmlEscape($code) ?>_salutation]">
-            <option value="MR"><?php echo $this->htmlEscape($this->__('mr')) ?></option>
-            <option value="MRS" <?php
-            if (array_key_exists('payment_data', $userData) &&
-                array_key_exists('NAME.SALUTATION', $userData['payment_data']) &&
-                $userData['payment_data']['NAME.SALUTATION'] === 'MRS'
-            ) {
-                echo 'selected="selected"';
-            } ?>>
-                <?php echo $this->htmlEscape($this->__('mrs')) ?>
+                title="<?php echo $form->escapeHtml($form->__('salutation')) ?>"
+                name="payment[<?php echo $form->escapeHtml($code) ?>_salutation]">
+            <option disabled="disabled" <?php echo $userSalutation === null ? 'selected="selected"' : ''; ?>>
+                <?php echo $form->escapeHtml($form->__('Please choose your salution')) ?>
+            </option>
+            <option value="MR" <?php echo $userSalutation === 'MR' ? 'selected="selected"' : ''; ?>>
+                <?php echo $form->escapeHtml($form->__('mr')) ?>
+            </option>
+            <option value="MRS" <?php echo $userSalutation === 'MRS' ? 'selected="selected"' : ''; ?>>
+                <?php echo $form->escapeHtml($form->__('mrs')) ?>
             </option>
         </select>
     </div>
     <!-- Select Input for date of birth (day) -->
     <div class="input-box">
-        <label for="<?php echo $this->htmlEscape($code) ?>_dob"
+        <label for="<?php echo $form->escapeHtml($code) ?>_dob"
                class="required hcd-singleline-label"><em>*</em>
-            <?php echo $this->htmlEscape($this->__('Date of birth')) ?></label>
+            <?php echo $form->escapeHtml($form->__('Date of birth')) ?></label>
         <select class="required-entry"
-                title="<?php echo $this->htmlEscape($this->__('day')) ?>"
-                name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]">
+                title="<?php echo $form->escapeHtml($form->__('day')) ?>"
+                name="payment[<?php echo $form->escapeHtml($code) ?>_dobday]">
             <option disabled <?php echo $dobday === null ? 'selected' : ''; ?> value>
-                <?php echo $this->htmlEscape($this->__('day')); ?>
+                <?php echo $form->escapeHtml($form->__('day')); ?>
             </option>
             <?php
             $i = 0;
             for ($i = 1; $i <= 31; $i++) {
                 $v = sprintf('%02d', $i);
                 $selected = ($dobday === $v) ? 'selected="selected"' : '';
-                echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected)
-                    . '>' . $this->htmlEscape($v) . '</option>';
+                echo '<option value="' . $form->escapeHtml($v) . '" ' . $form->escapeHtml($selected)
+                    . '>' . $form->escapeHtml($v) . '</option>';
             }
             ?>
         </select>
@@ -106,18 +119,18 @@ if (array_key_exists('payment_data', $userData) &&
     <!-- Select Input for date of birth (month) -->
     <div class="input-box">
         <select class="required-entry"
-                title="<?php echo $this->htmlEscape($this->__('month')) ?>"
-                name="payment[<?php echo $this->htmlEscape($code) ?>_dobmonth]">
+                title="<?php echo $form->escapeHtml($form->__('month')) ?>"
+                name="payment[<?php echo $form->escapeHtml($code) ?>_dobmonth]">
             <option disabled <?php echo $dobmonth === null ? 'selected' : ''; ?> value>
-                <?php echo $this->htmlEscape($this->__('month')); ?>
+                <?php echo $form->escapeHtml($form->__('month')); ?>
             </option>
             <?php
             $i = 0;
             for ($i = 1; $i <= 12; $i++) {
                 $v = sprintf('%02d', $i);
                 $selected = ($dobmonth === $v) ? 'selected="selected"' : '';
-                echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected) . '>' .
-                    $this->htmlEscape($v) . '</option>';
+                echo '<option value="' . $form->escapeHtml($v) . '" ' . $form->escapeHtml($selected) . '>' .
+                    $form->escapeHtml($v) . '</option>';
             }
             ?>
         </select>
@@ -125,10 +138,10 @@ if (array_key_exists('payment_data', $userData) &&
     <!-- Select Input for date of birth (year) -->
     <div class="input-box">
         <select class="required-entry"
-                title="<?php echo $this->htmlEscape($this->__('year')) ?>"
-                name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]">
+                title="<?php echo $form->escapeHtml($form->__('year')) ?>"
+                name="payment[<?php echo $form->escapeHtml($code) ?>_dobyear]">
             <option disabled <?php echo $dobyear === null ? 'selected' : ''; ?> value>
-                <?php echo $this->htmlEscape($this->__('year')); ?>
+                <?php echo $form->escapeHtml($form->__('year')); ?>
             </option>
             <?php
             $i = 0;
@@ -136,8 +149,8 @@ if (array_key_exists('payment_data', $userData) &&
                 // @codingStandardsIgnoreLine should be refactored - issue #2
                 $year = date('Y', strtotime("last day of -$i year"));
                 $selected = ($dobyear === $year) ? 'selected="selected"' : '';
-                echo '<option value="' . $this->htmlEscape($year) . '" ' .
-                    $this->htmlEscape($selected) . '>' . $this->htmlEscape($year) . '</option>';
+                echo '<option value="' . $form->escapeHtml($year) . '" ' .
+                    $form->escapeHtml($selected) . '>' . $form->escapeHtml($year) . '</option>';
             }
             ?>
         </select>
@@ -163,7 +176,7 @@ if (array_key_exists('payment_data', $userData) &&
             </p>
         </div>
         <div class="hcd-payment-desc">
-            <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
+            <?php echo $form->escapeHtml($form->__('Desc' . $code)); ?>
         </div>
     </div>
 </div>
