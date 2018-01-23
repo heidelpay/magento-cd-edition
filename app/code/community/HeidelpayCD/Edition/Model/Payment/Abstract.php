@@ -624,16 +624,27 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @param int|null $storeId magento store id
      *
      * @return array additional payment information
-     *
-     * @throws \Mage_Core_Model_Store_Exception
      */
     public function getCustomerData($code = null, $customerId = null, $storeId = null)
     {
         $result = array();
 
-        $paymentCode = $code ?: $this->getCode();
-        $customerId = $customerId ?: $this->getQuote()->getBillingAddress()->getCustomerId();
-        $storeId = $storeId ?: Mage::app()->getStore()->getId();
+        try {
+            $paymentCode = $code ?: $this->getCode();
+            $customerId = $customerId ?: $this->getQuote()->getBillingAddress()->getCustomerId();
+            $storeId = $storeId ?: Mage::app()->getStore()->getId();
+        } catch (Mage_Core_Model_Store_Exception $e) {
+            $message = sprintf(
+                '%s exception thrown. Message: %s, Code: %s, Stacktrace: %s',
+                get_class($e),
+                $e->getMessage(),
+                $e->getCode(),
+                $e->getTraceAsString()
+            );
+            $this->log($message);
+            return $result;
+        }
+
         if ($customerId === 0) {
             $visitorData = Mage::getSingleton('core/session')->getVisitorData();
             $customerId = $visitorData['visitor_id'];
