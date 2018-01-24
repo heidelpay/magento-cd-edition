@@ -22,7 +22,7 @@
 "specific countries","specific countries"
 "always","always"
 "no recognition","no recognition"
-"only if shippping adress is unchanged","only if shippping adress is unchanged"
+"only if shippping adress is unchanged","only if shipping address is unchanged"
 "Prepayment Info Text","Please transfer the amount of <strong>{AMOUNT} {CURRENCY}</strong> to the following account<br /><br />
 		Holder: {CONNECTOR_ACCOUNT_HOLDER}<br/>
 		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/><br/>
@@ -35,7 +35,7 @@
 		<br />
 		Please ensure that there will be sufficient funds on the corresponding account."	
 "An unexpected error occurred. Please contact us to get further information.","An unexpected error occurred. Please contact us to get further information."
-"Invoice Info Text","Please transfer the amount of <strong>{AMOUNT} {CURRENCY}</strong>after receiving your order to the following account<br /><br />
+"Invoice Info Text","Please transfer the amount of <strong>{AMOUNT} {CURRENCY}</strong> after receiving your order to the following account<br /><br />
 		Holder: {CONNECTOR_ACCOUNT_HOLDER}<br/>
 		IBAN: {CONNECTOR_ACCOUNT_IBAN}<br/><br/>
 		BIC: {CONNECTOR_ACCOUNT_BIC}<br/><br/>
@@ -43,10 +43,10 @@
 		<strong>{IDENTIFICATION_SHORTID}</strong>"
 "continue","continue"
 "Please enter additional payment information.","Please enter additional payment information."
-"recived amount ","recived amount "
+"recived amount ","received amount "
 "Push information from Heidelpay","Push information from Heidelpay"
 "Direct Booking","Direct Booking"
-"Preauthorisation","Preauthorisation"
+"Preauthorisation","Preauthorization"
 
 "Credit Card","Credit Card"
 "Debit Card","Debit Card"
@@ -86,15 +86,15 @@
 "Deschcdivsec","Pay comfortable with invoice"
 
 "Return in Errorcase","Return in Errorcase"
-"Please configurate where your costumer should be redirected to in case of an payment error","Please configurate where your costumer should be redirected to in case of an payment error"
+"Please configurate where your costumer should be redirected to in case of an payment error","Please configure where your costumer should be redirected to in case of an payment error"
 "Basket","Basket"
 "Use Testsystem","Use Sandbox"
-"If is set to yes, transactionis use the sandbox system and the TRANSACTION.MODE=CONNECTOR_TEST, otherwise real payment will be used with mode LIVE. For details see integration basisc documentation.","If is set to yes, transactionis use the sandbox system and the TRANSACTION.MODE=CONNECTOR_TEST, otherwise real payment will be used with mode LIVE. For details see integration basisc documentation."
+"If is set to yes, transactionis use the sandbox system and the TRANSACTION.MODE=CONNECTOR_TEST, otherwise real payment will be used with mode LIVE. For details see integration basisc documentation.","If is set to yes, transactions use the sandbox system and the TRANSACTION.MODE=CONNECTOR_TEST, otherwise real payment will be used with mode LIVE. For details see integration basics documentation."
 "Security Sender","Security Sender"
 "User Login","User Login"
 "User Password","User Password"
 "Debug Log","Debug Log"
-"If is set to yes, you can controll all neccessary conntetion Data in /var/log/Heidelpay.log","If is set to yes, you can controll all neccessary conntetion Data in /var/log/Heidelpay.log"
+"If is set to yes, you can controll all neccessary conntetion Data in /var/log/Heidelpay.log","If is set to yes, you can control all necessary connection Data in /var/log/Heidelpay.log"
 "Invoicing over heidelpay","Invoicing over heidelpay"
 "Invoicing over heidelpay requires an extra contract. For more information, please contact your key account manager.","Invoicing over heidelpay requires an extra contract. For more information, please contact your key account manager."
 "General Settings Heidelpay","General Settings Heidelpay"
@@ -168,13 +168,13 @@
 "Redirect to MasterPass ...","Redirect to MasterPass ..."
 "This Transaction could not be capture online.","This Transaction could not be capture online."
 "please note that this is only necessary, when you use purchase on account with payment guarantee.","please note that this is only necessary, when you use purchase on account with payment guarantee."
-"please note that capture on delivery is only possible, when you set bookingmode to preauthorisation","please note that capture on delivery is only possible, when you set bookingmode to preauthorisation."
+"please note that capture on delivery is only possible, when you set bookingmode to preauthorisation","please note that capture on delivery is only possible, when you set bookingmode to preauthorization."
 "Automatically capture on delivery","Automatically capture on delivery"
 "Send delivery note to Heidelpay","Send delivery note to Heidelpay"
 "Successfully report delivery to Heidelpay.","Successfully report delivery to Heidelpay."
 "Delivery notes to Heidelpay fail, because of : ","Delivery notes to Heidelpay fail, because of : "
 
-"You have used the card %CARD% befor, would you like to use this again?","You have used the card %CARD% befor, would you like to use this again?"
+"You have used the card %CARD% befor, would you like to use this again?","You have used the card %CARD% before, would you like to use this again?"
 "HPError-100.100.101","Please verify your payment data"
 "HPError-100.100.303","card expired"
 "HPError-100.100.500","Please verify your payment data"
