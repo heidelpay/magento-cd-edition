@@ -38,6 +38,8 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
             Mage::getSingleton('core/translate')->setLocale($locale)->init('frontend', true);
         }
 
+        $orderStatus = $order->getStatus();
+
         /** @var HeidelpayCD_Edition_Model_Payment_Abstract $paymentMethodInstance */
         $paymentMethodInstance = $order->getPayment()->getMethodInstance();
 
@@ -54,8 +56,11 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
         }
 
         // Do nothing if status is already successful
-        $orderStatus = $order->getStatus();
-        if ($orderStatus === $paymentMethodInstance->getStatusSuccess()) {
+        $paymentMethodCode = $paymentMethodInstance->getCode();
+        $isReceipt = $paymentCode[1] === 'RC';
+        $isSuccess = $orderStatus === $paymentMethodInstance->getStatusSuccess();
+        $isSecInvoice = in_array($paymentMethodCode, ['hcdivsec', 'hcdivpol', 'hcdivsan'], true);
+        if ($isSuccess && !($isReceipt && $isSecInvoice)) {
             return;
         }
 
