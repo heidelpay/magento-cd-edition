@@ -8,7 +8,7 @@
   ],
   "homepage": "https://dev.heidelpay.de/magento/",
   "type": "magento-module",
-  "license": "Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.",
+  "license": "proprietary",
   "support": {
     "email": "support@heidelpay.de"
   },
