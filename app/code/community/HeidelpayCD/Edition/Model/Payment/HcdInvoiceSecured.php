@@ -27,6 +27,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
         $this->_code = 'hcdivsec';
         $this->_canReversal = true;
         $this->_sendsInvoiceMailComment = true;
+        $this->_reportsShippingToHeidelpay = true;
         $this->_canBasketApi = true;
     }
 
