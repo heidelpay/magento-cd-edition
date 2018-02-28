@@ -1,5 +1,11 @@
 # Release Notes - heidelpay extension for Magento 1
 
+## v18.2.28
+
+### Changed
+- Renamed "Heidelpay Payment GmbH" to "heidelpay GmbH" due to re-branding.
+- Renamed "SOFORT Überweisung" to "Sofort" due to re-branding.
+
 ## v17.6.2
 
 ### Fixed

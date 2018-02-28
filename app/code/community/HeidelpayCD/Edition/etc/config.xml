@@ -2,7 +2,7 @@
 <config>
     <modules>
         <HeidelpayCD_Edition>
-            <version>17.6.2</version>
+            <version>18.2.28</version>
         </HeidelpayCD_Edition>
     </modules>
     <global>
@@ -224,7 +224,7 @@
             </hcdddsec>
             <hcdsu>
                 <group>hcd</group>
-                <title>SOFORT Überweisung</title>
+                <title>Sofort</title>
                 <active>0</active>
                 <channel>31HA07BC8142C5A171749CDAA43365D2</channel>
                 <invioce>1</invioce>
