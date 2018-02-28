@@ -4,7 +4,7 @@
  * BillSafe payment method
  *
  * @license Use of this software requires acceptance of the License Agreement.
- * @copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ * @copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
  * @link  https://dev.heidelpay.de/magento
  *
