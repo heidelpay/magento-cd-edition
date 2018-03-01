@@ -6,17 +6,17 @@
     "heidelpay",
     "payment"
   ],
-  "homepage": "https://dev.heidelpay.de/magento/",
+  "homepage": "http://dev.heidelpay.com/magento/",
   "type": "magento-module",
   "license": "proprietary",
   "support": {
-    "email": "support@heidelpay.de"
+    "email": "support@heidelpay.com"
   },
   "authors": [
     {
       "name": "Jens Richter",
-      "email": "development@heidelpay.de",
-      "homepage": "https://dev.heidelpay.de/magento"
+      "email": "development@heidelpay.com",
+      "homepage": "http://dev.heidelpay.com/magento"
     }
   ],
   "require": {
