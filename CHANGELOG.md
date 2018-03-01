@@ -1,6 +1,6 @@
 # Release Notes - heidelpay extension for Magento 1
 
-## v18.2.28
+## v18.3.1
 
 ### Changed
 - Renamed "Heidelpay Payment GmbH" to "heidelpay GmbH" due to re-branding.

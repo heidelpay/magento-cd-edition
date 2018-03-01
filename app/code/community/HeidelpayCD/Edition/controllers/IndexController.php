@@ -5,7 +5,7 @@
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
- * @link  https://dev.heidelpay.de/magento
+ * @link  http://dev.heidelpay.com/magento
  *
  * @author  Jens Richter
  *
@@ -497,7 +497,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             'ADDRESS.ZIP' => ' - ',
             'ADDRESS.CITY' => ' - ',
             'ADDRESS.COUNTRY' => 'DE',
-            'CONTACT.EMAIL' => 'dummy@heidelpay.de',
+            'CONTACT.EMAIL' => 'dummy@heidelpay.com',
             'CONTACT.IP' => (filter_var(
                 trim(Mage::app()->getRequest()->getClientIp()),
                 FILTER_VALIDATE_IP

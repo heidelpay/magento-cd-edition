@@ -5,7 +5,7 @@
  * @license Use of this software requires acceptance of the License Agreement.
  * @copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
- * @link  https://dev.heidelpay.de/magento
+ * @link  http://dev.heidelpay.com/magento
  *
  * @author  Jens Richter
  *
