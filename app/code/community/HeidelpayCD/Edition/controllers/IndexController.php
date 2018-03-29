@@ -285,7 +285,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
      */
     public function indexAction()
     {
-        $data = array();
         $order = $this->getOrder();
 
         $refId = false;
@@ -299,15 +298,14 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             return $this;
         }
 
-        $payment = $order->getPayment()->getMethodInstance();
-
+        // set refId in case of masterpass quick checkout
         if ($session->getHcdWallet() !== false) {
             $wallet = $session->getHcdWallet();
             $refId = (!empty($wallet['referenceId'])) ? $wallet['referenceId'] : false;
             $this->log('Wallet reference id :' . $refId);
         }
 
-
+        $payment = $order->getPayment()->getMethodInstance();
         if ($payment->canBasketApi() and empty($refId)) {
             $shoppingCart = $this->_basketApiHelper->basketItems($order, $this->getStore());
 
@@ -359,7 +357,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
 
         $data = $payment->getHeidelpayUrl(false, $basketId, $refId);
-
         if ($data['POST_VALIDATION'] == 'ACK' and $data['PROCESSING_RESULT'] == 'ACK') {
             if ($data['PAYMENT_CODE'] == "OT.PA") {
                 $quoteID = ($session->getLastQuoteId() === false) ? $session->getQuoteId() : $session->getLastQuoteId();
