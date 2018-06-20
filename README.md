@@ -4,7 +4,7 @@
 [![PHP 5.6](https://img.shields.io/badge/php-5.6-blue.svg)](http://www.php.net)
 [![PHP 7.0](https://img.shields.io/badge/php-7.0-blue.svg)](http://www.php.net)
 
-![Logo](https://dev.heidelpay.de/devHeidelpay_400_180.jpg)
+![Logo](http://dev.heidelpay.com/devHeidelpay_400_180.jpg)
 
 # heidelpay payment extension for magento1
 
@@ -25,7 +25,7 @@ Currently supported payment methods are:
 * BillSafe
 * Santander Invoice
 
-For more information please visit -https://dev.heidelpay.de/magento/
+For more information please visit -http://dev.heidelpay.com/magento/
 
 ## SYSTEM REQUIREMENTS
 
@@ -38,4 +38,6 @@ You can find a copy of this license in [LICENSE.txt](LICENSE.txt).
 
 ## Installation
 
-A manual can be fund on https://dev.heidelpay.de/handbuch-magento-cd-edition-plugin/ (DE) 
+A manual can be fund here...
+* http://dev.heidelpay.com/magento-cd-edition-manual/ (EN) 
+* https://dev.heidelpay.de/handbuch-magento-cd-edition-plugin/ (DE) 
