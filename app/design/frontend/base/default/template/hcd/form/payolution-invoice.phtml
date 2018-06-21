@@ -16,9 +16,13 @@
 $code = $this->getMethodCode();
 $dobyear = $dobmonth = $dobday = null;
 
+/** @var HeidelpayCD_Edition_Block_Form_PayolutionInvoice $form */
+$form = $this;
+
 /** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
 $payment = $this->getMethod();
-$data = $payment->getHeidelpayUrl(true);
+
+$form->fetchInformation();
 
 $userData = $payment->getCustomerData() ?: [];
 if (array_key_exists('payment_data', $userData) &&
@@ -116,13 +120,11 @@ $customerCountryIsNl = $payment->getQuote()->getBillingAddress()->getCountry() =
             ?>
         </select>
     </div>
-    <br />
-    <div>
-        <?php
-            if (array_key_exists('CONFIG_OPTIN_TEXT', $data)) {
-                echo $data['CONFIG_OPTIN_TEXT'];
-            }
-        ?>
+    <div class="input-box">
+        <p class="control">
+            <input type="checkbox" class="checkbox required-entry" name="payment[<?php echo $code ?>_privpol_optin]" id="<?php echo $code ?>-privpol-optin" />
+            <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->getGtcText(); ?></label>
+        </p>
     </div>
     <div class="hcd-payment-desc">
         <?php echo $this->htmlEscape($this->__('Desc'.$code)); ?>

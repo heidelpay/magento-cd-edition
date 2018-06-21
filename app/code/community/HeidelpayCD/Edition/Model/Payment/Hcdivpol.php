@@ -31,7 +31,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
         $this->_sendsInvoiceMailComment = true;
         $this->_reportsShippingToHeidelpay = true;
         $this->_allowsBusinessToBusiness = true;
-        $this->_formBlockType = 'hcd/form_invoicePayolution';
+        $this->_formBlockType = 'hcd/form_payolutionInvoice';
     }
 
     /**

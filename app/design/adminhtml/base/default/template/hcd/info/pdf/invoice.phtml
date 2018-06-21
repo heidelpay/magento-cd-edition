@@ -3,9 +3,9 @@
  * Extend pdf template and add invoice information
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
- * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
- * @link  https://dev.heidelpay.de/magento
+ * @link  http://dev.heidelpay.com/magento
  *
  * @author  Jens Richter
  *
@@ -14,19 +14,18 @@
  * @category Magento
  */
 $data = array(
-        'IDENTIFICATION_SHORTID'     => '',
-        'CONNECTOR_ACCOUNT_HOLDER'     => '',
-        'CONNECTOR_ACCOUNT_IBAN'     => '',
-        'CONNECTOR_ACCOUNT_BIC'     => ''
-
+    'IDENTIFICATION_SHORTID'    => '',
+    'CONNECTOR_ACCOUNT_HOLDER'  => '',
+    'CONNECTOR_ACCOUNT_IBAN'    => '',
+    'CONNECTOR_ACCOUNT_BIC'     => ''
 );
 
-$transactionId = $this->getMethod()->getInfoInstance()->getLastTransId();
+$orderId = $this->getMethod()->getInfoInstance()->getOrder()->getRealOrderId();
 
-if ($transactionId !== False) {
+if ($orderId !== false) {
     /** @var HeidelpayCD_Edition_Model_Transaction $hcdTransaction */
     $hcdTransaction = Mage::getModel('hcd/transaction');
-    $data = $hcdTransaction->loadLastTransactionDataByUniqeId((string)$transactionId);
+    $data = $hcdTransaction->getOneTransactionByMethode((string)$orderId, 'PA');
 }
 
 // title of the payment method
@@ -39,6 +38,6 @@ echo $this->escapeHtml($this->getMethod()->getTitle()); ?>
 <?php echo $this->escapeHtml($this->__('BIC') . ': ' . $data['CONNECTOR_ACCOUNT_BIC']) ?>
 {{pdf_row_separator}}
 <?php echo $this->escapeHtml($this->__('Identification'). ': ' . (array_key_exists('CONNECTOR_ACCOUNT_USAGE', $data) ?
-    $data['CONNECTOR_ACCOUNT_USAGE'] :
-    $data['IDENTIFICATION_SHORTID'])) ?>
+        $data['CONNECTOR_ACCOUNT_USAGE'] :
+        $data['IDENTIFICATION_SHORTID'])) ?>
 

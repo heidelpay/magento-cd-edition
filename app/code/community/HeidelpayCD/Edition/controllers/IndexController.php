@@ -3,9 +3,9 @@
  * Index controller
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
- * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
  *
- * @link  https://dev.heidelpay.de/magento
+ * @link  http://dev.heidelpay.com/magento
  *
  * @author  Jens Richter
  *
@@ -300,7 +300,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
      */
     public function indexAction()
     {
-        $data = array();
         $order = $this->getOrder();
 
         $refId = false;
@@ -314,15 +313,15 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             return $this;
         }
 
-        /** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
-        $payment = $order->getPayment()->getMethodInstance();
-
+        // set refId in case of masterpass quick checkout
         if ($session->getHcdWallet() !== false) {
             $wallet = $session->getHcdWallet();
             $refId = (!empty($wallet['referenceId'])) ? $wallet['referenceId'] : false;
             $this->log('Wallet reference id :' . $refId);
         }
 
+        /** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
+        $payment = $order->getPayment()->getMethodInstance();
         if ($payment->canBasketApi() && empty($refId)) {
             // determine if shipping should be included to the basket for the heidelpay basket api
             $includeShipping = $order->getShippingAddress() ? true : false;
@@ -351,11 +350,10 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
                     json_encode($result), 'ERROR'
                 );
                 Mage::getSingleton('core/session')->setHcdError($result['basketErrors']['message']);
-                $this->_redirect(
+                return $this->_redirect(
                     'hcd/index/error',
                     array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true)
                 );
-                return;
             }
 
             $this->log('Basket API Response :' . json_encode($result));
@@ -366,22 +364,18 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         // if order status is cancel redirect to cancel page
         if ($orderStatus === $payment->getStatusError()) {
-            $this->_redirect(
+            return $this->_redirect(
                 'hcd/index/error',
                 array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true)
             );
-
-            return;
         }
 
         // if order status is success redirect to success page
         if ($orderStatus === $payment->getStatusSuccess() || $orderStatus === $payment->getStatusPending()) {
-            $this->_redirect(
+            return $this->_redirect(
                 'hcd/index/success',
                 array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true, 'no_mail' => true)
             );
-
-            return;
         }
 
         $data = $payment->getHeidelpayUrl(false, $basketId, $refId);
@@ -463,7 +457,6 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         ) == 0) ? $this->_liveBasketUrl : $this->_sandboxBasketUrl;
 
         $this->log('doRequest shoppingcart : ' . json_encode($shoppingCart));
-        $this->log('doRequest shoppingcart : ' . json_encode($shoppingCart));
 
         $result = Mage::helper('hcd/payment')->doRequest($url, array('raw' => $shoppingCart));
 
@@ -520,7 +513,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
             'ADDRESS.ZIP' => ' - ',
             'ADDRESS.CITY' => ' - ',
             'ADDRESS.COUNTRY' => 'DE',
-            'CONTACT.EMAIL' => 'dummy@heidelpay.de',
+            'CONTACT.EMAIL' => 'dummy@heidelpay.com',
             'CONTACT.IP' => (filter_var(
                 trim(Mage::app()->getRequest()->getClientIp()),
                 FILTER_VALIDATE_IP
