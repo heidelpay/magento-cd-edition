@@ -108,3 +108,12 @@ button.btn-hcdmpa-info {
     display: inline;
     width: 25px;
 }
+
+.hcdivsan {
+    margin-top: 20px;
+}
+
+.hcdivsan .input-box a {
+    float: none;
+    margin: 0;
+}

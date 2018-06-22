@@ -1,4 +1,5 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
 /**
  * EPS payment method
  *
@@ -13,35 +14,42 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdeps';
-    protected $_canRefund = false;
-    protected $_canRefundInvoicePartial = false;
-    
-    protected $_formBlockType = 'hcd/form_eps';
-    
-    public function getFormBlockType()
+
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdeps constructor.
+     */
+    public function __construct()
     {
-        return $this->_formBlockType;
+        parent::__construct();
+
+        $this->_code = 'hcdeps';
+        $this->_canRefund = false;
+        $this->_canRefundInvoicePartial = false;
+        $this->_formBlockType = 'hcd/form_eps';
     }
-    
+
+    /**
+     * Validate input data from checkout
+     *
+     * @return HeidelpayCD_Edition_Model_Payment_Abstract
+     * @throws \Mage_Core_Exception
+     */
     public function validate()
     {
         parent::validate();
-        $payment = array();
         $params = array();
-        $payment = Mage::app()->getRequest()->getPOST('payment');
+        $payment = Mage::app()->getRequest()->getPost('payment');
         
-        if ($payment['method'] == $this->_code) {
-            if (empty($payment[$this->_code.'_holder'])) {
+        if ($payment['method'] === $this->getCode()) {
+            if (empty($payment[$this->getCode().'_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
         
-            $params['ACCOUNT.HOLDER'] = $payment[$this->_code.'_holder'];
+            $params['ACCOUNT.HOLDER'] = $payment[$this->getCode().'_holder'];
             
-            $params['ACCOUNT.BANKNAME'] = $payment[$this->_code.'_bank'];
+            $params['ACCOUNT.BANKNAME'] = $payment[$this->getCode().'_bank'];
             $params['ACCOUNT.COUNTRY'] = $this->getQuote()->getBillingAddress()->getCountry();
             
             

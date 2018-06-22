@@ -1,57 +1,39 @@
 <?php
 /**
- * Invoice secured form template
+ * Description only form template
  *
  * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
- * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
+ * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
  *
- * @link http://dev.heidelpay.com/magento
+ * @link  https://dev.heidelpay.de/magento
  *
- * @author Jens Richter
+ * @author  Jens Richter
  *
- * @package Heidelpay
+ * @package  Heidelpay
  * @subpackage Magento
  * @category Magento
  */
-
-use HeidelpayCD_Edition_Model_System_Config_Source_Recognition as Recognition;
-
 $code = $this->getMethodCode();
-$dobyear = null;
-$dobmonth = null;
-$dobday = null;
+$dobyear = $dobmonth = $dobday = null;
 
-$path = 'payment/' . $code . '/';
-$storeId = Mage::app()->getStore()->getId();
-$recognition = Mage::getStoreConfig($path . 'recognition', $storeId);
+/** @var HeidelpayCD_Edition_Block_Form_PayolutionInvoice $form */
+$form = $this;
 
-$hash = $this->getMethod()->getShippingHash();
-$userData = array();
+/** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
+$payment = $this->getMethod();
 
-$cId = $this->getMethod()->getCustomerId();
+$form->fetchInformation();
 
-if ($cId != 0) {
-    if ($recognition == Recognition::SAME_SHIPPING_ADDRESS) {
-        // only if shipping address is unchanged
-        $hash = $this->getMethod()->getShippingHash();
-        $userData = $this->getMethod()->getCustomerData();
-        if ($userData !== false && array_key_exists('payment_data', $userData)) {
-            if ($userData ['payment_data']['SHIPPING_HASH'] !== $hash) {
-                $userData = array();
-            }
-        }
-    } elseif ($recognition == Recognition::ALWAYS) {
-        $userData = $this->getMethod()->getCustomerData();
-    }
-}
-
+$userData = $payment->getCustomerData() ?: [];
 if (array_key_exists('payment_data', $userData) &&
     array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])
 ) {
     list($dobyear, $dobmonth, $dobday) = explode('-', $userData['payment_data']['NAME.BIRTHDATE']);
 }
 
+$customerCountryIsNl = $payment->getQuote()->getBillingAddress()->getCountry() === 'NL';
 ?>
+
 <div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
@@ -63,14 +45,32 @@ if (array_key_exists('payment_data', $userData) &&
             <option value="MRS" <?php
             if (array_key_exists('payment_data', $userData) &&
                 array_key_exists('NAME.SALUTATION', $userData['payment_data']) &&
-                $userData['payment_data']['NAME.SALUTATION'] === 'MRS'
-            ) {
+                $userData['payment_data']['NAME.SALUTATION'] === 'MRS'){
                 echo 'selected="selected"';
-            } ?>>
+            }
+            ?>>
                 <?php echo $this->htmlEscape($this->__('mrs')) ?>
             </option>
         </select>
     </div>
+    <?php if ($customerCountryIsNl) {?>
+    <div class="field">
+        <label for="<?php echo $this->htmlEscape($code) ?>_telephone"
+               class="required"><em>*</em><?php echo Mage::helper('core')->quoteEscape($this->__('Telephone')) ?></label>
+        <div class="input-box">
+            <input type="text" name="payment[<?php echo $this->htmlEscape($code) ?>_telephone]"
+                   value="<?php
+                   if ( array_key_exists('payment_data', $userData) &&
+                        array_key_exists('CONTACT.PHONE', $userData['payment_data'])) {
+                       echo $userData['payment_data']['CONTACT.PHONE'];
+                   } else {
+                       echo $this->htmlEscape($payment->getQuote()->getBillingAddress()->getTelephone());
+                   } ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Telephone')) ?>"
+                   class="required-entry input-text validate-length maximum-length-20 minimum-length-6 validate-hcd-phone"
+                   id="<?php echo $this->htmlEscape($code) ?>_telephone" />
+        </div>
+    </div>
+    <?php } // if ($customerCountryIsNl) ?>
     <div class="input-box">
         <label for="<?php echo $this->htmlEscape($code) ?>_dob"
                class="required hcd-singleline-label"><em>*</em>
@@ -97,7 +97,7 @@ if (array_key_exists('payment_data', $userData) &&
             $i = 0;
             for ($i = 1; $i <= 12; $i++) {
                 $v = sprintf('%02d', $i);
-                $selected = ($dobmonth == $v) ? 'selected="selected"' : '';
+                $selected = ($dobmonth === $v) ? 'selected="selected"' : '';
                 echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected) . '>' .
                     $this->htmlEscape($v) . '</option>';
             }
@@ -120,7 +120,13 @@ if (array_key_exists('payment_data', $userData) &&
             ?>
         </select>
     </div>
+    <div class="input-box">
+        <p class="control">
+            <input type="checkbox" class="checkbox required-entry" name="payment[<?php echo $code ?>_privpol_optin]" id="<?php echo $code ?>-privpol-optin" />
+            <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->getGtcText(); ?></label>
+        </p>
+    </div>
     <div class="hcd-payment-desc">
-        <?php echo $this->htmlEscape($this->__('Desc' . $code)); ?>
+        <?php echo $this->htmlEscape($this->__('Desc'.$code)); ?>
     </div>
 </div>

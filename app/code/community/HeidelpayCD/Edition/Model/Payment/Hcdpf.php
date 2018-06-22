@@ -1,4 +1,5 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Postfinance payment method
  *
@@ -13,43 +14,58 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdpf extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdpf';
-    protected $_canRefund = false;
-    protected $_canRefundInvoicePartial = false;
-    protected $_formBlockType = 'hcd/form_postfinance';
-    
-    public function getFormBlockType()
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdpf constructor.
+     */
+    public function __construct()
     {
-        return $this->_formBlockType;
+        parent::__construct();
+
+        $this->_code = 'hcdpf';
+        $this->_canRefund = false;
+        $this->_canRefundInvoicePartial = false;
+        $this->_formBlockType = 'hcd/form_postfinance';
     }
-    
-    public function isAvailable($quote=null)
+
+    /**
+     * Deactivate payment method in case of wrong currency or other credentials
+     *
+     * @param Mage_Quote
+     * @param null|mixed $quote
+     *
+     * @return bool
+     */
+    public function isAvailable($quote = null)
     {
         $currencyCode=$this->getQuote()->getQuoteCurrencyCode();
-        if (!empty($currencyCode) && $currencyCode != 'CHF') {
+        if (!empty($currencyCode) && $currencyCode !== 'CHF') {
             return false;
         }
 
         return parent::isAvailable($quote);
     }
-    
+
+    /**
+     * Validate input data from checkout
+     *
+     * @return HeidelpayCD_Edition_Model_Payment_Abstract
+     * @throws \Mage_Core_Exception
+     */
     public function validate()
     {
         parent::validate();
-        $payment = Mage::app()->getRequest()->getPOST('payment');
+        $payment = Mage::app()->getRequest()->getPost('payment');
         
         
-        if (empty($payment[$this->_code.'_pf'])) {
-            $errorCode = 'invalid_data';
+        if (empty($payment[$this->getCode().'_pf'])) {
             $errorMsg = $this->_getHelper()->__('No Postfinance method selected');
             Mage::throwException($errorMsg);
             return $this;
         }
         
-        $this->saveCustomerData(array('ACCOUNT.BRAND' => $payment[$this->_code.'_pf']));
+        $this->saveCustomerData(array('ACCOUNT.BRAND' => $payment[$this->getCode().'_pf']));
 
         return $this;
     }

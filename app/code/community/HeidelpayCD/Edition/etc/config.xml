@@ -80,6 +80,14 @@
                     </reportShippingToHeidelpay>
                 </observers>
             </sales_order_shipment_save_before>
+            <sales_order_payment_cancel_invoice>
+                <observers>
+                    <reportReversalToHeidelpay>
+                        <class>hcd/observer</class>
+                        <method>reportReversalToHeidelpay</method>
+                    </reportReversalToHeidelpay>
+                </observers>
+            </sales_order_payment_cancel_invoice>
         </events>
         <template>
             <email>
@@ -262,7 +270,7 @@
             </hcdbs>
             <hcdpal>
                 <group>hcd</group>
-                <title>Pay Pal</title>
+                <title>PayPal</title>
                 <active>0</active>
                 <channel>31HA07BC8142C5A171749A60D979B6E4</channel>
                 <bookingmode>DB</bookingmode>
@@ -365,6 +373,35 @@
                 <max_amount>0</max_amount>
                 <allowspecific>0</allowspecific>
             </hcdmpa>
+            <hcdivsan>
+                <group>hcd</group>
+                <title>Rechnungskauf von Santander</title>
+                <active>0</active>
+                <channel>31HA07BC81941E63A2482091FAF374AF</channel>
+                <invioce>0</invioce>
+                <capture_on_delivery>0</capture_on_delivery>
+                <model>hcd/payment_hcdivsan</model>
+                <sort_order>1</sort_order>
+                <min_amount>0</min_amount>
+                <max_amount>0</max_amount>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DE</specificcountry>
+            </hcdivsan>
+            <hcdivpol>
+                <group>hcd</group>
+                <title>Payolution</title>
+                <active>0</active>
+                <channel>31HA07BC814A8F6690C0107650478B06</channel>
+                <invioce>1</invioce>
+                <capture_on_delivery>0</capture_on_delivery>
+                <model>hcd/payment_hcdivpol</model>
+                <sort_order>1</sort_order>
+                <min_amount>0</min_amount>
+                <max_amount>0</max_amount>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DE,AT,CH,NL</specificcountry>
+                <provideremailaddress/>
+            </hcdivpol>
         </payment>
     </default>
 </config>

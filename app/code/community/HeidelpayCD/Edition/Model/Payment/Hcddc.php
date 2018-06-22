@@ -1,4 +1,5 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Debit card payment method
  *
@@ -13,55 +14,56 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcddc';
-    protected $_canCapture = true;
-    protected $_canCapturePartial = true;
 
     /**
-     * @inheritdoc
+     * HeidelpayCD_Edition_Model_Payment_Hcddc constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcddc';
+        $this->_canCapture = true;
+        $this->_canCapturePartial = true;
+        $this->_canReversal = true;
+        $this->_formBlockType = 'hcd/form_debitcard';
+    }
+
+    /**
+     * Returns the store configuration for recognition of this payment method.
+     *
+     * @throws \Mage_Core_Model_Store_Exception
      */
     public function isRecognition()
     {
-        $path = "payment/".$this->_code."/";
+        $path = 'payment/' . $this->getCode() . '/';
         $storeId =  Mage::app()->getStore()->getId();
         return Mage::getStoreConfig($path.'recognition', $storeId);
     }
 
     /**
-     * @inheritdoc
+     * @return bool payment method will redirect the customer directly to heidelpay
+     * @throws \Mage_Core_Model_Store_Exception
      */
     public function activeRedirect()
     {
-        $recognation = $this->isRecognition();
-        if ($recognation > 0) {
-            return true;
-        }
-
-        return false;
+        return $this->isRecognition() > 0;
     }
 
     /**
-     * @inheritdoc
+     * Handle charge back notices from heidelpay payment
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
      */
-    protected $_formBlockType = 'hcd/form_creditcard';
-
-    /**
-     * @inheritdoc
-     */
-    public function getFormBlockType()
+    public function chargeBackTransaction($order, $message = '')
     {
-        return $this->_formBlockType;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function chargeBack($order, $message = "")
-    {
+        /** @noinspection SuspiciousAssignmentsInspection */
         $message = Mage::helper('hcd')->__('chargeback');
-        return parent::chargeBack($order, $message);
+        return parent::chargeBackTransaction($order, $message);
     }
 }

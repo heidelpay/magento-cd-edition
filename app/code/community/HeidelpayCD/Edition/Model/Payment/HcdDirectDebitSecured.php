@@ -1,5 +1,5 @@
 <?php
-
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Direct debit secured payment method
  *
@@ -14,56 +14,53 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
-class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
+class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
+    extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
-    /**
-     * payment code
-     *
-     * @var string payment code
-     */
-    protected $_code = 'hcdddsec';
 
     /**
-     * set checkout form block
-     *
-     * @var string checkout form block
+     * HeidelpayCD_Edition_Model_Payment_Hcdpp constructor.
      */
-    protected $_formBlockType = 'hcd/form_directDebitSecured';
+    public function __construct()
+    {
+        parent::__construct();
 
-    /**
-     * over write existing info block
-     *
-     * @var string
-     */
-    protected $_infoBlockType = 'hcd/info_directDebit';
+        $this->_code = 'hcdddsec';
+        $this->_canReversal = true;
+        $this->_formBlockType = 'hcd/form_directDebitSecured';
+        $this->_infoBlockType = 'hcd/info_directDebit';
+        $this->_reportsShippingToHeidelpay = true;
+        $this->_showAdditionalPaymentInformation = true;
+        $this->_canBasketApi = true;
+    }
 
     /**
      * Validate customer input on checkout
      *
      * @return $this
+     * @throws \Mage_Core_Exception
      */
     public function validate()
     {
-        $this->_postPayload = Mage::app()->getRequest()->getPOST('payment');
+        $this->_postPayload = Mage::app()->getRequest()->getPost('payment');
 
-        if (isset($this->_postPayload['method']) and $this->_postPayload['method'] == $this->_code) {
+        if (isset($this->_postPayload['method']) && $this->_postPayload['method'] === $this->getCode()) {
             parent::validate();
 
-            if (empty($this->_postPayload[$this->_code . '_holder'])) {
+            if (empty($this->_postPayload[$this->getCode() . '_holder'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a account holder'));
             }
 
-            if (empty($this->_postPayload[$this->_code . '_iban'])) {
+            if (empty($this->_postPayload[$this->getCode() . '_iban'])) {
                 Mage::throwException($this->_getHelper()->__('Please specify a iban or account'));
             }
 
-            $this->_validatedParameters['ACCOUNT.HOLDER'] = $this->_postPayload[$this->_code . '_holder'];
+            $this->_validatedParameters['ACCOUNT.HOLDER'] = $this->_postPayload[$this->getCode() . '_holder'];
 
-            if (preg_match('#^[\d]#', $this->_postPayload[$this->_code . '_iban'])) {
-                $this->_validatedParameters['ACCOUNT.NUMBER'] = $this->_postPayload[$this->_code . '_iban'];
+            if (preg_match('#^[\d]#', $this->_postPayload[$this->getCode() . '_iban'])) {
+                $this->_validatedParameters['ACCOUNT.NUMBER'] = $this->_postPayload[$this->getCode() . '_iban'];
             } else {
-                $this->_validatedParameters['ACCOUNT.IBAN'] = $this->_postPayload[$this->_code . '_iban'];
+                $this->_validatedParameters['ACCOUNT.IBAN'] = $this->_postPayload[$this->getCode() . '_iban'];
             }
 
             parent::validate();
@@ -81,7 +78,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
      */
     public function showPaymentInfo($paymentData)
     {
-        $loadSnippet = $this->_getHelper()->__("Direct Debit Info Text");
+        $loadSnippet = $this->_getHelper()->__('Direct Debit Info Text');
 
         $repl = array(
             '{AMOUNT}' => $paymentData['CLEARING_AMOUNT'],
@@ -97,9 +94,10 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayC
     /**
      * @inheritdoc
      */
-    public function chargeBack($order, $message = "")
+    public function chargeBackTransaction($order, $message = '')
     {
+        /** @noinspection SuspiciousAssignmentsInspection */
         $message = Mage::helper('hcd')->__('debit failed');
-        return parent::chargeBack($order, $message);
+        return parent::chargeBackTransaction($order, $message);
     }
 }

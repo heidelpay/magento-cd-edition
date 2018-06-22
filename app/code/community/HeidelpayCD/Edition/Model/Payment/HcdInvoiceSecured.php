@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection LongInheritanceChainInspection */
 
 /**
  * Invoice secured payment method
@@ -14,22 +14,29 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
-class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
+class HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured
+    extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
     /**
-     * payment code
-     *
-     * @var string payment code
+     * HeidelpayCD_Edition_Model_Payment_HcdInvoiceSecured constructor.
      */
-    protected $_code = 'hcdivsec';
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdivsec';
+        $this->_canReversal = true;
+        $this->_sendsInvoiceMailComment = true;
+        $this->_reportsShippingToHeidelpay = true;
+        $this->_canBasketApi = true;
+    }
 
     /**
      * @inheritdoc
      */
     public function validate()
     {
-        $this->_postPayload = Mage::app()->getRequest()->getPOST('payment');
+        $this->_postPayload = Mage::app()->getRequest()->getPost('payment');
         return parent::validate();
     }
 }
