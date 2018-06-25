@@ -156,7 +156,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         $data = Mage::getModel('hcd/transaction')
             ->loadLastTransactionDataByTransactionnr($session->getLastRealOrderId());
 
-        ksort($data);   // TODO-Stephano: might refactor ksort + log(json_encode($params)) into single helper?
+        ksort($data);
         $this->log('SuccessAction Data: '. json_encode($data));
 
         /*

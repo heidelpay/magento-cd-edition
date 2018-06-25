@@ -380,12 +380,12 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         );
 
         $params = $paymentHelper->preparePostData($config, $frontend, $user, $basketData, $criterion);
-        ksort($params); // TODO-Stephano: might refactor ksort + log(json_encode($params)) into single helper?
+        ksort($params);
 
         $this->log('doRequest url : ' . $config['URL']);
         $this->log('doRequest params : ' . json_encode($params));
         $src = $paymentHelper->doRequest($config['URL'], $params);
-        ksort($src);    // TODO-Stephano: might refactor ksort + log(json_encode($params)) into single helper?
+        ksort($src);
         $this->log('doRequest response : ' . json_encode($src));
 
         return $src;

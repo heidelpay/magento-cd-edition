@@ -85,7 +85,7 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
 
             // @codingStandardsIgnoreLine parse_str is discouraged
             parse_str($responseBody, $result);
-            ksort($result); // TODO-Stephano: might refactor ksort + log(json_encode($params)) into single helper?
+            ksort($result);
         }
 
         return $result;
@@ -168,7 +168,7 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
         $params['REQUEST.VERSION'] = '1.0';
 
         // sort the parameters
-        ksort($params); // TODO-Stephano: might refactor ksort + log(json_encode($params)) into single helper?
+        ksort($params);
 
         return $params;
     }
