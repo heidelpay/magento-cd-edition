@@ -143,7 +143,7 @@ class HeidelpayCD_Edition_ResponseController extends Mage_Core_Controller_Front_
         $data = $response->getParams();
         $paymentCode = Mage::helper('hcd/payment')->splitPaymentCode($data['PAYMENT_CODE']);
 
-        ksort($data);   // TODO-Stephano: might refactor ksort + log(json_encode($params)) into single helper?
+        ksort($data);
         $this->log('Post params: ' . json_encode($data));
 
         if ($paymentCode[1] === 'RG') {
