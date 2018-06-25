@@ -36,6 +36,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
      */
     public function isAvailable($quote = null)
     {
+        return false;
+
         if ($quote === null) {
             return false;
         }
