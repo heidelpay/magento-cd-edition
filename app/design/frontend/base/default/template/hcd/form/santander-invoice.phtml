@@ -83,7 +83,7 @@ if (isset($userData['payment_data']['NAME.SALUTATION'])) {
         <select class="required-entry"
                 title="<?php echo $form->escapeHtml($form->__('salutation')) ?>"
                 name="payment[<?php echo $form->escapeHtml($code) ?>_salutation]">
-            <option disabled="disabled" <?php echo $userSalutation === null ? 'selected="selected"' : ''; ?>>
+            <option disabled value="" <?php echo $userSalutation === null ? 'selected="selected"' : ''; ?>>
                 <?php echo $form->escapeHtml($form->__('Please choose your salution')) ?>
             </option>
             <option value="MR" <?php echo $userSalutation === 'MR' ? 'selected="selected"' : ''; ?>>
