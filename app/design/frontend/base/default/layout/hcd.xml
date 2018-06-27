@@ -38,6 +38,12 @@
 
     </hcd_index_index>
 
+    <hcd_response_index>
+        <reference name="root">
+            <block type="hcd/response" name="hcd_response" template="hcd/response.phtml"/>
+        </reference>
+    </hcd_response_index>
+
     <checkout_cart_index>
         <reference name="head">
             <action method="addJS">

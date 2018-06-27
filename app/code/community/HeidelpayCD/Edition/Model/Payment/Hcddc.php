@@ -1,35 +1,69 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
+/**
+ * Debit card payment method
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
+ *
+ * @link  http://dev.heidelpay.com/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
+ */
 class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
+
     /**
-    * unique internal payment method identifier
-    *
-    * @var string [a-z0-9_]
-    **/
-    protected $_code = 'hcddc';
-    protected $_canCapture = true;
-    protected $_canCapturePartial = true;
-    
-    public function isRecognation()
+     * HeidelpayCD_Edition_Model_Payment_Hcddc constructor.
+     */
+    public function __construct()
     {
-        $path = "payment/".$this->_code."/";
+        parent::__construct();
+
+        $this->_code = 'hcddc';
+        $this->_canCapture = true;
+        $this->_canCapturePartial = true;
+        $this->_canReversal = true;
+        $this->_formBlockType = 'hcd/form_debitcard';
+    }
+
+    /**
+     * Returns the store configuration for recognition of this payment method.
+     *
+     * @throws \Mage_Core_Model_Store_Exception
+     */
+    public function isRecognition()
+    {
+        $path = 'payment/' . $this->getCode() . '/';
         $storeId =  Mage::app()->getStore()->getId();
         return Mage::getStoreConfig($path.'recognition', $storeId);
     }
 
+    /**
+     * @return bool payment method will redirect the customer directly to heidelpay
+     * @throws \Mage_Core_Model_Store_Exception
+     */
     public function activeRedirect()
     {
-        $recognation = $this->isRecognation();
-        if ($recognation > 0) {
-            return true;
-        }
-        return false ;
+        return $this->isRecognition() > 0;
     }
-    
-    protected $_formBlockType = 'hcd/form_creditcard';
-    
-    public function getFormBlockType()
+
+    /**
+     * Handle charge back notices from heidelpay payment
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
+     */
+    public function chargeBackTransaction($order, $message = '')
     {
-        return $this->_formBlockType;
+        /** @noinspection SuspiciousAssignmentsInspection */
+        $message = Mage::helper('hcd')->__('chargeback');
+        return parent::chargeBackTransaction($order, $message);
     }
 }

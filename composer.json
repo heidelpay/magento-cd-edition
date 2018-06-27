@@ -6,17 +6,17 @@
     "heidelpay",
     "payment"
   ],
-  "homepage": "https://dev.heidelpay.de/magento/",
+  "homepage": "http://dev.heidelpay.com/magento/",
   "type": "magento-module",
-  "license": "Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.",
+  "license": "proprietary",
   "support": {
-    "email": "support@heidelpay.de"
+    "email": "support@heidelpay.com"
   },
   "authors": [
     {
       "name": "Jens Richter",
-      "email": "development@heidelpay.de",
-      "homepage": "https://dev.heidelpay.de/magento"
+      "email": "development@heidelpay.com",
+      "homepage": "http://dev.heidelpay.com/magento"
     }
   ],
   "require": {
@@ -36,8 +36,8 @@
   "extra": {
     "map": [
       [
-        "app/code/community/HeidelpayCD/*",
-        "app/code/community/HeidelpayCD/"
+        "app/code/community/HeidelpayCD/Edition/*",
+        "app/code/community/HeidelpayCD/Edition/"
       ],
       [
         "app/design/frontend/base/default/layout/hcd.xml",
@@ -50,6 +50,10 @@
       [
         "app/design/adminhtml/default/default/template/hcd/*",
         "app/design/adminhtml/default/default/template/hcd/"
+      ],
+      [
+        "app/design/adminhtml/base/default/template/hcd/*",
+        "app/design/adminhtml/base/default/template/hcd/"
       ],
       [
         "app/etc/modules/HeidelpayCD_Edition.xml",
@@ -78,6 +82,15 @@
       [
         "js/hcd/*",
         "js/hcd/"
+      ],
+      ["README.md",
+        "app/code/community/HeidelpayCD/Edition/"
+      ],
+      ["CHANGELOG.md",
+        "app/code/community/HeidelpayCD/Edition/"
+      ],
+      ["LICENSE.txt",
+        "app/code/community/HeidelpayCD/Edition/"
       ]
     ]
   }

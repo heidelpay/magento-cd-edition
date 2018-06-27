@@ -1,5 +1,19 @@
 <?php
-
+/**
+ * Onepage shipping block
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
+ *
+ * @link  http://dev.heidelpay.com/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
+ */
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Block_Onepage_Shipping extends Mage_Checkout_Block_Onepage_Shipping
 {
     public function getAddress()
@@ -7,17 +21,20 @@ class HeidelpayCD_Edition_Block_Onepage_Shipping extends Mage_Checkout_Block_One
         if (!empty(Mage::getSingleton('checkout/session')->getHcdWallet())) {
             $wallet = Mage::getSingleton('checkout/session')->getHcdWallet();
             $this->_address = Mage::getModel('sales/quote_address')->setAddressType(
-            Mage_Sales_Model_Quote_Address::TYPE_BILLING)
+                Mage_Sales_Model_Quote_Address::TYPE_BILLING
+            )
             ->setStoreId(Mage::app()->getStore()->getId())
             ->setFirstname($wallet['adress']['firstname'])
             ->setLastname($wallet['adress']['lastname'])
             ->setEmail($wallet['adress']['email'])
             ->setSuffix((''))
             ->setCompany('')
-            ->setStreet(array(
+            ->setStreet(
+                array(
                 '0' => $wallet['adress']['street'][0],
                 '1' => $wallet['adress']['street'][1]
-            ))
+                )
+            )
             ->setCity($wallet['adress']['city'])
             ->setPostcode($wallet['adress']['postcode'])
             ->setCountry_id($wallet['adress']['country_id'])

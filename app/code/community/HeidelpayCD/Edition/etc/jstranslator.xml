@@ -1,0 +1,7 @@
+<jstranslator>
+<!-- validation.js -->
+<hcd-validate-phone-number translate="message" module="hcd">
+    <message>Please enter a valid phone number e.g. +49 123 456-1222. Allowed symbols are +, /, -, (, ) and whitespace.</message>
+</hcd-validate-phone-number>
+
+</jstranslator>

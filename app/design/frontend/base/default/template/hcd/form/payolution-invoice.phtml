@@ -1,0 +1,135 @@
+<?php
+/**
+ * Description only form template
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present Heidelberger Payment GmbH. All rights reserved.
+ *
+ * @link  https://dev.heidelpay.de/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
+ */
+$code = $this->getMethodCode();
+$dobyear = $dobmonth = $dobday = null;
+
+/** @var HeidelpayCD_Edition_Block_Form_PayolutionInvoice $form */
+$form = $this;
+
+/** @var HeidelpayCD_Edition_Model_Payment_Abstract $payment */
+$payment = $this->getMethod();
+
+$form->fetchInformation();
+
+$userData = $payment->getCustomerData() ?: [];
+if (array_key_exists('payment_data', $userData) &&
+    array_key_exists('NAME.BIRTHDATE', $userData['payment_data'])
+) {
+    list($dobyear, $dobmonth, $dobday) = explode('-', $userData['payment_data']['NAME.BIRTHDATE']);
+}
+
+$customerCountryIsNl = $payment->getQuote()->getBillingAddress()->getCountry() === 'NL';
+?>
+
+<div class="form-list hcd-payment-info" id="payment_form_<?php echo $this->htmlEscape($code) ?>" style="display: none;">
+    <div class="input-box">
+        <label for="<?php echo $this->htmlEscape($code) ?>_salutation"
+               class="required hcd-singleline-label"><em>*</em><?php echo $this->htmlEscape($this->__('salutation')) ?>
+        </label>
+        <select title="<?php echo $this->htmlEscape($this->__('salutation')) ?>"
+                name="payment[<?php echo $this->htmlEscape($code) ?>_salutation]">
+            <option value="MR"><?php echo $this->htmlEscape($this->__('mr')) ?></option>
+            <option value="MRS" <?php
+            if (array_key_exists('payment_data', $userData) &&
+                array_key_exists('NAME.SALUTATION', $userData['payment_data']) &&
+                $userData['payment_data']['NAME.SALUTATION'] === 'MRS'){
+                echo 'selected="selected"';
+            }
+            ?>>
+                <?php echo $this->htmlEscape($this->__('mrs')) ?>
+            </option>
+        </select>
+    </div>
+    <?php if ($customerCountryIsNl) {?>
+    <div class="field">
+        <label for="<?php echo $this->htmlEscape($code) ?>_telephone"
+               class="required"><em>*</em><?php echo Mage::helper('core')->quoteEscape($this->__('Telephone')) ?></label>
+        <div class="input-box">
+            <input type="text" name="payment[<?php echo $this->htmlEscape($code) ?>_telephone]"
+                   value="<?php
+                   if ( array_key_exists('payment_data', $userData) &&
+                        array_key_exists('CONTACT.PHONE', $userData['payment_data'])) {
+                       echo $userData['payment_data']['CONTACT.PHONE'];
+                   } else {
+                       echo $this->htmlEscape($payment->getQuote()->getBillingAddress()->getTelephone());
+                   } ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Telephone')) ?>"
+                   class="required-entry input-text validate-length maximum-length-20 minimum-length-6 validate-hcd-phone"
+                   id="<?php echo $this->htmlEscape($code) ?>_telephone" />
+        </div>
+    </div>
+    <?php } // if ($customerCountryIsNl) ?>
+    <div class="input-box">
+        <label for="<?php echo $this->htmlEscape($code) ?>_dob"
+               class="required hcd-singleline-label"><em>*</em>
+            <?php echo $this->htmlEscape($this->__('Date of birth')) ?></label>
+        <select title="<?php echo $this->htmlEscape($this->__('day')) ?>"
+                name="payment[<?php echo $this->htmlEscape($code) ?>_dobday]"
+                class="required-entry">
+            <option disabled value=""><?php echo $this->htmlEscape($this->__('day')); ?></option>
+            <?php
+            $i = 0;
+            for ($i = 1; $i <= 31; $i++) {
+                $v = sprintf('%02d', $i);
+                $selected = ($dobday === $v) ? 'selected="selected"' : '';
+                echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected)
+                    . '>' . $this->htmlEscape($v) . '</option>';
+            }
+            ?>
+        </select>
+    </div>
+    <div class="input-box">
+        <select title="<?php echo $this->htmlEscape($this->__('month')) ?>"
+                name="payment[<?php echo $this->htmlEscape($code) ?>_dobmonth]"
+                class="required-entry">
+            <option disabled value=""><?php echo $this->htmlEscape($this->__('month')); ?></option>
+            <?php
+            $i = 0;
+            for ($i = 1; $i <= 12; $i++) {
+                $v = sprintf('%02d', $i);
+                $selected = ($dobmonth === $v) ? 'selected="selected"' : '';
+                echo '<option value="' . $this->htmlEscape($v) . '" ' . $this->htmlEscape($selected) . '>' .
+                    $this->htmlEscape($v) . '</option>';
+            }
+            ?>
+        </select>
+    </div>
+    <div class="input-box">
+        <select title="<?php echo $this->htmlEscape($this->__('year')) ?>"
+                name="payment[<?php echo $this->htmlEscape($code) ?>_dobyear]"
+                class="required-entry">
+            <option disabled value=""><?php echo $this->htmlEscape($this->__('year')); ?></option>
+            <?php
+            $i = 0;
+            for ($i = 17; $i <= 80; $i++) {
+                // @codingStandardsIgnoreLine should be refactored - issue #2
+                $year = date('Y', strtotime("last day of -$i year"));
+                $selected = ($dobyear === $year) ? 'selected="selected"' : '';
+                echo '<option value="' . $this->htmlEscape($year) . '" ' .
+                    $this->htmlEscape($selected) . '>' . $this->htmlEscape($year) . '</option>';
+            }
+            ?>
+        </select>
+    </div>
+    <div class="input-box">
+        <p class="control">
+            <input type="checkbox" class="checkbox required-entry" name="payment[<?php echo $code ?>_privpol_optin]" id="<?php echo $code ?>-privpol-optin" />
+            <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->getGtcText(); ?></label>
+        </p>
+    </div>
+    <div class="hcd-payment-desc">
+        <?php echo $this->htmlEscape($this->__('Desc'.$code)); ?>
+    </div>
+</div>

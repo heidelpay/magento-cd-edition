@@ -1,44 +1,55 @@
 <?php
-
-/*
- * Wallet Express Checkout
+/**
+ * Checkout controller
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
+ *
+ * @link  http://dev.heidelpay.com/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
  */
  
-$module_path = Mage::getModuleDir('', 'Mage_Checkout');
-require_once($module_path."/controllers/OnepageController.php");
-
+$modulePath = Mage::getModuleDir('', 'Mage_Checkout');
+require_once($modulePath."/controllers/OnepageController.php");
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageController
 {
     public function indexAction()
     {
         $session = Mage::getSingleton('checkout/session');
         $checkout = $this->getOnepage();
+
+        /** @var Mage_Sales_Model_Quote $quote */
         $quote = $session->getQuote();
         
         if (!$quote->hasItems() || $quote->getHasError()) {
             $this->_redirect('checkout/cart');
             return;
         }
-        
-        
+
         $data = false;
         $this->loadLayout();
         $this->getLayout()->getBlock('head')->setTitle($this->__('MasterPass Checkout'));
         
-        $session->setCurrency($quote->getGlobalCurrencyCode());
+        $session->setCurrency($quote->getQuoteCurrencyCode() ?: $quote->getOrderCurrencyCode());
         $session->setTotalamount($quote->getGrandTotal());
         
-        $data = Mage::getModel('hcd/transaction')->loadLastTransactionDataByTransactionnr(Mage::getSingleton('checkout/session')->getQuoteId());
+        $data = Mage::getModel('hcd/transaction')
+            ->loadLastTransactionDataByTransactionnr(Mage::getSingleton('checkout/session')->getQuoteId());
         
         Mage::getSingleton('checkout/session')->setCartWasUpdated(false);
         Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_secure' => true)));
         $this->getOnepage()->initCheckout();
-        
-        
+
+
+        // @codingStandardsIgnoreLine should be refactored - issue #4
         $this->log('Data from wallet '.print_r($data, 1));
-        
-        
-        
+
         $this->getOnepage()->saveCheckoutMethod(Mage_Checkout_Model_Type_Onepage::METHOD_GUEST);
         
         $this->getOnepage()->getCheckout()->setStepData('login', 'complete', true);
@@ -46,26 +57,26 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         $region = Mage::helper('hcd/payment')->getRegion($data['ADDRESS_COUNTRY'], $data['ADDRESS_STATE']);
         
         $billingAddress = array(
-            "address_id" => '',
-            "firstname" => trim($data['NAME_GIVEN']),
-            "lastname" => trim($data['NAME_FAMILY']),
-            "company" => '',
-            "email" => trim($data['CONTACT_EMAIL']),
-            "street" => array(
-                "0" => $data['ADDRESS_STREET'],
-                "1" => '',
+            'address_id' => '',
+            'firstname' => trim($data['NAME_GIVEN']),
+            'lastname' => trim($data['NAME_FAMILY']),
+            'company' => '',
+            'email' => trim($data['CONTACT_EMAIL']),
+            'street' => array(
+                '0' => $data['ADDRESS_STREET'],
+                '1' => '',
             ),
-            "region_id" =>(string) $region,
-            "region" => $data['ADDRESS_STATE'],
-            "city" => $data['ADDRESS_CITY'],
-            "postcode" =>  $data['ADDRESS_ZIP'],
-            "country_id" => $data['ADDRESS_COUNTRY'],
-            "telephone" => preg_replace('/[A-z]-/', '', $data['CONTACT_PHONE']),
-            "customer_password" =>"",
-            "confirm_password" =>"",
-            "save_in_address_book" => 1
+            'region_id' =>(string) $region,
+            'region' => $data['ADDRESS_STATE'],
+            'city' => $data['ADDRESS_CITY'],
+            'postcode' =>  $data['ADDRESS_ZIP'],
+            'country_id' => $data['ADDRESS_COUNTRY'],
+            'telephone' => preg_replace('/[A-z]-/', '', $data['CONTACT_PHONE']),
+            'customer_password' =>"",
+            'confirm_password' =>"",
+            'save_in_address_book' => 1
         );
-        
+        // @codingStandardsIgnoreLine should be refactored - issue #4
         $this->log('adress'.print_r($billingAddress, 1));
         
         $hpdata = array(
@@ -73,36 +84,39 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             'brand'            => (array_key_exists('ACCOUNT_BRAND', $data)) ? $data['ACCOUNT_BRAND'] : false ,
             'mail'            => (array_key_exists('CONTACT_EMAIL', $data)) ? $data['CONTACT_EMAIL'] : false ,
             'number'        => (array_key_exists('ACCOUNT_NUMBER', $data)) ? $data['ACCOUNT_NUMBER'] : false ,
-            'expiryMonth'    => (array_key_exists('ACCOUNT_EXPIRY_MONTH', $data)) ? $data['ACCOUNT_EXPIRY_MONTH'] : false ,
-            'expiryYear'    => (array_key_exists('ACCOUNT_EXPIRY_YEAR', $data)) ? $data['ACCOUNT_EXPIRY_YEAR'] : false ,
-            'referenceId'    => (array_key_exists('IDENTIFICATION_UNIQUEID', $data)) ? $data['IDENTIFICATION_UNIQUEID'] : false ,
+            'expiryMonth'    => (array_key_exists('ACCOUNT_EXPIRY_MONTH', $data))
+                ? $data['ACCOUNT_EXPIRY_MONTH'] : false ,
+            'expiryYear'    => (array_key_exists('ACCOUNT_EXPIRY_YEAR', $data))
+                ? $data['ACCOUNT_EXPIRY_YEAR'] : false ,
+            'referenceId'    => (array_key_exists('IDENTIFICATION_UNIQUEID', $data))
+                ? $data['IDENTIFICATION_UNIQUEID'] : false ,
             'adress'        => $billingAddress
         );
         
         $session->setHcdWallet($hpdata);
         
-        
         $customAddress = Mage::getModel('customer/address');
         $customAddress->setData($billingAddress);
         
-        $quote->setBillingAddress(Mage::getSingleton('sales/quote_address')
-            ->importCustomerAddress($customAddress));
+        $quote->setBillingAddress(
+            Mage::getSingleton('sales/quote_address')
+            ->importCustomerAddress($customAddress)
+        );
         
-        $quote->setShippingAddress(Mage::getSingleton('sales/quote_address')
-            ->importCustomerAddress($customAddress));
+        $quote->setShippingAddress(
+            Mage::getSingleton('sales/quote_address')
+            ->importCustomerAddress($customAddress)
+        );
         
         $this->getOnepage()->getQuote()->collectTotals()->save();
-        
-        
+
         $this->getOnepage()->getCheckout()->setStepData('billing', 'complete', true);
         $this->getOnepage()->getCheckout()->setStepData('shipping', 'allow', true);
         
         $this->getOnepage()->getCheckout()->setStepData('shipping', 'complete', true);
         $this->getOnepage()->getCheckout()->setStepData('payment', 'allow', true);
         $this->getOnepage()->savePayment(array('method'=>'hcdmpa'));
-        
-        
-        
+
         $this->renderLayout();
     }
     
@@ -111,6 +125,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         if ($this->_expireAjax()) {
             return;
         }
+
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost('billing', array());
             $customerAddressId = $this->getRequest()->getPost('billing_address_id', false);
@@ -118,6 +133,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             if (isset($data['email'])) {
                 $data['email'] = trim($data['email']);
             }
+
             $result = $this->getOnepage()->saveBilling($data, $customerAddressId);
                     
             
@@ -164,6 +180,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
                     'html' => $this->_getReviewHtml()
                 );
             }
+
             if ($redirectUrl) {
                 $result['redirect'] = $redirectUrl;
             }
@@ -171,6 +188,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             if ($e->getFields()) {
                 $result['fields'] = $e->getFields();
             }
+
             $result['error'] = $e->getMessage();
         } catch (Mage_Core_Exception $e) {
             $result['error'] = $e->getMessage();
@@ -178,8 +196,9 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             Mage::logException($e);
             $result['error'] = $this->__('Unable to set Payment Method.');
         }
+
         $this->getOnepage()->getCheckout()->setStepData('payment', 'complete', true);
-        return $result ;
+        return $result;
     }
     
     public function savePaymentAction()
@@ -187,6 +206,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         if ($this->_expireAjax()) {
             return;
         }
+
         $result = $this->savePayment(array('method'=>'hcdmpa'));
 
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
@@ -208,6 +228,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         if ($this->_expireAjax()) {
             return;
         }
+
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost('shipping_method', '');
             $result = $this->getOnepage()->saveShippingMethod($data);
@@ -215,9 +236,10 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
             if (!$result) {
                 Mage::dispatchEvent(
                     'checkout_controller_onepage_save_shipping_method',
-                     array(
+                    array(
                           'request' => $this->getRequest(),
-                          'quote'   => $this->getOnepage()->getQuote()));
+                    'quote'   => $this->getOnepage()->getQuote())
+                );
                 $this->getOnepage()->getQuote()->collectTotals();
                 $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
 
@@ -227,6 +249,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
                     'html' => $this->_getPaymentMethodsHtml()
                 );
             }
+
             $this->getOnepage()->getQuote()->collectTotals()->save();
             $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
         }
@@ -252,7 +275,7 @@ class HeidelpayCD_Edition_CheckoutController extends Mage_Checkout_OnepageContro
         return $output;
     }
     
-    private function log($message, $level="DEBUG", $file=false)
+    protected function log($message, $level='DEBUG', $file=false)
     {
         $callers=debug_backtrace();
         return  Mage::helper('hcd/payment')->realLog($callers[1]['function'].' '.$message, $level, $file);

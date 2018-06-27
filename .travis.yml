@@ -1,0 +1,27 @@
+# automated extension test
+# Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+# Copyright © 2016-present heidelpay GmbH. All rights reserved.
+# http://dev.heidelpay.com/magento
+# Jens Richter
+
+dist: trusty
+language: php
+php:
+  - 5.6
+  - 7.0
+
+cache:
+    directories:
+      - $HOME/.composer/cache
+      - $HOME/.php-cs-fixer
+      - $HOME/.local
+
+before_install:
+  - composer config -g http-basic.repo.magento.com $MAGE_PUBLICKEY $MAGE_PRIVATEKEY
+  - composer update
+
+before_script:
+ - ./vendor/bin/phpcs --config-set installed_paths vendor/magento/marketplace-eqp
+
+script:
+ - ./vendor/bin/phpcs . --ignore=vendor/ -v --standard=MEQP1;

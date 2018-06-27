@@ -1,5 +1,19 @@
 <?php
-
+/**
+ * Transaction model
+ *
+ * @license Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * @copyright Copyright © 2016-present heidelpay GmbH. All rights reserved.
+ *
+ * @link  http://dev.heidelpay.com/magento
+ *
+ * @author  Jens Richter
+ *
+ * @package  Heidelpay
+ * @subpackage Magento
+ * @category Magento
+ */
+// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
 {
     public function _construct()
@@ -10,10 +24,10 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
        
     public function saveTransactionData($data, $source='shop')
     {
-        $PaymentCode = Mage::helper('hcd/payment')->splitPaymentCode($data['PAYMENT_CODE']);
+        $paymentCode = Mage::helper('hcd/payment')->splitPaymentCode($data['PAYMENT_CODE']);
            
-        $this->setPaymentMethode($PaymentCode[0]);
-        $this->setPaymentType($PaymentCode[1]);
+        $this->setPaymentMethode($paymentCode[0]);
+        $this->setPaymentType($paymentCode[1]);
         $this->setTransactionid($data['IDENTIFICATION_TRANSACTIONID']);
         $this->setUniqeid($data['IDENTIFICATION_UNIQUEID']);
         $this->setResult($data['PROCESSING_RESULT']);
@@ -22,6 +36,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $this->setReturn($data['PROCESSING_RETURN']);
         $this->setReturncode($data['PROCESSING_RETURN_CODE']);
         $this->setJsonresponse(Mage::getModel('hcd/resource_encryption')->encrypt(json_encode($data)));
+        // @codingStandardsIgnoreLine should be refactored - issue #2
         $this->setDatetime(date('Y-m-d H:i:s'));
         $this->setSource($source);
         return $this->save();
@@ -49,7 +64,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         foreach ($data as $k => $v) {
             $temp[] =  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[$k]['jsonresponse']), true);
         }
-                
+
         return $temp;
     }
        
@@ -59,12 +74,19 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $trans = $this->getCollection();
         $trans->addFieldToFilter('transactionid', $transid);
         $trans->getSelect()->order('id DESC');
+        // @codingStandardsIgnoreLine
         $trans->getSelect()->limit(1);
         $trans->load();
                 
                 
         $data = $trans->getData();
-        return  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['jsonresponse']), true);
+
+        // @codingStandardsIgnoreLine seem to be a bug in marketplace ready
+        if (is_array($data)) {
+            return  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['jsonresponse']), true);
+        }
+
+        return false;
     }
        
     public function loadLastTransactionDataByUniqeId($id)
@@ -72,6 +94,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
         $data = array();
         $trans = $this->getCollection();
         $trans->addFieldToFilter('uniqeid', $id);
+        // @codingStandardsIgnoreLine should be refactored - issue #6
         $trans->getSelect()->limit(1);
         $trans->load();
                 
@@ -83,24 +106,29 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
             return false;
         }
     }
-       
-    public function getOneTransactionByMethode($transid, $methode)
+
+    /**
+     * @param $transid
+     * @param $method
+     * @return bool|array
+     */
+    public function getOneTransactionByMethode($transid, $method)
     {
         $data = false;
         $trans = $this->getCollection();
         $trans->addFieldToFilter('transactionid', $transid)
-                     ->addFieldToFilter('Payment_Type', $methode);
+            ->addFieldToFilter('Payment_Type', $method);
         $trans->getSelect()->order('id DESC');
+        // @codingStandardsIgnoreLine should be refactored - issue #6
         $trans->getSelect()->limit(1);
         $trans->load();
-                
-                
+
         $data = $trans->getData();
-            
+
         if (isset($data[0])) {
             return  json_decode(Mage::getModel('hcd/resource_encryption')->decrypt($data[0]['jsonresponse']), true);
-        } else {
-            return false;
         }
+
+        return false;
     }
 }
