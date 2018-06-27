@@ -13,6 +13,9 @@
  * @subpackage Magento
  * @category Magento
  */
+
+use HeidelpayCD_Edition_Model_System_Config_Source_Recognition as Recognition;
+
 $data = array();
 $userData = array();
 $payment = '';
@@ -20,7 +23,7 @@ $payment = '';
 $code = $this->getMethodCode();
 $payment = $this->getMethod();
 
-$path = "payment/" . $code . "/";
+$path = 'payment/' . $code . '/';
 $storeId = Mage::app()->getStore()->getId();
 $recognition = Mage::getStoreConfig($path . 'recognition', $storeId);
 ?>
@@ -29,59 +32,61 @@ $recognition = Mage::getStoreConfig($path . 'recognition', $storeId);
     <?php
     $cId = $this->getMethod()->getCustomerId();
 
-    if ($recognition == 1 and $cId != 0) {  // only if shipping address is unchanged
+    if ($recognition == Recognition::SAME_SHIPPING_ADDRESS && $cId !== 0) {  // only if shipping address is unchanged
         $hash = $this->getMethod()->getShippingHash();
         $userData = $this->getMethod()->getCustomerData();
         if (isset($userData['payment_data'])) {
-            if ($userData['payment_data']['SHIPPPING_HASH'] != $hash) {
+            if ($userData['payment_data']['SHIPPING_HASH'] !== $hash) {
                 $userData = array();
             }
         }
-    } elseif ($recognition == 2 and $cId != 0) { // allways
+    } elseif ($recognition == Recognition::ALWAYS && $cId != 0) { // always
         $userData = $this->getMethod()->getCustomerData();
     }
 
-    if ($recognition != 0) {
+    if ($recognition != Recognition::NEVER) {
         $data = $payment->getHeidelpayUrl(true);
-        if ($data['PROCESSING_RESULT'] == 'NOK') {
+        if ($data['PROCESSING_RESULT'] === 'NOK') {
             $userData = array();
         }
     }
 
     ?>
-    <label class="hcd-singleline-label" <?php echo (isset($userData['payment_data'])) ? '' : 'style="display: none"';?>>
-        <?php if (isset($userData['payment_data']))
+    <label class="hcd-singleline-label" <?php echo isset($userData['payment_data']) ? '' : 'style="display: none"';?>>
+        <?php
+        if (isset($userData['payment_data'])) {
             echo $this->htmlEscape(
                 str_replace(
                     '%CARD%', $userData['payment_data']['ACCOUNT_NUMBER'],
                     // @codingStandardsIgnoreLine
-                    $this->__('You have used the card %CARD% befor, would you like to use this again?')
+                    $this->__('You have used the card %CARD% before, would you like to use this again?')
                 )
-            ) ?></label>
-    <div class="input-box" <?php echo (isset($userData['payment_data'])) ? '' : 'style="display: none"'; ?>>
+            );
+        } ?></label>
+    <div class="input-box" <?php echo isset($userData['payment_data']) ? '' : 'style="display: none"'; ?>>
         <input type="radio"
                onClick="Heidelpay.toggle.getInstance().hpform('<?php echo $this->htmlEscape($code) ?>','false')"
                class="radio hcd-use_again" id="<?php echo $this->htmlEscape($code) ?>_use_again"
                name="<?php echo $this->htmlEscape($code) ?>_use_again" value="0"
-            <?php echo (isset($userData['payment_data']) or $recognition == 0) ? 'checked' : ''; ?>>
+            <?php echo (isset($userData['payment_data']) || $recognition == Recognition::NEVER) ? 'checked' : ''; ?>>
         <?php echo $this->htmlEscape($this->__('Yes')) ?>
         <input type="radio"
                onClick="Heidelpay.toggle.getInstance().hpform('<?php echo $this->htmlEscape($code) ?>','true')"
                class="radio hcd-use_again" id="<?php echo $this->htmlEscape($code) ?>_use_again"
                name="<?php echo $this->htmlEscape($code) ?>_use_again"
-               value="1" <?php echo (empty($userData['payment_data']) and $recognition > 0) ? 'checked' : ''; ?>>
+               value="1" <?php echo (empty($userData['payment_data']) && $recognition != Recognition::NEVER) ? 'checked' : ''; ?>>
         <?php echo $this->htmlEscape($this->__('No')) ?>
     </div>
 
     <?php
-    if ($recognition != 0 and $data['PROCESSING_RESULT'] == 'NOK') {
+    if ($recognition != Recognition::NEVER && $data['PROCESSING_RESULT'] === 'NOK') {
         echo '<div class="hcd-payment-desc hcd-payment-error">'
             . $this->htmlEscape(Mage::helper('hcd/payment')->handleError($data['PROCESSING_RETURN'])) . '</div>';
     } else {
-        if ($recognition != 0) {
+        if ($recognition != Recognition::NEVER) {
             ?>
             <div id="<?php echo $this->htmlEscape($code) ?>_hpform"
-                <?php echo (isset($userData['payment_data']['ACCOUNT_NUMBER'])) ? 'style="display: none"' : ''; ?>>
+                <?php echo isset($userData['payment_data']['ACCOUNT_NUMBER']) ? 'style="display: none"' : ''; ?>>
 
                 <iframe id="<?php echo $this->htmlEscape($code) ?>_payment_frame"
                         class="<?php echo $this->htmlEscape($code) ?>_payment_frame"

@@ -1,4 +1,5 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Giropay payment method
  *
@@ -13,10 +14,15 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdgp extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdgp';
-    protected $_canRefund = true;
-    protected $_canRefundInvoicePartial = true;
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdgp constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdgp';
+    }
 }

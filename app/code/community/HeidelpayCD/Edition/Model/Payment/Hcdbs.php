@@ -1,5 +1,6 @@
 <?php
 
+/** @noinspection LongInheritanceChainInspection */
 /**
  * BillSafe payment method
  *
@@ -14,16 +15,8 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    /** @var  $_code string payment method code */
-    protected $_code = 'hcdbs';
-    /** @var $_canRefund bool   */
-    protected $_canRefund = false;
-    /** @var $_canRefundInvoicePartial bool  */
-    protected $_canRefundInvoicePartial = false;
-
     /** @var $_basketApiHelper HeidelpayCD_Edition_Helper_BasketApi  */
     protected $_basketApiHelper;
 
@@ -33,7 +26,13 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     public function __construct()
     {
         parent::__construct();
-        $this->_basketApiHelper =    Mage::helper('hcd/basketApi');
+
+        $this->_code = 'hcdbs';
+        $this->_canRefund = false;
+        $this->_canRefundInvoicePartial = false;
+        $this->_reportsShippingToHeidelpay = true;
+
+        $this->_basketApiHelper = Mage::helper('hcd/basketApi');
     }
 
     /**
@@ -44,12 +43,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
         $billing = $this->getQuote()->getBillingAddress();
         $shipping = $this->getQuote()->getShippingAddress();
 
-        if (($billing->getFirstname() != $shipping->getFirstname()) or
-            ($billing->getLastname() != $shipping->getLastname()) or
-            ($billing->getStreet() != $shipping->getStreet()) or
-            ($billing->getPostcode() != $shipping->getPostcode()) or
-            ($billing->getCity() != $shipping->getCity()) or
-            ($billing->getCountry() != $shipping->getCountry())
+        if (($billing->getFirstname() !== $shipping->getFirstname()) ||
+            ($billing->getLastname() !== $shipping->getLastname()) ||
+            ($billing->getStreet() !== $shipping->getStreet()) ||
+            ($billing->getPostcode() !== $shipping->getPostcode()) ||
+            ($billing->getCity() !== $shipping->getCity()) ||
+            ($billing->getCountry() !== $shipping->getCountry())
         ) {
             return false;
         }
@@ -62,7 +61,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
      */
     public function showPaymentInfo($paymentData)
     {
-        $loadSnippet = $this->_getHelper()->__("BillSafe Info Text");
+        $loadSnippet = $this->_getHelper()->__('BillSafe Info Text');
 
         $replace = array(
             '{LEGALNOTE}' => $paymentData['CRITERION_BILLSAFE_LEGALNOTE'],
@@ -77,7 +76,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
 
         $loadSnippet = strtr($loadSnippet, $replace);
 
-
         return $loadSnippet;
     }
 
@@ -86,8 +84,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
      */
     public function processingTransaction($order, $data, $message='')
     {
+        /** @noinspection SuspiciousAssignmentsInspection */
         $message = 'BillSafe Id: ' . $data['CRITERION_BILLSAFE_REFERENCE'];
-        parent::processingTransaction($order, $data, $message);
+
+        return parent::processingTransaction($order, $data, $message);
     }
 
     /**

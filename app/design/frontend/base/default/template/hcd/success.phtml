@@ -1,16 +1,15 @@
-<?php 
-	$paymentInfo = false;
+<?php
+    /** @var array $paymentInfo */
 	$paymentInfo = $this->showPaymentInfo(); 
-	if ($paymentInfo !== false) {
+	if (!empty($paymentInfo)) :
 ?>
-<!-- Heidelpay success payment informations -->
+<!-- Heidelpay success payment information -->
 <div class="block block-list block-compare">
 <div class="block-title">
 		<strong>
 			<span>
-			<?php 
-				echo $this->__('payment informations');
-				echo $paymentInfo['Title'];
+			<?php
+                printf('%s - %s', $this->__('payment information'), $paymentInfo['Title']);
 			?>
 			</span>
 		</strong>
@@ -19,5 +18,5 @@
 		<?php echo $paymentInfo['Message'] ?>
 	</div>
 </div>
-<!-- End Heidelpay success payment informations -->
-<?php } ?>
+<!-- End Heidelpay success payment information -->
+<?php endif ?>
