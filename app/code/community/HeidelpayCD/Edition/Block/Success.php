@@ -16,6 +16,9 @@
 // @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Block_Success extends HeidelpayCD_Edition_Block_Abstract
 {
+    /**
+     * @return array
+     */
     public function showPaymentInfo()
     {
         $return = array();
@@ -33,6 +36,6 @@ class HeidelpayCD_Edition_Block_Success extends HeidelpayCD_Edition_Block_Abstra
             return $return;
         }
         
-        return false;
+        return $return;
     }
 }

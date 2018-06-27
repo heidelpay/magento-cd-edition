@@ -20,7 +20,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
     /**
      * collect items for basket api
      *
-     * @param $quote Mage_Sales_Model_Order quote object
+     * @param $quote Mage_Sales_Model_Quote|Mage_Sales_Model_Order quote object
      * @param $storeId integer current store id
      * @param $includingShipment boolean include
      *
@@ -31,106 +31,150 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
         $shoppingCartItems = $quote->getAllVisibleItems();
 
         $shoppingCart = array(
-
             'authentication' => array(
-
                 'login' => trim(Mage::getStoreConfig('hcd/settings/user_id', $storeId)),
                 'sender' => trim(Mage::getStoreConfig('hcd/settings/security_sender', $storeId)),
                 'password' => trim(Mage::getStoreConfig('hcd/settings/user_pwd', $storeId)),
-
             ),
-
-
             'basket' => array(
-                'amountTotalNet' => floor(bcmul($quote->getGrandTotal(), 100, 10)),
-                'currencyCode' => $quote->getGlobalCurrencyCode(),
+                'amountTotalNet' => (int) ($this->getBasketTotalNet($quote) * 100),
+                'currencyCode' => $quote->getQuoteCurrencyCode() ?: $quote->getOrderCurrencyCode(),
                 'amountTotalDiscount' => floor(bcmul($quote->getDiscountAmount(), 100, 10)),
-                'itemCount' => count($shoppingCartItems)
+                'itemCount' => count($shoppingCartItems),
+                'amountTotalVat' => floor(bcmul($quote->getTaxAmount(), 100, 10))
             )
-
-
         );
 
         $count = 1;
-        /** @var  $item Mage_Sales_Model_Order_Item */
+        /** @var Mage_Sales_Model_Order_Item $item */
         foreach ($shoppingCartItems as $item) {
             $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
                 'basketItemReferenceId' => $item->getItemId(),
+                'articleId' => $item->getSku(),
                 'quantity' => ($item->getQtyOrdered() !== false) ? floor($item->getQtyOrdered()) : $item->getQty(),
                 'vat' => floor($item->getTaxPercent()),
                 'amountVat' => floor(bcmul($item->getTaxAmount(), 100, 10)),
                 'amountGross' => floor(bcmul($item->getRowTotalInclTax(), 100, 10)),
                 'amountNet' => floor(bcmul($item->getRowTotal(), 100, 10)),
-                'amountPerUnit' => floor(bcmul($item->getPrice(), 100, 10)),
+                'amountPerUnit' => floor(bcmul($item->getRowTotalInclTax(), 100, 10)),
                 'amountDiscount' => floor(bcmul($item->getDiscountAmount(), 100, 10)),
-                'type' => 'goods',
+                'type' => $item->getIsVirtual() ? 'digital' : 'goods',
                 'title' => $item->getName(),
                 'imageUrl' => (string)Mage::helper('catalog/image')->init($item->getProduct(), 'thumbnail')
             );
             $count++;
         }
 
-        if ($includingShipment and $this->getShippingNetPrice($quote) > 0) {
-            // Shipping amount including tax
-            $shippingAmountInclTax = floor(
-                bcmul(
-                    (($quote->getShippingAmount() - $quote->getShippingRefunded())
-                        * (1 + $this->getShippingTaxPercent($quote) / 100)),
-                    100, 10
-                )
+        // include shipping as single position
+        if ($includingShipment && $this->getShippingInclTax($quote) > 0) {
+            // shipment counts as a single position and is also part of the itemCount.
+            $shoppingCart['basket']['itemCount']++;
+
+            /** @var Mage_Tax_Model_Calculation $taxCalculation */
+            $taxCalculation = Mage::getModel('tax/calculation');
+            $taxRateRequest = $taxCalculation->getRateRequest(
+                $quote->getShippingAddress(),
+                $quote->getBillingAddress(),
+                null,
+                $quote->getStore()
             );
+
+            /** @var Mage_Tax_Model_Sales_Total_Quote_Shipping $taxRateId */
+            $taxRateId = Mage::getStoreConfig('tax/classes/shipping_tax_class', $quote->getStore());
+            $taxPercent = $taxCalculation->getRate($taxRateRequest->setProductClassId($taxRateId));
 
             $shoppingCart['basket']['basketItems'][] = array(
                 'position' => $count,
                 'basketItemReferenceId' => $count,
-                "type" => "shipment",
-                "title" => "Shipping",
+                'type' => 'shipment',
+                'title' => 'Shipping',
                 'quantity' => 1,
-                'vat' => $this->getShippingTaxPercent($quote),
-                'amountVat' => floor(
-                    bcmul(
-                        ($shippingAmountInclTax - $this->getShippingTaxPercent($quote)),
-                        100, 10
-                    )
-                ),
-                'amountGross' => $shippingAmountInclTax,
-                'amountNet' => $this->getShippingNetPrice($quote) ,
-                'amountPerUnit' => $shippingAmountInclTax,
-                'amountDiscount' => ''
+                'vat' => $taxPercent,
+                'amountVat' => (int) ($this->getShippingTaxAmount($quote) * 100),
+                'amountGross' => (int) ($this->getShippingInclTax($quote) * 100),
+                'amountNet' => (int) ($this->getShippingAmount($quote) * 100),
+                'amountPerUnit' => (int) ($this->getShippingInclTax($quote) * 100),
+                'amountDiscount' => (int) ($this->getShippingDiscountAmount($quote) * 100)
             );
         }
-
 
         return $shoppingCart;
     }
 
     /**
-     * Calculate shipping net price
+     * Returns the total net amount of the quote/order.
      *
-     * @param $order Mage_Sales_Model_Order magento order object
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
      *
-     * @return string shipping net price
+     * @return float
      */
-    public function getShippingNetPrice($order)
+    protected function getBasketTotalNet($quote)
     {
-        $shippingTax = $order->getShippingTaxAmount();
-        $price = $order->getShippingInclTax() - $shippingTax;
-        $price -= $order->getShippingRefunded();
-        $price -= $order->getShippingCanceled();
-        return $price;
+        return $quote->getSubtotal() + $this->getShippingAmount($quote);
     }
 
     /**
-     * Calculate shipping tax in percent for BillSafe
+     * Returns the net shipping cost amount depending on the order/quote type
      *
-     * @param $order Mage_Sales_Model_Order magentp order object
-     *
-     * @return string shipping tex in percent
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     * @return float
      */
-    public function getShippingTaxPercent($order)
+    protected function getShippingAmount($quote)
     {
-        $tax = ($order->getShippingTaxAmount() * 100) / $order->getShippingAmount();
-        return $this->format(round($tax));
+        if ($quote instanceof Mage_Sales_Model_Quote) {
+            return $quote->getShippingAddress()->getShippingAmount();
+        }
+
+        /** @var Mage_Sales_Model_Order $quote */
+        return $quote->getShippingAmount();
+    }
+
+    /**
+     * Returns the shipping discount amount depending on the order/quote type
+     *
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     * @return float
+     */
+    protected function getShippingDiscountAmount($quote)
+    {
+        if ($quote instanceof Mage_Sales_Model_Quote) {
+            return $quote->getShippingAddress()->getShippingDiscountAmount();
+        }
+
+        /** @var Mage_Sales_Model_Order $quote */
+        return $quote->getShippingDiscountAmount();
+    }
+
+    /**
+     * Returns the gross shipping cost amount depending on the order/quote type
+     *
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     * @return float
+     */
+    protected function getShippingInclTax($quote)
+    {
+        if ($quote instanceof Mage_Sales_Model_Quote) {
+            return $quote->getShippingAddress()->getShippingInclTax();
+        }
+
+        /** @var Mage_Sales_Model_Order $quote */
+        return $quote->getShippingInclTax();
+    }
+
+    /**
+     * Returns the shipping tax amount depending on the order/quote type
+     *
+     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     * @return float
+     */
+    protected function getShippingTaxAmount($quote)
+    {
+        if ($quote instanceof Mage_Sales_Model_Quote) {
+            return $quote->getShippingAddress()->getShippingTaxAmount();
+        }
+
+        /** @var Mage_Sales_Model_Order $quote */
+        return $quote->getShippingTaxAmount();
     }
 }

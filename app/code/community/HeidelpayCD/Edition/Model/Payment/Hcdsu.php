@@ -1,4 +1,5 @@
 <?php
+/** @noinspection LongInheritanceChainInspection */
 /**
  * Sofort payment method
  *
@@ -15,19 +16,30 @@
  * @subpackage Magento
  * @category Magento
  */
-// @codingStandardsIgnoreLine magento marketplace namespace warning
 class HeidelpayCD_Edition_Model_Payment_Hcdsu extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-    protected $_code = 'hcdsu';
-    protected $_canRefund = true;
-    protected $_canRefundInvoicePartial = true;
+    /**
+     * HeidelpayCD_Edition_Model_Payment_Hcdsu constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_code = 'hcdsu';
+    }
 
     /**
-     * @inheritdoc
+     * Handle charge back notices from heidelpay payment
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
      */
-    public function chargeBack($order, $message = "")
+    public function chargeBackTransaction($order, $message = '')
     {
+        /** @noinspection SuspiciousAssignmentsInspection */
         $message = Mage::helper('hcd')->__('chargeback');
-        return parent::chargeBack($order, $message);
+        return parent::chargeBackTransaction($order, $message);
     }
 }

@@ -20,13 +20,17 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
     /**
      * send request to heidelpay apo
      *
-     * @param $url string url for the heidelpay api
+     * @param       $url string url for the heidelpay api
      * @param array $params post parameter
      *
-     * @return mixed|null|Zend_Http_Response response from heidelpay api
+     * @return array response from heidelpay api
+     *
+     * @throws Zend_Http_Client_Exception
+     * @throws Mage_Core_Model_Store_Exception
      */
-    public function doRequest($url, $params = array())
+    public function doRequest($url, array $params = array())
     {
+        $result = array();
         $client = new Zend_Http_Client(trim($url), array());
 
         if (array_key_exists('raw', $params)) {
@@ -43,33 +47,60 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
             $client->setAdapter($adapter);
         }
 
-        $response = $client->request('POST');
-        $res = $response->getBody();
+        $response = null;
+        $responseBody = null;
 
+        try {
+            $response = $client->request('POST');
+            $responseBody = $response->getBody();
+        } catch (Zend_Http_Client_Exception $e) {
+            $message = sprintf(
+                'doRequest failed, because on exception occured. Message: %s, Code: %s, Stacktrace: %s',
+                $e->getMessage(),
+                $e->getCode(),
+                $e->getTraceAsString()
+            );
+            $this->log($message, 'ERROR');
 
-        if ($response->isError()) {
-            $this->log("Request fail. Http code : " . $response->getStatus() . ' Message : ' . $res, 'ERROR');
-            $this->log("Request data : " . json_encode($params), 'ERROR');
-            if (array_key_exists('raw', $params)) {
-                return $response;
+            // return an empty array on error.
+            return $result;
+        }
+
+        if (!empty($responseBody)) {
+            if ($response->isError()) {
+                $this->log(
+                    'Request fail. Http code : ' . $response->getStatus() . ' Message : ' . $responseBody,
+                    'ERROR'
+                );
+
+                $this->log('Request data : ' . json_encode($params), 'ERROR');
+                if (array_key_exists('raw', $params)) {
+                    return $result;
+                }
             }
+
+            if (array_key_exists('raw', $params)) {
+                return json_decode($responseBody, true);
+            }
+
+            // @codingStandardsIgnoreLine parse_str is discouraged
+            parse_str($responseBody, $result);
+            ksort($result);
         }
 
-        if (array_key_exists('raw', $params)) {
-            return json_decode($res, true);
-        }
-
-        $result = null;
-        // @codingStandardsIgnoreLine parse_str is discouraged
-        parse_str($res, $result);
-        ksort($result);
         return $result;
     }
 
     // @codingStandardsIgnoreLine more than 120 characters
-    public function preparePostData($config = array(), $front = array(), $customer = array(), $basket = array(), $criterion = array())
-    {
+    public function preparePostData(
+        $config = array(),
+        $front = array(),
+        $customer = array(),
+        $basket = array(),
+        $criterion = array()
+    ) {
         $params = array();
+
         /*
          * configuration part of this function
          */
@@ -90,22 +121,20 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
 
         $params['TRANSACTION.CHANNEL'] = $config['TRANSACTION.CHANNEL'];
 
-
         $params = array_merge($params, $this->_setPaymentMethod($config, $customer));
-
 
         /* debit on registration */
         if (array_key_exists('ACCOUNT.REGISTRATION', $config)) {
             $params['ACCOUNT.REGISTRATION'] = $config['ACCOUNT.REGISTRATION'];
-            $params['FRONTEND.ENABLED'] = "false";
+            $params['FRONTEND.ENABLED'] = 'false';
         }
 
         if (array_key_exists('SHOP.TYPE', $config)) {
             $params['SHOP.TYPE'] = $config['SHOP.TYPE'];
         }
 
-        if (array_key_exists('SHOPMODUL.VERSION', $config)) {
-            $params['SHOPMODUL.VERSION'] = $config['SHOPMODUL.VERSION'];
+        if (array_key_exists('SHOPMODULE.VERSION', $config)) {
+            $params['SHOPMODULE.VERSION'] = $config['SHOPMODULE.VERSION'];
         }
 
         /* frontend configuration */
@@ -120,11 +149,10 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
             $params['FRONTEND.MODE'] = $front['FRONTEND.MODE'];
             unset($front['FRONTEND.MODE']);
         } else {
-            $params['FRONTEND.MODE'] = "WHITELABEL";
-            $params['TRANSACTION.RESPONSE'] = "SYNC";
+            $params['FRONTEND.MODE'] = 'WHITELABEL';
+            $params['TRANSACTION.RESPONSE'] = 'SYNC';
             $params['FRONTEND.ENABLED'] = 'true';
         }
-
 
         $params = array_merge($params, $front);
 
@@ -137,87 +165,106 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
         /* criterion data configuration */
         $params = array_merge($params, $criterion);
 
-        $params['REQUEST.VERSION'] = "1.0";
+        $params['REQUEST.VERSION'] = '1.0';
 
-        // sort the parameter
+        // sort the parameters
         ksort($params);
 
         return $params;
     }
 
-    // @codingStandardsIgnoreLine should be refactored - issue #3
+    /**
+     * @param array $config
+     * @param array $customer
+     *
+     * @return array
+     */
+    //@codingStandardsIgnoreLine should be refactored - issue #3
     protected function _setPaymentMethod($config = array(), $customer = array())
     {
+        $params = array();
+
         $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'PA' : $config['PAYMENT.TYPE'];
         /* Set payment method */
         switch ($config['PAYMENT.METHOD']) {
             /* sofort */
             case 'su':
-                $params['ACCOUNT.BRAND'] = "SOFORT";
-                $params['PAYMENT.CODE'] = "OT." . $type;
+                $params['ACCOUNT.BRAND'] = 'SOFORT';
+                $params['PAYMENT.CODE'] = 'OT.' . $type;
                 break;
-            /* griopay */
+            /* giropay */
             case 'gp':
-                $params['ACCOUNT.BRAND'] = "GIROPAY";
-                $params['PAYMENT.CODE'] = "OT." . $type;
+                $params['ACCOUNT.BRAND'] = 'GIROPAY';
+                $params['PAYMENT.CODE'] = 'OT.' . $type;
                 break;
             /* ideal */
             case 'ide':
-                $params['ACCOUNT.BRAND'] = "IDEAL";
-                $params['PAYMENT.CODE'] = "OT." . $type;
+                $params['ACCOUNT.BRAND'] = 'IDEAL';
+                $params['PAYMENT.CODE'] = 'OT.' . $type;
                 break;
             /* eps */
             case 'eps':
-                $params['ACCOUNT.BRAND'] = "EPS";
-                $params['PAYMENT.CODE'] = "OT." . $type;
+                $params['ACCOUNT.BRAND'] = 'EPS';
+                $params['PAYMENT.CODE'] = 'OT.' . $type;
                 break;
             /* postfinance */
             case 'pf':
-                $params['PAYMENT.CODE'] = "OT." . $type;
+                $params['PAYMENT.CODE'] = 'OT.' . $type;
                 break;
             /* paypal */
             case 'pal':
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "VA." . $type;
-                $params['ACCOUNT.BRAND'] = "PAYPAL";
+                $params['PAYMENT.CODE'] = 'VA.' . $type;
+                $params['ACCOUNT.BRAND'] = 'PAYPAL';
                 break;
             /* prepayment */
             case 'pp':
-                $params['PAYMENT.CODE'] = "PP." . $type;
+                $params['PAYMENT.CODE'] = 'PP.' . $type;
                 break;
-            /* invoce */
+            /* invoice */
             case 'iv':
-                $params['PAYMENT.CODE'] = "IV." . $type;
+                $params['PAYMENT.CODE'] = 'IV.' . $type;
                 break;
             /* invoice secured */
             case 'ivsec':
-                $params['PAYMENT.CODE'] = "IV." . $type;
+                $params['PAYMENT.CODE'] = 'IV.' . $type;
+                break;
+            /* Payolution invoice */
+            case 'ivpol':
+                $params['PAYMENT.CODE'] = 'IV.' . ($type !== 'RG' ? $type : 'PA') ;
+                $params['ACCOUNT.BRAND'] = 'PAYOLUTION_DIRECT';
                 break;
             /* direct debit secured */
             case 'ddsec':
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'];
-                $params['PAYMENT.CODE'] = "DD." . $type;
+                $params['PAYMENT.CODE'] = 'DD.' . $type;
                 break;
             /* BillSafe */
             case 'bs':
-                $params['PAYMENT.CODE'] = "IV." . $type;
-                $params['ACCOUNT.BRAND'] = "BILLSAFE";
-                $params['FRONTEND.ENABLED'] = "false";
+                $params['PAYMENT.CODE'] = 'IV.' . $type;
+                $params['ACCOUNT.BRAND'] = 'BILLSAFE';
+                $params['FRONTEND.ENABLED'] = 'false';
                 break;
             /* MasterPass */
             case 'mpa':
                 $type = (!array_key_exists('PAYMENT.TYPE', $config)) ? 'DB' : $config['PAYMENT.TYPE'];
 
                 // masterpass as a payment method
-                if (!array_key_exists('IDENTIFICATION.REFERENCEID', $customer) and ($type == 'DB' or $type == 'PA')) {
-                    $params['WALLET.DIRECT_PAYMENT'] = "true";
-                    $params['WALLET.DIRECT_PAYMENT_CODE'] = "WT." . $type;
+                if (!array_key_exists('IDENTIFICATION.REFERENCEID', $customer) && ($type === 'DB' || $type === 'PA')) {
+                    $params['WALLET.DIRECT_PAYMENT'] = 'true';
+                    $params['WALLET.DIRECT_PAYMENT_CODE'] = 'WT.' . $type;
                     $type = 'IN';
                 }
 
-                $params['PAYMENT.CODE'] = "WT." . $type;
-                $params['ACCOUNT.BRAND'] = "MASTERPASS";
+                $params['PAYMENT.CODE'] = 'WT.' . $type;
+                $params['ACCOUNT.BRAND'] = 'MASTERPASS';
                 break;
+            // Santander Invoice
+            case 'ivsan':
+                $params['PAYMENT.CODE'] = 'IV.' . (($type === 'RG') ? 'PA' : $type);
+                $params['ACCOUNT.BRAND'] = 'SANTANDER';
+                break;
+
             default:
                 $params['PAYMENT.CODE'] = strtoupper($config['PAYMENT.METHOD']) . '.' . $type;
                 break;
@@ -244,27 +291,97 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
     }
 
     /**
+     * Returns the customer's/guest's order count
+     *
+     * @param $orderQuote Mage_Sales_Model_Quote|Mage_Sales_Model_Order
+     *
+     * @return int
+     */
+    public function getCustomerOrderCount($orderQuote)
+    {
+        // guest = get the order count by e-mail address and customer_id = null
+        if ($this->getCustomerIsGuest($orderQuote)) {
+            /** @var string $emailAddress */
+            $emailAddress = $orderQuote->getCustomerEmail() ?: $orderQuote->getBillingAddress()->getEmail();
+
+            /** @var Mage_Eav_Model_Entity_Collection_Abstract $orders */
+            $orders = Mage::getModel('sales/order')
+                ->getCollection()
+                ->addFieldToFilter('customer_id', null)
+                ->addFieldToFilter('customer_email', $emailAddress)
+                ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
+
+            return $orders->count();
+        }
+
+        /** @var Mage_Eav_Model_Entity_Collection_Abstract $orders */
+        $orders = Mage::getModel('sales/order')
+            ->getCollection()
+            ->addFieldToFilter('customer_id', $orderQuote->getCustomerId())
+            ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
+
+        return $orders->count();
+    }
+
+    /**
+     * Returns a customer's registration date or today's date in case of guest customers.
+     *
+     * @param $orderQuote Mage_Sales_Model_Quote|Mage_Sales_Model_Order
+     *
+     * @return string
+     */
+    public function getCustomerRegistrationDate($orderQuote)
+    {
+        /** @var Mage_Core_Model_Date $dateHelper */
+        $dateHelper = Mage::getSingleton('core/date');
+
+        // if the customer is a guest, return today's date.
+        if ($this->getCustomerIsGuest($orderQuote)) {
+            return $dateHelper->date('Y-m-d');
+        }
+
+        /** @var Mage_Customer_Model_Customer $customer */
+        $customer = Mage::getModel('customer/customer')->load($orderQuote->getCustomerId());
+
+        if ($customer && $customer->getCreatedAtTimestamp() !== null) {
+            return $dateHelper->date('Y-m-d', $customer->getCreatedAtTimestamp());
+        }
+
+        // fallback, if customer is null or getCreatedAtTimestamp somehow returns null.
+        return $dateHelper->date('Y-m-d');
+    }
+
+    /**
+     * @param Mage_Sales_Model_Quote|Mage_Sales_Model_Order $orderQuote
+     *
+     * @return bool
+     */
+    public function getCustomerIsGuest($orderQuote)
+    {
+        return $orderQuote->getCustomerId() === null;
+    }
+
+    /**
      * helper to generate customer payment error messages
      *
      * @param mixed      $errorMsg
      * @param null|mixed $errorCode
      * @param null|mixed $orderNumber
+     *
+     * @return string
      */
     public function handleError($errorMsg, $errorCode = null, $orderNumber = null)
     {
         // default is return generic error message
-        if ($orderNumber != null) {
+        if ($orderNumber !== null) {
             $this->log('Ordernumber ' . $orderNumber . ' -> ' . $errorMsg . ' [' . $errorCode . ']', 'NOTICE');
         }
 
-        if ($errorCode) {
-            if (!preg_match(
-                '/HPError-[0-9]{3}\.[0-9]{3}\.[0-9]{3}/', $this->_getHelper()->__('HPError-' . $errorCode),
-                $matches
-            )
-            ) { //JUST return when snipet exists
-                return $this->_getHelper()->__('HPError-' . $errorCode);
-            }
+        if ($errorCode && !preg_match(
+            '/HPError-[0-9]{3}\.[0-9]{3}\.[0-9]{3}/', $this->_getHelper()->__('HPError-' . $errorCode)
+        )) {
+            //JUST return when snipet exists
+            return $this->_getHelper()->__('HPError-' . $errorCode);
         }
 
         return $this->_getHelper()->__('An unexpected error occurred. Please contact us to get further information.');
@@ -293,7 +410,6 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
         $regionData = Mage::getModel('directory/region')->getResourceCollection()
             ->addCountryFilter($countryCode)
             ->load();
-
 
         $regionId = null;
 
