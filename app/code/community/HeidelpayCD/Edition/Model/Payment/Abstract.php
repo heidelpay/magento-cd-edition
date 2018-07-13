@@ -737,8 +737,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @param $order
      * @return array
      */
-    protected function getBasket($order) {
-        return [];
+    protected function getBasket($order)
+    {
+        return array();
     }
 
     /**

@@ -98,7 +98,8 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
         $customer = array(),
         $basket = array(),
         $criterion = array()
-    ) {
+    )
+    {
         $params = array();
 
         /*
