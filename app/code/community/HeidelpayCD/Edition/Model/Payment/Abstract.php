@@ -231,7 +231,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             return false;
         }
 
-        $storeId = Mage::app()->getStore()->getId();
+        $storeId = $this->getStoreId();
 
         $amount = sprintf('%1.2f', $totals['grand_total']->getData('value'));
         $amount *= 100;
@@ -424,14 +424,15 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * Load configuration parameter for the given payment method
      *
-     * @param mixed $code    payment method code
+     * @param mixed $code payment method code
      * @param mixed $storeId magento store identification number
      *
      * @return mixed
+     * @throws Mage_Core_Model_Store_Exception
      */
     public function getMainConfig($code, $storeId = false)
     {
-        $storeId = $storeId ?: $this->getStore();
+        $storeId = $storeId ?: $this->getStoreId();
         $path = 'hcd/settings/';
         $config = array();
         $config['PAYMENT.METHOD'] = preg_replace('/^hcd/', '', $code);
@@ -492,7 +493,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             'CRITERION.SECRET' => Mage::getModel('hcd/resource_encryption')
                     ->getHash((string)$orderNumber),
             'CRITERION.LANGUAGE' => strtolower($frontendLanguage),
-            'CRITERION.STOREID' => $storeId ?: Mage::app()->getStore()->getId(),
+            'CRITERION.STOREID' => $storeId ?: $this->getStoreId(),
             'SHOP.TYPE' => sprintf('Magento %s %s', Mage::getEdition(), Mage::getVersion()),
             'SHOPMODULE.VERSION' => 'HeidelpayCD Edition - ' .
                 (string)Mage::getConfig()->getNode()->modules->HeidelpayCD_Edition->version
@@ -638,7 +639,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         try {
             $paymentCode = $code ?: $this->getCode();
             $customerId = $customerId ?: $this->getQuote()->getBillingAddress()->getCustomerId();
-            $storeId = $storeId ?: Mage::app()->getStore()->getId();
+            $storeId = $storeId ?: $this->getStoreId();
         } catch (Mage_Core_Model_Store_Exception $e) {
             $message = sprintf(
                 '%s exception thrown. Message: %s, Code: %s, Stacktrace: %s',
@@ -744,6 +745,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Getter for the payment method backend title
      *
      * @return string payment method title
+     * @throws Mage_Core_Model_Store_Exception
      */
     public function getAdminTitle()
     {
@@ -754,10 +756,11 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Getter for the payment method frontend title
      *
      * @return string payment method title
+     * @throws Mage_Core_Model_Store_Exception
      */
     public function getTitle()
     {
-        $storeId = $this->getStore();
+        $storeId = $this->getStoreId();
         $path = 'payment/' . $this->getCode() . '/';
         return $this->_getHelper()->__(Mage::getStoreConfig($path . 'title', $storeId));
     }
@@ -857,7 +860,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         }
 
         // prevent frontend to capture an amount in case of direct booking with auto invoice
-        if (Mage::app()->getStore()->getId() !== '0') {
+        if ($this->getStoreId() !== '0') {
             $this->log('try to capture amount in frontend ... this is not necessary !');
             return false;
         }
@@ -1024,9 +1027,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             $customerData->load($lastData['id']);
         }
 
-        $this->log('StoreID :' . Mage::app()->getStore()->getId());
+        $storeId = $this->getStoreId();
+        $this->log('StoreID :' . $storeId);
         $customerId = $this->getQuote()->getBillingAddress()->getCustomerId();
-        $storeId = Mage::app()->getStore()->getId();
         if ($customerId === 0) {
             $visitorData = Mage::getSingleton('core/session')->getVisitorData();
             $customerId = $visitorData['visitor_id'];
@@ -1293,5 +1296,16 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         $autoInvoice = Mage::getStoreConfig($path, $data['CRITERION_STOREID']) === '1';
         $this->log('Auto invoiced: ' . ($autoInvoice ? 'enabled' : 'disabled'));
         return $autoInvoice;
+    }
+
+    /**
+     * Returns the id of the current store.
+     *
+     * @return int
+     * @throws Mage_Core_Model_Store_Exception
+     */
+    private function getStoreId()
+    {
+        return Mage::app()->getStore()->getId();
     }
 }
