@@ -730,6 +730,17 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     }
 
     /**
+     * Returns a basket array used for heidelpay invoicing.
+     * This has to be overridden by the payment method.
+     *
+     * @param $order
+     * @return array
+     */
+    protected function getBasket($order) {
+        return [];
+    }
+
+    /**
      * Getter for the payment method backend title
      *
      * @return string payment method title
