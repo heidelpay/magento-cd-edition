@@ -127,30 +127,18 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
             }
         }
 
-        if ($this->_basketApiHelper->getShippingNetPrice($order) > 0) {
+        if ($this->getShippingNetPrice($order) > 0) {
             $itemCount++;
             $prefix = 'CRITERION.POS_' . sprintf('%02d', $itemCount);
             $parameters[$prefix . '.POSITION'] = $itemCount;
             $parameters[$prefix . '.QUANTITY'] = '1';
             $parameters[$prefix . '.UNIT'] = 'Stk.'; // Liter oder so
-            $parameters[$prefix . '.AMOUNT_UNIT_GROSS'] = floor(
-                bcmul(
-                    (($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100)),
-                    100, 10
-                )
-            );
-            $parameters[$prefix . '.AMOUNT_GROSS'] = floor(
-                bcmul(
-                    (($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->_basketApiHelper->getShippingTaxPercent($order) / 100)),
-                    100, 10
-                )
-            );
+            $parameters[$prefix . '.AMOUNT_UNIT_GROSS'] = $this->getAmountGross($order);
+            $parameters[$prefix . '.AMOUNT_GROSS'] = $this->getAmountGross($order);
 
             $parameters[$prefix . '.TEXT'] = 'Shipping';
             $parameters[$prefix . '.ARTICLE_NUMBER'] = '0';
-            $parameters[$prefix . '.PERCENT_VAT'] = $this->_basketApiHelper->getShippingTaxPercent($order);
+            $parameters[$prefix . '.PERCENT_VAT'] = $this->getShippingTaxPercent($order);
             $parameters[$prefix . '.ARTICLE_TYPE'] = 'shipment';
         }
 
@@ -171,4 +159,62 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
 
         return $parameters;
     }
+
+    /**
+     * @param $order
+     * @return float
+     */
+    private function getAmountGross($order)
+    {
+        return floor(
+            bcmul(
+                ($order->getShippingAmount() - $order->getShippingRefunded())
+                * (1 + $this->getShippingTaxPercent($order) / 100),
+                100, 10
+            )
+        );
+    }
+
+    //<editor-fold desc="Legacy Basket">
+    /**
+     * Calculate shipping net price
+     *
+     * @param $order Mage_Sales_Model_Order magento order object
+     *
+     * @return string shipping net price
+     */
+    public function getShippingNetPrice($order)
+    {
+        $shippingTax = $order->getShippingTaxAmount();
+        $price = $order->getShippingInclTax() - $shippingTax;
+        $price -= $order->getShippingRefunded();
+        $price -= $order->getShippingCanceled();
+        return $price;
+    }
+
+    /**
+     * Calculate shipping tax in percent for BillSafe
+     *
+     * @param $order Mage_Sales_Model_Order magentp order object
+     *
+     * @return string shipping tex in percent
+     */
+    public function getShippingTaxPercent($order)
+    {
+        $tax = ($order->getShippingTaxAmount() * 100) / $order->getShippingAmount();
+        return $this->format(round($tax));
+    }
+
+    /**
+     * function to format amount
+     *
+     * @param mixed $number
+     *
+     * @return string
+     */
+    public function format($number)
+    {
+        return number_format($number, 2, '.', '');
+    }
+    //</editor-fold>
 }
