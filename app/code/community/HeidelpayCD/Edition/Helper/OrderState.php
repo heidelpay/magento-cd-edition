@@ -59,7 +59,8 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
         $paymentMethodCode = $paymentMethodInstance->getCode();
         $isReceipt = $paymentCode[1] === 'RC';
         $isSuccess = $orderStatus === $paymentMethodInstance->getStatusSuccess();
-        $isSecInvoice = in_array($paymentMethodCode, ['hcdivsec', 'hcdivpol', 'hcdivsan'], true);
+        $secInvoiceMethods = array('hcdivsec', 'hcdivpol', 'hcdivsan');
+        $isSecInvoice = in_array($paymentMethodCode, $secInvoiceMethods, true);
         if ($isSuccess && !($isReceipt && $isSecInvoice)) {
             return;
         }
