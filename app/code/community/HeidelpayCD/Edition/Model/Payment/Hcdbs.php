@@ -133,20 +133,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
             $parameters[$prefix . '.POSITION'] = $itemCount;
             $parameters[$prefix . '.QUANTITY'] = '1';
             $parameters[$prefix . '.UNIT'] = 'Stk.'; // Liter oder so
-            $parameters[$prefix . '.AMOUNT_UNIT_GROSS'] = floor(
-                bcmul(
-                    ($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->getShippingTaxPercent($order) / 100),
-                    100, 10
-                )
-            );
-            $parameters[$prefix . '.AMOUNT_GROSS'] = floor(
-                bcmul(
-                    ($order->getShippingAmount() - $order->getShippingRefunded())
-                        * (1 + $this->getShippingTaxPercent($order) / 100),
-                    100, 10
-                )
-            );
+            $parameters[$prefix . '.AMOUNT_UNIT_GROSS'] = $this->getAmountGross($order);
+            $parameters[$prefix . '.AMOUNT_GROSS'] = $this->getAmountGross($order);
 
             $parameters[$prefix . '.TEXT'] = 'Shipping';
             $parameters[$prefix . '.ARTICLE_NUMBER'] = '0';
@@ -170,6 +158,21 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
         }
 
         return $parameters;
+    }
+
+    /**
+     * @param $order
+     * @return float
+     */
+    private function getAmountGross($order)
+    {
+        return floor(
+            bcmul(
+                ($order->getShippingAmount() - $order->getShippingRefunded())
+                * (1 + $this->getShippingTaxPercent($order) / 100),
+                100, 10
+            )
+        );
     }
 
     //<editor-fold desc="Legacy Basket">
