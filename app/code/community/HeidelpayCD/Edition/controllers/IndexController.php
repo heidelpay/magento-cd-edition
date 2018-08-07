@@ -557,8 +557,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
      */
     public function pushAction()
     {
-        $rawPost = false;
-        $lastdata = null;
+        $lastData = null;
         $request = Mage::app()->getRequest();
         $rawPost = $request->getRawBody();
 
@@ -568,27 +567,27 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         /** Hack to remove a structure problem in criterion node */
         $rawPost = preg_replace('/<Criterion(\s+)name="(.+?)">(.+?)<\/Criterion>/', '<$2>$3</$2>', $rawPost);
-
-        $xml = simplexml_load_string($rawPost);
-
         $this->log('XML Object from Push : ' . $rawPost);
 
-        // @codingStandardsIgnoreStart simplexml notation
-        list($type, $methode) = Mage::helper('hcd/payment')
-            ->splitPaymentCode((string)$xml->Transaction->Payment['code']);
+        $xml = simplexml_load_string($rawPost);
+        $xmlTransaction = $xml->Transaction;
 
-        if ($methode == 'RG') {
+        // @codingStandardsIgnoreStart simplexml notation
+        list($type, $method) = Mage::helper('hcd/payment')
+            ->splitPaymentCode((string)$xmlTransaction->Payment['code']);
+
+        if ($method === 'RG') {
             return;
         }
 
-        $hash = (string)$xml->Transaction->Analysis->SECRET;
-        $orderID = (string)$xml->Transaction->Identification->TransactionID;
+        $hash = (string)$xmlTransaction->Analysis->SECRET;
+        $orderID = (string)$xmlTransaction->Identification->TransactionID;
         // @codingStandardsIgnoreEnd
 
         if (Mage::getModel('hcd/resource_encryption')->validateHash($orderID, $hash) === false) {
             $this->log(
-                "Get response form server " . Mage::app()->getRequest()->getServer('REMOTE_ADDR')
-                . " with an invalid hash. This could be some kind of manipulation.",
+                'Get response form server ' . Mage::app()->getRequest()->getServer('REMOTE_ADDR')
+                . ' with an invalid hash. This could be some kind of manipulation.',
                 'WARN'
             );
             $this->_redirect('', array('_forced_secure' => true, '_store_to_url' => true, '_nosid' => true));
@@ -597,20 +596,20 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
 
         // @codingStandardsIgnoreStart simplexml notation
         $xmlData = array(
-            'PAYMENT_CODE' => (string)$xml->Transaction->Payment['code'],
+            'PAYMENT_CODE' => (string)$xmlTransaction->Payment['code'],
             'IDENTIFICATION_TRANSACTIONID' => (string)$orderID,
-            'IDENTIFICATION_UNIQUEID' => (string)$xml->Transaction->Identification->UniqueID,
-            'PROCESSING_RESULT' => (string)$xml->Transaction->Processing->Result,
-            'IDENTIFICATION_SHORTID' => (string)$xml->Transaction->Identification->ShortID,
-            'PROCESSING_STATUS_CODE' => (string)$xml->Transaction->Processing->Status['code'],
-            'PROCESSING_RETURN' => (string)$xml->Transaction->Processing->Return,
-            'PROCESSING_RETURN_CODE' => (string)$xml->Transaction->Processing->Return['code'],
-            'PRESENTATION_AMOUNT' => (string)$xml->Transaction->Payment->Presentation->Amount,
-            'PRESENTATION_CURRENCY' => (string)$xml->Transaction->Payment->Presentation->Currency,
-            'IDENTIFICATION_REFERENCEID' => (string)$xml->Transaction->Identification->ReferenceID,
-            'CRITERION_STOREID' => (int)$xml->Transaction->Analysis->STOREID,
+            'IDENTIFICATION_UNIQUEID' => (string)$xmlTransaction->Identification->UniqueID,
+            'PROCESSING_RESULT' => (string)$xmlTransaction->Processing->Result,
+            'IDENTIFICATION_SHORTID' => (string)$xmlTransaction->Identification->ShortID,
+            'PROCESSING_STATUS_CODE' => (string)$xmlTransaction->Processing->Status['code'],
+            'PROCESSING_RETURN' => (string)$xmlTransaction->Processing->Return,
+            'PROCESSING_RETURN_CODE' => (string)$xmlTransaction->Processing->Return['code'],
+            'PRESENTATION_AMOUNT' => (string)$xmlTransaction->Payment->Presentation->Amount,
+            'PRESENTATION_CURRENCY' => (string)$xmlTransaction->Payment->Presentation->Currency,
+            'IDENTIFICATION_REFERENCEID' => (string)$xmlTransaction->Identification->ReferenceID,
+            'CRITERION_STOREID' => (int)$xmlTransaction->Analysis->STOREID,
             'ACCOUNT_BRAND' => false,
-            'CRITERION_LANGUAGE' => strtoupper((string)$xml->Transaction->Analysis->LANGUAGE)
+            'CRITERION_LANGUAGE' => strtoupper((string)$xmlTransaction->Analysis->LANGUAGE)
         );
         // @codingStandardsIgnoreEnd
 
@@ -621,25 +620,25 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         switch ($paymentCode) {
             case 'hcddd':
                 // @codingStandardsIgnoreStart simplexml notation
-                $xmlData['CLEARING_AMOUNT'] = (string)$xml->Transaction->Payment->Clearing->Amount;
-                $xmlData['CLEARING_CURRENCY'] = (string)$xml->Transaction->Payment->Clearing->Currency;
-                $xmlData['ACCOUNT_IBAN'] = (string)$xml->Transaction->Account->Iban;
-                $xmlData['ACCOUNT_BIC'] = (string)$xml->Transaction->Account->Bic;
-                $xmlData['ACCOUNT_IDENTIFICATION'] = (string)$xml->Transaction->Account->Identification;
-                $xmlData['IDENTIFICATION_CREDITOR_ID'] = (string)$xml->Transaction->Identification->CreditorID;
+                $xmlData['CLEARING_AMOUNT'] = (string)$xmlTransaction->Payment->Clearing->Amount;
+                $xmlData['CLEARING_CURRENCY'] = (string)$xmlTransaction->Payment->Clearing->Currency;
+                $xmlData['ACCOUNT_IBAN'] = (string)$xmlTransaction->Account->Iban;
+                $xmlData['ACCOUNT_BIC'] = (string)$xmlTransaction->Account->Bic;
+                $xmlData['ACCOUNT_IDENTIFICATION'] = (string)$xmlTransaction->Account->Identification;
+                $xmlData['IDENTIFICATION_CREDITOR_ID'] = (string)$xmlTransaction->Identification->CreditorID;
                 // @codingStandardsIgnoreEnd
                 break;
             case 'hcdbs':
-                if ($methode == 'FI') {
+                if ($method === 'FI') {
                     // @codingStandardsIgnoreStart simplexml notation
-                    $xmlData['CRITERION_BILLSAFE_LEGALNOTE'] = (string)$xml->Transaction->Analysis->BILLSAFE_LEGALNOTE;
-                    $xmlData['CRITERION_BILLSAFE_AMOUNT'] = (string)$xml->Transaction->Analysis->BILLSAFE_AMOUNT;
-                    $xmlData['CRITERION_BILLSAFE_CURRENCY'] = (string)$xml->Transaction->Analysis->BILLSAFE_CURRENCY;
-                    $xmlData['CRITERION_BILLSAFE_RECIPIENT'] = (string)$xml->Transaction->Analysis->BILLSAFE_RECIPIENT;
-                    $xmlData['CRITERION_BILLSAFE_IBAN'] = (string)$xml->Transaction->Analysis->BILLSAFE_IBAN;
-                    $xmlData['CRITERION_BILLSAFE_BIC'] = (string)$xml->Transaction->Analysis->BILLSAFE_BIC;
-                    $xmlData['CRITERION_BILLSAFE_REFERENCE'] = (string)$xml->Transaction->Analysis->BILLSAFE_REFERENCE;
-                    $xmlData['CRITERION_BILLSAFE_PERIOD'] = (string)$xml->Transaction->Analysis->BILLSAFE_PERIOD;
+                    $xmlData['CRITERION_BILLSAFE_LEGALNOTE'] = (string)$xmlTransaction->Analysis->BILLSAFE_LEGALNOTE;
+                    $xmlData['CRITERION_BILLSAFE_AMOUNT'] = (string)$xmlTransaction->Analysis->BILLSAFE_AMOUNT;
+                    $xmlData['CRITERION_BILLSAFE_CURRENCY'] = (string)$xmlTransaction->Analysis->BILLSAFE_CURRENCY;
+                    $xmlData['CRITERION_BILLSAFE_RECIPIENT'] = (string)$xmlTransaction->Analysis->BILLSAFE_RECIPIENT;
+                    $xmlData['CRITERION_BILLSAFE_IBAN'] = (string)$xmlTransaction->Analysis->BILLSAFE_IBAN;
+                    $xmlData['CRITERION_BILLSAFE_BIC'] = (string)$xmlTransaction->Analysis->BILLSAFE_BIC;
+                    $xmlData['CRITERION_BILLSAFE_REFERENCE'] = (string)$xmlTransaction->Analysis->BILLSAFE_REFERENCE;
+                    $xmlData['CRITERION_BILLSAFE_PERIOD'] = (string)$xmlTransaction->Analysis->BILLSAFE_PERIOD;
                     $xmlData['ACCOUNT_BRAND'] = 'BILLSAFE';
                     // @codingStandardsIgnoreEnd
                 }
@@ -647,32 +646,25 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         }
 
         // @codingStandardsIgnoreLine simplexml notation
-        if (!empty($xml->Transaction->Identification->UniqueID)) {
-            $lastdata = Mage::getModel('hcd/transaction')
+        if (!empty($xmlTransaction->Identification->UniqueID)) {
+            $lastData = Mage::getModel('hcd/transaction')
                 ->loadLastTransactionDataByUniqeId($xmlData['IDENTIFICATION_UNIQUEID']);
         }
 
-        if ($lastdata === false) {
+        if ($lastData === false) {
             Mage::getModel('hcd/transaction')->saveTransactionData($xmlData, 'push');
         }
 
-
         $this->log('PaymentCode ' . $paymentCode);
+        $this->log($type . '.' . $method);
 
-        $this->log($type . " " . $methode);
-
-        if ($methode == 'CB' or
-            $methode == 'RC' or
-            $methode == 'CP' or
-            $methode == 'DB' or
-            ($methode == 'FI' and $paymentCode == 'hcdbs')
+        $paymentTransactionTypes = ['CB', 'RC', 'CP', 'DB'];
+        if (($method === 'FI' && $paymentCode === 'hcdbs') ||
+            in_array($method, $paymentTransactionTypes, true)
         ) {
             /** @var  $orderStateHelper HeidelpayCD_Edition_Helper_OrderState */
             $orderStateHelper = Mage::helper('hcd/orderState');
-            $orderStateHelper->mapStatus(
-                $xmlData,
-                $order
-            );
+            $orderStateHelper->mapStatus($xmlData, $order);
         }
     }
 }
