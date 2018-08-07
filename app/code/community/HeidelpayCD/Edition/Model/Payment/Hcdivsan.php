@@ -38,15 +38,16 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
     {
         return false;
 
-        if ($quote === null) {
-            return false;
-        }
-
-        if ($quote->getIsVirtual()) {
-            return false;
-        }
-
-        return parent::isAvailable($quote);
+// --- Can be re-activated when santander will be free to use ---
+//        if ($quote === null) {
+//            return false;
+//        }
+//
+//        if ($quote->getIsVirtual()) {
+//            return false;
+//        }
+//
+//        return parent::isAvailable($quote);
     }
 
     /**

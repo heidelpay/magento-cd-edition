@@ -54,6 +54,84 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
     }
 
     /**
+     * Handle transaction with means pending
+     *
+     * @param $order Mage_Sales_Model_Order
+     * @param $data HeidelpayCD_Edition_Model_Transaction
+     * @param $message string order history message
+     *
+     * @return Mage_Sales_Model_Order
+     * @throws \Mage_Core_Exception
+     */
+    public function pendingTransaction($order, $data, $message = '')
+    {
+        $message = 'Heidelpay ShortID: ' . $data['IDENTIFICATION_SHORTID'] . ' ' . $message;
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $order->getPayment()
+            ->setTransactionId($data['IDENTIFICATION_UNIQUEID'])
+            ->setParentTransactionId($order->getPayment()->getLastTransId())
+            ->setIsTransactionClosed(false);
+
+        /** @var Mage_Sales_Model_Service_Order $salesOrder */
+        $salesOrder = Mage::getModel('sales/service_order', $order);
+
+        /** @var Mage_Sales_Model_Convert_Order $convertOrder */
+        $convertOrder = Mage::getModel('hcd/convert_order');
+        $invoice = $salesOrder->setConvertor($convertOrder)->prepareInvoice();
+        $invoice->register();
+        $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_OPEN);
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $order->setIsInProcess(true);
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $invoice->setIsPaid(false);
+        $order->addStatusHistoryComment(Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'));
+        $invoice->save();
+
+        // send invoice email if payment method is configured to do so
+        if ($this->canInvoiceOrderEmail() && $this->isSendingInvoiceAutomatically($data)) {
+            $invoiceMailComment = '';
+            if ($this->isSendingInvoiceMailComment()) {
+                /** @noinspection PhpUndefinedMethodInspection */
+                $info = $order->getPayment()->getMethodInstance()->showPaymentInfo($data);
+                $invoiceMailComment = ($info === false) ? '' : '<h3>'
+                    . $this->_getHelper()->__('payment information') . '</h3><p>' . $info . '</p>';
+            }
+
+            $this->log('Sending invoice email for order #' . $order->getRealOrderId() . '...');
+            $invoice->sendEmail(true, $invoiceMailComment);
+        }
+
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $transactionSave = Mage::getModel('core/resource_transaction')
+            ->addObject($invoice)
+            ->addObject($invoice->getOrder());
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $transactionSave->save();
+
+        $this->log('Setting order status/state to processed and generate invoice.');
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $order->setState(
+            $order->getPayment()->getMethodInstance()->getStatusSuccess(),
+            $order->getPayment()->getMethodInstance()->getStatusSuccess(true)
+        );
+
+        $order->getPayment()->addTransaction(
+            Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH,
+            null,
+            true,
+            $message
+        );
+
+        return $order;
+    }
+
+    /**
      * Handle transaction with means processing
      *
      * @param $order Mage_Sales_Model_Order
@@ -61,12 +139,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdiv extends HeidelpayCD_Edition_Model_
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     * @throws \Mage_Core_Exception
      */
-    public function processingTransaction($order, $data, $message='')
+    public function processingTransaction($order, $data, $message = '')
     {
-        $message = Mage::helper('hcd')->__('received amount ')
-            . $data['PRESENTATION_AMOUNT'] . ' ' . $data['PRESENTATION_CURRENCY'] . ' ' . $message;
-
-        return parent::processingTransaction($order, $data, $message);
+        /** @var HeidelpayCD_Edition_Helper_InvoiceHelper $invoiceHelper */
+        $invoiceHelper = Mage::helper('hcd/InvoiceHelper');
+        return $invoiceHelper->handleInvoicePayment($order, $data, $message);
     }
 }
