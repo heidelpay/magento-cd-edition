@@ -543,7 +543,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
 
         $customerId = $billing->getCustomerId();
         $user['CRITERION.GUEST'] = 'false';
-        if ($customerId === null) {
+        if (empty($customerId)) {
             $visitorData = Mage::getSingleton('core/session')->getVisitorData();
             $customerId = $visitorData['visitor_id'];
             $user['CRITERION.GUEST'] = 'true';
