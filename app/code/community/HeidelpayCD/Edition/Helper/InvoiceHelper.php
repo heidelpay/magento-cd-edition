@@ -53,6 +53,7 @@ class HeidelpayCD_Edition_Helper_InvoiceHelper
             );
             return false;
         }
+
         return true;
     }
 
