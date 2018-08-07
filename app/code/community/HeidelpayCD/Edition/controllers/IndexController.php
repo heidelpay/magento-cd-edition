@@ -658,7 +658,7 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
         $this->log('PaymentCode ' . $paymentCode);
         $this->log($type . '.' . $method);
 
-        $paymentTransactionTypes = ['CB', 'RC', 'CP', 'DB'];
+        $paymentTransactionTypes = array('CB', 'RC', 'CP', 'DB');
         if (($method === 'FI' && $paymentCode === 'hcdbs') ||
             in_array($method, $paymentTransactionTypes, true)
         ) {
