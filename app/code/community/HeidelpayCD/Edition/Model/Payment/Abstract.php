@@ -308,7 +308,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         } else {
             $customerId = $this->getCustomerId();
             $visitorData = Mage::getSingleton('core/session')->getVisitorData();
-            $orderNr = ($customerId === 0) ? $visitorData['visitor_id'] : $customerId;
+            $orderNr = empty($customerId) ? $visitorData['visitor_id'] : $customerId;
             $order = $this->getQuote();
         }
 
@@ -652,7 +652,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             return $result;
         }
 
-        if ($customerId === 0) {
+        if (empty($customerId)) {
             $visitorData = Mage::getSingleton('core/session')->getVisitorData();
             $customerId = $visitorData['visitor_id'];
             $storeId = 0;
@@ -1031,7 +1031,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         $storeId = $this->getStoreId();
         $this->log('StoreID :' . $storeId);
         $customerId = $this->getQuote()->getBillingAddress()->getCustomerId();
-        if ($customerId === 0) {
+        if (empty($customerId)) {
             $visitorData = Mage::getSingleton('core/session')->getVisitorData();
             $customerId = $visitorData['visitor_id'];
             $storeId = 0;
@@ -1043,7 +1043,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
         $customerData->setStoreid($storeId);
         $data['SHIPPING_HASH'] = $this->getShippingHash();
         $customerData->setPaymentData(Mage::getModel('hcd/resource_encryption')->encrypt(json_encode($data)));
-
         $customerData->save();
     }
 
