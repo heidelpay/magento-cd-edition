@@ -48,9 +48,6 @@
                 <connection>
                     <use>core_read</use>
                 </connection>
-                <connection>
-                    <use>core_delete</use>
-                </connection>
             </hcd_read>
         </resources>
         <payment>
