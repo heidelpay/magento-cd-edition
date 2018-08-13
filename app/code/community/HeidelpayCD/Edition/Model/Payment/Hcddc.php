@@ -28,7 +28,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_
         $this->_canCapture = true;
         $this->_canCapturePartial = true;
         $this->_canReversal = true;
-        $this->_formBlockType = 'hcd/form_debitcard';
+        $this->_formBlockType = 'hcd/form_creditcard';
     }
 
     /**
