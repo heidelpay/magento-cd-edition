@@ -2,7 +2,7 @@
 <config>
     <modules>
         <HeidelpayCD_Edition>
-            <version>18.6.27</version>
+            <version>18.8.13</version>
         </HeidelpayCD_Edition>
     </modules>
     <global>

@@ -8,6 +8,7 @@
 ### Fixed
 - Issue which lead to an error when heidelpay invoicing was activated. 
 - Several code style issues.
+- Issue that causes registration to fail for guest users.
 
 ## v18.6.27
 
