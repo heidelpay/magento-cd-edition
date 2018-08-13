@@ -1,14 +1,17 @@
 # Release Notes - heidelpay extension for Magento 1
 
-## v18.X.XX
+## v18.8.14
 
 ### Added
 - Missing annotations.
 
 ### Fixed
 - Issue which lead to an error when heidelpay invoicing was activated. 
-- Several code style issues.
 - Issue that causes registration to fail for guest users.
+- Issue that lead to error when billsafe was selected.
+- Template for debit card was set incorrectly.
+- Invoice object was not created on place order.
+- Several code style issues.
 
 ## v18.6.27
 
