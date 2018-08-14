@@ -1,5 +1,18 @@
 # Release Notes - heidelpay extension for Magento 1
 
+## v18.8.14
+
+### Added
+- Missing annotations.
+
+### Fixed
+- Issue which lead to an error when heidelpay invoicing was activated. 
+- Issue that causes registration to fail for guest users.
+- Issue that lead to error when billsafe was selected.
+- Template for debit card was set incorrectly.
+- Invoice object was not created on place order.
+- Several code style issues.
+
 ## v18.6.27
 
 ### Added
@@ -9,7 +22,6 @@
 - removed checkbox for automatic invoice creation for prepayment, since it always has to be created.
 - disabled Yapital payment option for frontend, since this payment method is deprecated.
 - disabled MangirKart payment option for frontend, since this payment method is deprecated.
-
 
 ### Fixed
 - fixed several code style issues
