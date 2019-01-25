@@ -16,6 +16,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
 {
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdivsan constructor.
+     *
+     * @throws Mage_Core_Exception
      */
     public function __construct()
     {
@@ -36,24 +38,22 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
      */
     public function isAvailable($quote = null)
     {
-        return false;
+        if ($quote === null) {
+            return false;
+        }
 
-// --- Can be re-activated when santander will be free to use ---
-//        if ($quote === null) {
-//            return false;
-//        }
-//
-//        if ($quote->getIsVirtual()) {
-//            return false;
-//        }
-//
-//        return parent::isAvailable($quote);
+        if ($quote->getIsVirtual()) {
+            return false;
+        }
+
+        return parent::isAvailable($quote);
     }
 
     /**
      * @inheritdoc
      *
      * @throws \Mage_Core_Exception
+     * @throws Zend_Controller_Request_Exception
      */
     public function validate()
     {
