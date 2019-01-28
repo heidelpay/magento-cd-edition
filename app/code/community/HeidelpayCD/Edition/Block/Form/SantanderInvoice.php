@@ -18,22 +18,21 @@ class HeidelpayCD_Edition_Block_Form_SantanderInvoice extends Mage_Payment_Block
     public $optin;
 
     /** @var string */
-    public $privacyPolicy;
-
-    /** @var string */
     public $imgLink;
 
     /** @var string */
-    public $advLink;
+    public $privacyPolicy;
 
-    /** @var string */
-    public $advText;
-
-    /** @var string */
-    public $privpolLink;
-
-    /** @var string */
-    public $privpolText;
+    /**
+     * Replaces paragraph-tag (<p>) with span-tag (<span>).
+     *
+     * @param $text
+     * @return mixed
+     */
+    public function stripParagraphTag($text)
+    {
+        return str_replace('<p', '<span', $text);
+    }
 
     /**
      * @inheritdoc
@@ -64,23 +63,8 @@ class HeidelpayCD_Edition_Block_Form_SantanderInvoice extends Mage_Payment_Block
                 $this->optin = $optinInformation->optin;
                 $this->privacyPolicy = $optinInformation->privacy_policy;
 
-                // urls for logo, advanced privacy and policy information
-                $this->imgLink = $optinInformation->santander_iv_img_link;
-                $this->advLink = $optinInformation->santander_iv_de_adv_link;
-                $this->privpolLink = $optinInformation->santander_iv_de_privpol_link;
-
-                // texts for checkboxes (accept policies, ...)
-                $this->advText = str_replace(
-                    'hier',
-                    '<a href="' . $this->advLink . '" target="_blank" rel="nofollow">hier</a>',
-                    $optinInformation->santander_iv_de_adv_text
-                );
-
-                $this->privpolText = str_replace(
-                    'Einwilligungserklärungstextes',
-                    '<a href="' . $this->privpolLink . '" target="_blank" rel="nofollow">hier</a>',
-                    $optinInformation->santander_iv_de_privpol_text
-                );
+                // url for the santander logo
+                $this->imgLink = $optinInformation->logolink;
             }
         }
     }
@@ -91,6 +75,14 @@ class HeidelpayCD_Edition_Block_Form_SantanderInvoice extends Mage_Payment_Block
     public function getOptin()
     {
         return $this->optin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptinText()
+    {
+        return $this->stripParagraphTag($this->getOptin());
     }
 
     /**
@@ -112,32 +104,8 @@ class HeidelpayCD_Edition_Block_Form_SantanderInvoice extends Mage_Payment_Block
     /**
      * @return string
      */
-    public function getAdvLink()
-    {
-        return $this->advLink;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAdvText()
-    {
-        return $this->advText;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrivpolLink()
-    {
-        return $this->privpolLink;
-    }
-
-    /**
-     * @return string
-     */
     public function getPrivpolText()
     {
-        return $this->privpolText;
+        return $this->stripParagraphTag($this->getPrivacyPolicy());
     }
 }

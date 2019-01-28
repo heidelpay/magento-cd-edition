@@ -160,19 +160,19 @@ if (isset($userData['payment_data']['NAME.SALUTATION'])) {
     <div class="<?php echo $code; ?>">
         <!-- Santander advertising opt-out -->
         <div class="input-box <?php echo $code ?>-adv-optout">
-            <h4>Werbezustimmung</h4>
+            <h4><?php echo $form->escapeHtml($form->__('Advertisement Approval')) ?></h4>
             <p class="control">
                 <input type="checkbox" class="checkbox" name="payment[<?php echo $code ?>_adv_optout]" id="<?php echo $code ?>-adv-optout" />
-                <label for="<?php echo $code ?>-adv-optout"><?php echo $form->getAdvText(); ?></label>
+                <label for="<?php echo $code ?>-adv-optout"><?php echo $form->getOptinText(); ?></label>
             </p>
         </div>
 
         <!-- Santander privacy policy opt-in -->
         <div class="input-box <?php echo $code ?>-privpol-optin">
-            <h4>Datenschutzerklärung</h4>
+            <h4><span class="required"><?php echo $form->escapeHtml($form->__('Privacy Policy')) ?></span></h4>
             <p class="control">
                 <input type="checkbox" class="checkbox required-entry" name="payment[<?php echo $code ?>_privpol_optin]" id="<?php echo $code ?>-privpol-optin" />
-                <label class="required" for="<?php echo $code ?>-privpol-optin"><?php echo $form->getPrivpolText(); ?></label>
+                <label for="<?php echo $code ?>-privpol-optin"><?php echo $form->getPrivpolText(); ?></label>
             </p>
         </div>
         <div class="hcd-payment-desc">
