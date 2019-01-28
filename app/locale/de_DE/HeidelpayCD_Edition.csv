@@ -201,6 +201,7 @@
 
 "Advertisement Approval","Werbeeinverständniserklärung"
 "Privacy Policy","Datenschutzerklärung"
+"Post code has to be 5 digits.","Die Postleitzahl muss 5-stellig sein. Bitte passen Sie Adresse an und versuchen Sie es erneut."
 
 "The booking contains:","Die Abbuchung enthält:"
 "mandate reference ID","Mandatsreferenz-ID"

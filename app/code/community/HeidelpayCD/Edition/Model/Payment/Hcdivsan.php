@@ -66,6 +66,10 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
             Mage::throwException($this->_getHelper()->__('Something went wrong. Please try again.'));
         }
 
+        if (strlen($this->getQuote()->getShippingAddress()->getPostcode()) !== 5) {
+            Mage::throwException($this->_getHelper()->__('Post code has to be 5 digits.'));
+        }
+
         $advField = $this->getCode() . '_adv_optout';
         $privPolField = $this->getCode() . '_privpol_optin';
 
