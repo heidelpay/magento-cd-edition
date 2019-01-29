@@ -70,6 +70,16 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
             Mage::throwException($this->_getHelper()->__('Post code has to be 5 digits.'));
         }
 
+        $validDate = checkdate(
+            $this->_postPayload['hcdivsan_dobmonth'],
+            $this->_postPayload['hcdivsan_dobday'],
+            $this->_postPayload['hcdivsan_dobyear']
+        );
+
+        if (!$validDate) {
+            Mage::throwException($this->_getHelper()->__('Please enter a valid date of birth.'));
+        }
+
         $advField = $this->getCode() . '_adv_optout';
         $privPolField = $this->getCode() . '_privpol_optin';
 
