@@ -41,3 +41,19 @@ You can find a copy of this license in [LICENSE.txt](LICENSE.txt).
 A manual can be found here...
 * http://dev.heidelpay.com/magento-cd-edition-manual/ (EN) 
 * https://dev.heidelpay.de/handbuch-magento-cd-edition-plugin/ (DE) 
+
+
+## Support
+For any issues or questions please get in touch with our support.
+
+#### Web page
+https://dev.heidelpay.com/
+ 
+#### Email
+support@heidelpay.com
+ 
+#### Phone
++49 (0)6221/6471-100
+
+#### Twitter
+@devHeidelpay
