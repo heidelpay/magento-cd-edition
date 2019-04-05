@@ -16,6 +16,8 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
 {
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdivsan constructor.
+     *
+     * @throws Mage_Core_Exception
      */
     public function __construct()
     {
@@ -36,24 +38,22 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
      */
     public function isAvailable($quote = null)
     {
-        return false;
+        if ($quote === null) {
+            return false;
+        }
 
-// --- Can be re-activated when santander will be free to use ---
-//        if ($quote === null) {
-//            return false;
-//        }
-//
-//        if ($quote->getIsVirtual()) {
-//            return false;
-//        }
-//
-//        return parent::isAvailable($quote);
+        if ($quote->getIsVirtual()) {
+            return false;
+        }
+
+        return parent::isAvailable($quote);
     }
 
     /**
      * @inheritdoc
      *
      * @throws \Mage_Core_Exception
+     * @throws Zend_Controller_Request_Exception
      */
     public function validate()
     {
@@ -64,6 +64,20 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivsan extends HeidelpayCD_Edition_Mod
         if (!isset($this->_postPayload['method']) || $this->_postPayload['method'] !== $this->getCode()) {
             $this->log('Request payment method code does not match "hcdivsan".', 'WARNING');
             Mage::throwException($this->_getHelper()->__('Something went wrong. Please try again.'));
+        }
+
+        if (strlen($this->getQuote()->getShippingAddress()->getPostcode()) !== 5) {
+            Mage::throwException($this->_getHelper()->__('Post code has to be 5 digits.'));
+        }
+
+        $validDate = checkdate(
+            $this->_postPayload['hcdivsan_dobmonth'],
+            $this->_postPayload['hcdivsan_dobday'],
+            $this->_postPayload['hcdivsan_dobyear']
+        );
+
+        if (!$validDate) {
+            Mage::throwException($this->_getHelper()->__('Please enter a valid date of birth.'));
         }
 
         $advField = $this->getCode() . '_adv_optout';
