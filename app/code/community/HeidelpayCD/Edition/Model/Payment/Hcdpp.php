@@ -63,6 +63,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     *
      * @throws \Mage_Core_Exception
      */
     public function pendingTransaction($order, $data, $message = '')
@@ -116,11 +117,12 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
     /**
      * Handle transaction with means processing
      *
-     * @param Mage_Sales_Model_Order $order
+     * @param Mage_Sales_Model_Order                $order
      * @param HeidelpayCD_Edition_Model_Transaction $data
-     * @param string $message order history message
+     * @param string                                $message order history message
      *
      * @return Mage_Sales_Model_Order
+     *
      * @throws \Exception
      * @throws \Mage_Core_Exception
      */

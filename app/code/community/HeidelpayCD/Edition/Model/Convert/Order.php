@@ -20,6 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
+ *
  * @copyright  Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,16 +30,17 @@
  *
  * @category    Mage
  * @package     Mage_Sales
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class HeidelpayCD_Edition_Model_Convert_Order extends Mage_Sales_Model_Convert_Order
 {
-
     /**
      * Convert order object to invoice
      *
-     * @param   Mage_Sales_Model_Order $order
-     * @return  Mage_Sales_Model_Order_Invoice
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return Mage_Sales_Model_Order_Invoice
      */
     public function toInvoice(Mage_Sales_Model_Order $order)
     {
@@ -52,5 +54,4 @@ class HeidelpayCD_Edition_Model_Convert_Order extends Mage_Sales_Model_Convert_O
         Mage::helper('core')->copyFieldset('sales_convert_order', 'to_invoice', $order, $invoice);
         return $invoice;
     }
-
 }

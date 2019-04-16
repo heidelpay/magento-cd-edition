@@ -41,6 +41,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
      * @param bool $isReg in case of registration
      *
      * @return array
+     *
      * @throws \Mage_Core_Exception
      */
     public function getUser($order, $isReg = false)
@@ -60,6 +61,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdivpol extends HeidelpayCD_Edition_Mod
      * Validate customer input on checkout
      *
      * @return HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
+     *
      * @throws \Mage_Core_Exception
      */
     public function validate()

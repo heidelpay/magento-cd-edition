@@ -5,7 +5,6 @@
  * Date: 08.11.2017
  * Time: 11:56
  */
-
 class HeidelpayCD_Edition_Model_Order_Invoice extends Mage_Sales_Model_Order_Invoice
 {
     protected function _getEmails($configPath)
@@ -22,6 +21,4 @@ class HeidelpayCD_Edition_Model_Order_Invoice extends Mage_Sales_Model_Order_Inv
 
         return $emails;
     }
-
-
 }

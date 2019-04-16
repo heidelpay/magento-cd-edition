@@ -27,6 +27,7 @@ class HeidelpayCD_Edition_Block_Form_SantanderInvoice extends Mage_Payment_Block
      * Replaces paragraph-tag (<p>) with span-tag (<span>).
      *
      * @param $text
+     *
      * @return mixed
      */
     public function stripParagraphTag($text)

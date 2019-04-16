@@ -110,6 +110,7 @@ class HeidelpayCD_Edition_Model_Transaction extends Mage_Core_Model_Abstract
     /**
      * @param $transid
      * @param $method
+     *
      * @return bool|array
      */
     public function getOneTransactionByMethode($transid, $method)

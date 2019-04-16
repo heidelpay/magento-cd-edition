@@ -53,9 +53,9 @@ class HeidelpayCD_Edition_IndexController extends Mage_Core_Controller_Front_Act
     /**
      * HeidelpayCD_Edition_IndexController constructor.
      *
-     * @param Zend_Controller_Request_Abstract     $request
-     * @param Zend_Controller_Response_Abstract    $response
-     * @param array                                $invokeArgs
+     * @param Zend_Controller_Request_Abstract  $request
+     * @param Zend_Controller_Response_Abstract $response
+     * @param array                             $invokeArgs
      */
     // @codingStandardsIgnoreLine bug in multi line standard
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())

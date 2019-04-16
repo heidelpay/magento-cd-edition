@@ -16,7 +16,6 @@
  */
 class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcddc constructor.
      */
@@ -45,6 +44,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcddc extends HeidelpayCD_Edition_Model_
 
     /**
      * @return bool payment method will redirect the customer directly to heidelpay
+     *
      * @throws \Mage_Core_Model_Store_Exception
      */
     public function activeRedirect()

@@ -118,6 +118,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
      * Returns the net shipping cost amount depending on the order/quote type
      *
      * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     *
      * @return float
      */
     protected function getShippingAmount($quote)
@@ -134,6 +135,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
      * Returns the shipping discount amount depending on the order/quote type
      *
      * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     *
      * @return float
      */
     protected function getShippingDiscountAmount($quote)
@@ -150,6 +152,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
      * Returns the gross shipping cost amount depending on the order/quote type
      *
      * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     *
      * @return float
      */
     protected function getShippingInclTax($quote)
@@ -166,6 +169,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
      * Returns the shipping tax amount depending on the order/quote type
      *
      * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
+     *
      * @return float
      */
     protected function getShippingTaxAmount($quote)
