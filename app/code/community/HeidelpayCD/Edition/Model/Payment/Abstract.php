@@ -282,14 +282,17 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * Call heidelpay api for a payment request
      *
-     * @param bool $isRegistration payment method supports registration
+     * @param bool  $isRegistration payment method supports registration
      * @param mixed $basketId
+     * @param bool  $refId          payment reference id for debit/authorize on a registration
      *
-     * @param bool $refId payment reference id for debit/authorize on a registration
      * @return mixed
+     *
      * @throws \Mage_Core_Exception
      * @throws \Mage_Core_Model_Store_Exception
+     *
      * @internal param bool $BasketI Id of a heidelpay basket api call
+     *
      * @throws Zend_Http_Client_Exception
      */
     public function getHeidelpayUrl($isRegistration = false, $basketId = false, $refId = false)
@@ -411,6 +414,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @param bool   $file  name of the logfile
      *
      * @return mixed
+     *
      * @throws Mage_Core_Model_Store_Exception
      */
     public function log($message, $level = 'DEBUG', $file = false)
@@ -424,10 +428,11 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * Load configuration parameter for the given payment method
      *
-     * @param mixed $code payment method code
+     * @param mixed $code    payment method code
      * @param mixed $storeId magento store identification number
      *
      * @return mixed
+     *
      * @throws Mage_Core_Model_Store_Exception
      */
     public function getMainConfig($code, $storeId = false)
@@ -464,9 +469,10 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Prepare frontend parameter for heidelpay api call
      *
      * @param integer $orderNumber order identification number
-     * @param boolean $storeId shore identification number
+     * @param boolean $storeId     shore identification number
      *
      * @return array
+     *
      * @throws \Mage_Core_Model_Store_Exception
      */
     public function getFrontend($orderNumber, $storeId = false)
@@ -530,6 +536,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @param bool $isReg in case of registration
      *
      * @return array
+     *
      * @throws \Mage_Core_Exception
      *
      */
@@ -625,11 +632,12 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * Load additional payment information
      *
-     * @param string|null $code current payment method
-     * @param int|null $customerId the customers identification number
-     * @param int|null $storeId magento store id
+     * @param string|null $code       current payment method
+     * @param int|null    $customerId the customers identification number
+     * @param int|null    $storeId    magento store id
      *
      * @return array additional payment information
+     *
      * @throws Mage_Core_Model_Store_Exception
      */
     public function getCustomerData($code = null, $customerId = null, $storeId = null)
@@ -735,6 +743,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * This has to be overridden by the payment method.
      *
      * @param $order
+     *
      * @return array
      */
     protected function getBasket($order)
@@ -746,6 +755,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Getter for the payment method backend title
      *
      * @return string payment method title
+     *
      * @throws Mage_Core_Model_Store_Exception
      */
     public function getAdminTitle()
@@ -757,6 +767,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Getter for the payment method frontend title
      *
      * @return string payment method title
+     *
      * @throws Mage_Core_Model_Store_Exception
      */
     public function getTitle()
@@ -771,7 +782,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      *
      * @param Mage_Sales_Model_Order_Payment|Varien_Object $payment current payment object
      * @param $amount float amount to capture
+     *
      * @return $this
+     *
      * @throws \Mage_Core_Exception
      */
     public function capture(Varien_Object $payment, $amount)
@@ -852,6 +865,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      *  Calculate whether a order can be captured or not
      *
      * @return bool
+     *
      * @throws \Mage_Core_Model_Store_Exception
      */
     public function canCapture()
@@ -888,8 +902,10 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Api call for refunding a given invoice
      *
      * @param Mage_Sales_Model_Order_Payment|Varien_Object $payment current payment object
-     * @param float $amount amount to refund
+     * @param float                                        $amount  amount to refund
+     *
      * @return $this
+     *
      * @throws \Mage_Core_Exception
      * @throws \Mage_Core_Model_Store_Exception
      * @throws Zend_Http_Client_Exception
@@ -938,7 +954,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      *
      * @param Mage_Sales_Model_Order_Invoice $invoice
      * @param Mage_Sales_Model_Order_Payment $payment
+     *
      * @return bool
+     *
      * @throws \Mage_Core_Exception
      * @throws \Mage_Core_Model_Store_Exception
      */
@@ -994,6 +1012,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Getter for customer given plus family name
      *
      * @param bool|Mage_Checkout_Model_Session $session checkout session
+     *
      * @return string given plus family name
      */
     public function getCustomerName($session = false)
@@ -1015,7 +1034,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      *
      * @param $data array additional payment information of the customer
      * @param null $uniqueId
+     *
      * @internal param string $uniqueID payment reference of a account registration
+     *
      * @throws \Mage_Core_Model_Store_Exception
      */
     public function saveCustomerData($data, $uniqueId = null)
@@ -1072,6 +1093,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     *
      * @throws \Mage_Core_Exception
      * @throws Exception
      */
@@ -1113,6 +1135,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     *
      * @throws \Mage_Core_Exception
      */
     public function canceledTransaction($order, $message)
@@ -1134,11 +1157,12 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
     /**
      * Handle transaction with means processing
      *
-     * @param Mage_Sales_Model_Order $order
+     * @param Mage_Sales_Model_Order                $order
      * @param HeidelpayCD_Edition_Model_Transaction $data
-     * @param string $message order history message
+     * @param string                                $message order history message
      *
      * @return Mage_Sales_Model_Order
+     *
      * @throws \Mage_Core_Exception
      * @throws Exception
      */
@@ -1232,6 +1256,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     *
      * @throws \Mage_Core_Exception
      */
     public function pendingTransaction($order, $data, $message='')
@@ -1287,7 +1312,9 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Returns true if the payment method is configured to automatically send an invoice email.
      *
      * @param $data
+     *
      * @return bool
+     *
      * @throws Mage_Core_Model_Store_Exception
      */
     protected function isSendingInvoiceAutomatically($data)
@@ -1302,6 +1329,7 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
      * Returns the id of the current store.
      *
      * @return int
+     *
      * @throws Mage_Core_Model_Store_Exception
      */
     private function getStoreId()

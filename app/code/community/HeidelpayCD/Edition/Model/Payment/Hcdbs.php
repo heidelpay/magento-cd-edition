@@ -162,6 +162,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
 
     /**
      * @param $order
+     *
      * @return float
      */
     private function getAmountGross($order)
@@ -176,6 +177,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     }
 
     //<editor-fold desc="Legacy Basket">
+
     /**
      * Calculate shipping net price
      *
@@ -216,5 +218,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdbs extends HeidelpayCD_Edition_Model_
     {
         return number_format($number, 2, '.', '');
     }
+
     //</editor-fold>
 }

@@ -103,6 +103,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      * Validate customer input on checkout
      *
      * @return $this
+     *
      * @throws \Mage_Core_Exception
      */
     public function validate()
@@ -177,6 +178,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     *
      * @throws \Mage_Core_Exception
      */
     public function pendingTransaction($order, $data, $message = '')
@@ -255,6 +257,7 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     *
      * @throws \Mage_Core_Exception
      */
     public function processingTransaction($order, $data, $message = '')

@@ -11,7 +11,6 @@
  *
  * @package  heidelpay/${Package}
  */
-
 class HeidelpayCD_Edition_Helper_InvoiceHelper
 {
     /**
@@ -22,6 +21,7 @@ class HeidelpayCD_Edition_Helper_InvoiceHelper
      * @param bool   $file  name of the logfile
      *
      * @return mixed
+     *
      * @throws Mage_Core_Model_Store_Exception
      */
     public function log($message, $level = 'DEBUG', $file = false)
@@ -35,9 +35,11 @@ class HeidelpayCD_Edition_Helper_InvoiceHelper
     /**
      * Return true if actual equals expected currency.
      *
-     * @param Mage_Sales_Model_Order $order
+     * @param Mage_Sales_Model_Order                $order
      * @param HeidelpayCD_Edition_Model_Transaction $data
+     *
      * @return bool
+     *
      * @throws Mage_Core_Model_Store_Exception
      */
     public function validateCurrency(Mage_Sales_Model_Order $order, $data)
@@ -65,6 +67,7 @@ class HeidelpayCD_Edition_Helper_InvoiceHelper
      * @param $message string order history message
      *
      * @return Mage_Sales_Model_Order
+     *
      * @throws Mage_Core_Exception
      * @throws Mage_Core_Model_Store_Exception
      */

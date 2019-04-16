@@ -20,7 +20,7 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
     /**
      * send request to heidelpay apo
      *
-     * @param       $url string url for the heidelpay api
+     * @param       $url    string url for the heidelpay api
      * @param array $params post parameter
      *
      * @return array response from heidelpay api
@@ -231,7 +231,7 @@ class HeidelpayCD_Edition_Helper_Payment extends HeidelpayCD_Edition_Helper_Abst
                 break;
             /* Payolution invoice */
             case 'ivpol':
-                $params['PAYMENT.CODE'] = 'IV.' . ($type !== 'RG' ? $type : 'PA') ;
+                $params['PAYMENT.CODE'] = 'IV.' . ($type !== 'RG' ? $type : 'PA');
                 $params['ACCOUNT.BRAND'] = 'PAYOLUTION_DIRECT';
                 break;
             /* direct debit secured */

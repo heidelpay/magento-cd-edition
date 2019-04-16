@@ -14,10 +14,8 @@
  * @subpackage Magento
  * @category Magento
  */
-class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
-    extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
+class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured extends HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods
 {
-
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdpp constructor.
      */
@@ -38,6 +36,7 @@ class HeidelpayCD_Edition_Model_Payment_HcdDirectDebitSecured
      * Validate customer input on checkout
      *
      * @return $this
+     *
      * @throws \Mage_Core_Exception
      */
     public function validate()

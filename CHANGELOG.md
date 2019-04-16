@@ -1,5 +1,14 @@
 # Release Notes - heidelpay extension for Magento 1
 
+## v19.4.16
+
+### Added
+- Enabled payment method Santander Invoice
+- Added support information to readme.
+
+### Changed
+- Updated heidelpay logo.
+
 ## v18.8.14
 
 ### Added
