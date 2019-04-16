@@ -376,7 +376,7 @@
                 <group>hcd</group>
                 <title>Rechnungskauf von Santander</title>
                 <active>0</active>
-                <channel>31HA07BC8147472B68A08F10540D7D9F</channel>
+                <channel>31HA07BC81856CAD6D8E07858ACD6CFB</channel>
                 <invioce>0</invioce>
                 <capture_on_delivery>0</capture_on_delivery>
                 <model>hcd/payment_hcdivsan</model>
