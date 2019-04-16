@@ -21,7 +21,7 @@ before_install:
   - composer update
 
 before_script:
- - ./vendor/bin/phpcs --config-set installed_paths vendor/magento/marketplace-eqp
+# - ./vendor/bin/phpcs --config-set installed_paths vendor/magento/marketplace-eqp
 
 script:
- - ./vendor/bin/phpcs . --ignore=vendor/ -v --standard=MEQP1;
+ - ./vendor/bin/phpcs . --ignore=vendor/ -v #--standard=MEQP1;
