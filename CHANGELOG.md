@@ -4,6 +4,10 @@
 
 ### Added
 - Enabled payment method Santander Invoice
+- Added support information to readme.
+
+### Changed
+- Updated heidelpay logo.
 
 ## v18.8.14
 
