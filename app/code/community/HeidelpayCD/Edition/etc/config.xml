@@ -2,7 +2,7 @@
 <config>
     <modules>
         <HeidelpayCD_Edition>
-            <version>18.8.14</version>
+            <version>19.4.16</version>
         </HeidelpayCD_Edition>
     </modules>
     <global>
@@ -376,7 +376,7 @@
                 <group>hcd</group>
                 <title>Rechnungskauf von Santander</title>
                 <active>0</active>
-                <channel>31HA07BC81941E63A2482091FAF374AF</channel>
+                <channel>31HA07BC81856CAD6D8E07858ACD6CFB</channel>
                 <invioce>0</invioce>
                 <capture_on_delivery>0</capture_on_delivery>
                 <model>hcd/payment_hcdivsan</model>

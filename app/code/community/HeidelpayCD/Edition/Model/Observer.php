@@ -62,7 +62,9 @@ class HeidelpayCD_Edition_Model_Observer
      * Observer on save shipment to report the shipment to heidelpay
      *
      * @param Varien_Event_Observer $observer
+     *
      * @return $this
+     *
      * @throws \Mage_Core_Exception
      */
     public function reportReversalToHeidelpay($observer)
@@ -278,5 +280,4 @@ class HeidelpayCD_Edition_Model_Observer
         return Mage::helper('hcd/payment')
             ->realLog($callers[1]['function'] . ' ' . $message, $level, $file);
     }
-
 }

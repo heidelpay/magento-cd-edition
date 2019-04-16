@@ -51,6 +51,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpf extends HeidelpayCD_Edition_Model_
      * Validate input data from checkout
      *
      * @return HeidelpayCD_Edition_Model_Payment_Abstract
+     *
      * @throws \Mage_Core_Exception
      */
     public function validate()

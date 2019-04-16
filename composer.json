@@ -25,7 +25,7 @@
   "require-dev": {
     "magento/marketplace-eqp": "*",
     "heidelpay/phpdocumentor": "2.9.1",
-    "friendsofphp/php-cs-fixer": "2.1.0"
+    "friendsofphp/php-cs-fixer": "^2.0"
   },
   "repositories": [
     {

@@ -16,7 +16,6 @@
  */
 class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdpp constructor.
      */
@@ -36,9 +35,6 @@ class HeidelpayCD_Edition_Model_Payment_Hcdmpa extends HeidelpayCD_Edition_Model
     }
 
     /**
-     * public function isAvailable($quote=null) {
-     * return true;
-     * }
      * @return string
      */
     public function getPaymentData()

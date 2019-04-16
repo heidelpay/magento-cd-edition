@@ -16,7 +16,6 @@
  */
 class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model_Payment_Abstract
 {
-
     /**
      * HeidelpayCD_Edition_Model_Payment_Hcdeps constructor.
      */
@@ -34,6 +33,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdeps extends HeidelpayCD_Edition_Model
      * Validate input data from checkout
      *
      * @return HeidelpayCD_Edition_Model_Payment_Abstract
+     *
      * @throws \Mage_Core_Exception
      */
     public function validate()
