@@ -1219,8 +1219,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             $message
         );
 
-        $order->setIsInProcess(true);
-
         return $order;
     }
 
