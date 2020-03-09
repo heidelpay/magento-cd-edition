@@ -29,6 +29,8 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
     public function basketItems($quote, $storeId, $includingShipment = false)
     {
         $shoppingCartItems = $quote->getAllVisibleItems();
+        $amountGrandTotal = (int) bcmul($quote->getGrandTotal(), 100, 10);
+        $amountTotalNet = (int) bcmul($this->getBasketTotalNet($quote), 100, 10);
 
         $shoppingCart = array(
             'authentication' => array(
@@ -37,11 +39,11 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'password' => trim(Mage::getStoreConfig('hcd/settings/user_pwd', $storeId)),
             ),
             'basket' => array(
-                'amountTotalNet' => (int) ($this->getBasketTotalNet($quote) * 100),
+                'amountTotalNet' => $amountTotalNet,
                 'currencyCode' => $quote->getQuoteCurrencyCode() ?: $quote->getOrderCurrencyCode(),
                 'amountTotalDiscount' => floor(bcmul($quote->getDiscountAmount(), 100, 10)),
                 'itemCount' => count($shoppingCartItems),
-                'amountTotalVat' => floor(bcmul($quote->getTaxAmount(), 100, 10))
+                'amountTotalVat' => $amountGrandTotal - $amountTotalNet
             )
         );
 
