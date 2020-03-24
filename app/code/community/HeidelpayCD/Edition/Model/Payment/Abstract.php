@@ -1213,8 +1213,12 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
             $invoice->setState(Mage_Sales_Model_Order_Invoice::STATE_PAID);
             $invoice->setIsPaid(true);
-            $order->setIsInProcess(true);
-            $order->addStatusHistoryComment(Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'));
+
+            $order->setState(
+                $paymentMethodInstance->getStatusSuccess(),
+                $paymentMethodInstance->getStatusSuccess(true),
+                __('Automatically invoiced by Heidelpay.')
+            );
             $invoice->save();
 
             if ($this->canInvoiceOrderEmail()) {
@@ -1242,8 +1246,6 @@ class HeidelpayCD_Edition_Model_Payment_Abstract extends Mage_Payment_Model_Meth
             true,
             $message
         );
-
-        $order->setIsInProcess(true);
 
         return $order;
     }

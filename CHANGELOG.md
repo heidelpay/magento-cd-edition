@@ -1,5 +1,9 @@
 # Release Notes - heidelpay extension for Magento 1
 
+## vXX.X.XX
+## Fixed
+- Custom status for processing was not set as expected.
+
 ## v19.4.16
 
 ### Added
