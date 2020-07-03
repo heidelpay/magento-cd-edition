@@ -268,8 +268,8 @@ class HeidelpayCD_Edition_Model_Payment_AbstractSecuredPaymentMethods extends He
         if ($paymentCode[0] !== 'IV') {
             return parent::processingTransaction($order, $data);
         }
-        $invoiceHelper = Mage::helper('hcd/InvoiceHelper');
         /** @var HeidelpayCD_Edition_Helper_InvoiceHelper $invoiceHelper */
+        $invoiceHelper = Mage::helper('hcd/InvoiceHelper');
         return $invoiceHelper->handleInvoicePayment($order, $data, $message);
     }
 
