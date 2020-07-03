@@ -25,6 +25,7 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
 
         $this->_code = 'hcdpp';
         $this->_infoBlockType = 'hcd/info_prepayment';
+        $this->_sendsInvoiceMailComment = true;
         $this->_showAdditionalPaymentInformation = true;
     }
 
@@ -85,8 +86,15 @@ class HeidelpayCD_Edition_Model_Payment_Hcdpp extends HeidelpayCD_Edition_Model_
         $invoice->setIsPaid(false);
         $order->addStatusHistoryComment(Mage::helper('hcd')->__('Automatically invoiced by Heidelpay.'));
         $invoice->save();
-        if ($this->canInvoiceOrderEmail()) {
-            $invoice->sendEmail(); // send invoice mail
+        if ($this->canInvoiceOrderEmail() && $this->isSendingInvoiceAutomatically($data)) {
+            if ($this->isSendingInvoiceMailComment()) {
+                $info = $this->showPaymentInfo((array)$data);
+                $invoiceMailComment = ($info === false) ? '' : '<h3>'
+                    . $this->_getHelper()->__('payment information') . '</h3><p>' . $info . '</p>';
+            }
+
+            $this->log('Sending invoice email for order #' . $order->getRealOrderId() . '...');
+            $invoice->sendEmail(true, $invoiceMailComment); // send invoice mail
         }
 
         /** @noinspection PhpUndefinedMethodInspection */
