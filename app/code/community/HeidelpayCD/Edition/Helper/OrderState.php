@@ -107,7 +107,7 @@ class HeidelpayCD_Edition_Helper_OrderState extends HeidelpayCD_Edition_Helper_A
         if ($orderStatus !== $paymentMethodInstance->getStatusSuccess() &&
             $orderStatus !== $paymentMethodInstance->getStatusError()
         ) {
-            $order->getPayment()->getMethodInstance()->pendingTransaction($order, $data, $message);
+            $paymentMethodInstance->pendingTransaction($order, $data, $message);
         }
 
 

@@ -29,6 +29,8 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
     public function basketItems($quote, $storeId, $includingShipment = false)
     {
         $shoppingCartItems = $quote->getAllVisibleItems();
+        $amountGrandTotal = $this->normalizeValue($quote->getGrandTotal());
+        $taxAmount = $this->normalizeValue($quote->getTaxAmount());
 
         $shoppingCart = array(
             'authentication' => array(
@@ -37,11 +39,11 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'password' => trim(Mage::getStoreConfig('hcd/settings/user_pwd', $storeId)),
             ),
             'basket' => array(
-                'amountTotalNet' => (int) ($this->getBasketTotalNet($quote) * 100),
+                'amountTotalNet' => $amountGrandTotal - $taxAmount,
                 'currencyCode' => $quote->getQuoteCurrencyCode() ?: $quote->getOrderCurrencyCode(),
-                'amountTotalDiscount' => floor(bcmul($quote->getDiscountAmount(), 100, 10)),
+                'amountTotalDiscount' => $this->normalizeValue(abs($quote->getDiscountAmount())),
                 'itemCount' => count($shoppingCartItems),
-                'amountTotalVat' => floor(bcmul($quote->getTaxAmount(), 100, 10))
+                'amountTotalVat' => $taxAmount
             )
         );
 
@@ -91,27 +93,15 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
                 'title' => 'Shipping',
                 'quantity' => 1,
                 'vat' => $taxPercent,
-                'amountVat' => (int) ($this->getShippingTaxAmount($quote) * 100),
-                'amountGross' => (int) ($this->getShippingInclTax($quote) * 100),
-                'amountNet' => (int) ($this->getShippingAmount($quote) * 100),
-                'amountPerUnit' => (int) ($this->getShippingInclTax($quote) * 100),
-                'amountDiscount' => (int) ($this->getShippingDiscountAmount($quote) * 100)
+                'amountVat' => $this->getShippingTaxAmount($quote),
+                'amountGross' => $this->getShippingInclTax($quote),
+                'amountNet' => $this->getShippingAmount($quote),
+                'amountPerUnit' => $this->getShippingInclTax($quote),
+                'amountDiscount' => $this->getShippingDiscountAmount($quote)
             );
         }
 
         return $shoppingCart;
-    }
-
-    /**
-     * Returns the total net amount of the quote/order.
-     *
-     * @param Mage_Sales_Model_Order|Mage_Sales_Model_Quote $quote
-     *
-     * @return float
-     */
-    protected function getBasketTotalNet($quote)
-    {
-        return $quote->getSubtotal() + $this->getShippingAmount($quote);
     }
 
     /**
@@ -128,7 +118,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
         }
 
         /** @var Mage_Sales_Model_Order $quote */
-        return $quote->getShippingAmount();
+        return $this->normalizeValue($quote->getShippingAmount());
     }
 
     /**
@@ -145,7 +135,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
         }
 
         /** @var Mage_Sales_Model_Order $quote */
-        return $quote->getShippingDiscountAmount();
+        return $this->normalizeValue($quote->getShippingDiscountAmount());
     }
 
     /**
@@ -162,7 +152,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
         }
 
         /** @var Mage_Sales_Model_Order $quote */
-        return $quote->getShippingInclTax();
+        return $this->normalizeValue($quote->getShippingInclTax());
     }
 
     /**
@@ -179,6 +169,17 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
         }
 
         /** @var Mage_Sales_Model_Order $quote */
-        return $quote->getShippingTaxAmount();
+        return $this->normalizeValue($quote->getShippingTaxAmount());
+    }
+
+    /** Converts an euro amount into cent by multiplying it by hundred.
+     *
+     * @param int | float $amount
+     *
+     * @return int
+     */
+    private function normalizeValue($amount)
+    {
+        return (int)bcmul($amount, 100, 10);
     }
 }

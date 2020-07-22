@@ -1,5 +1,17 @@
 # Release Notes - heidelpay extension for Magento 1
 
+## v20.07.22
+### Added
+- Ensure compatibility with Security-Patch SUPEE-11314
+
+### Fixed
+- Custom status for processing was not set as expected.
+- Direct debit secured: invoice was not sent automatically.
+- Prepayment: Payment information did not appear on invoice.
+
+### Changed
+- Improve reliability of basket calculation.
+
 ## v19.4.16
 
 ### Added

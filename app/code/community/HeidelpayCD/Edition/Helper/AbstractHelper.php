@@ -90,7 +90,7 @@ class HeidelpayCD_Edition_Helper_AbstractHelper extends Mage_Core_Helper_Abstrac
      */
     public function splitPaymentCode($paymentCode)
     {
-        return preg_split('/\./', $paymentCode);
+        return explode('.', $paymentCode);
     }
 
     /**
