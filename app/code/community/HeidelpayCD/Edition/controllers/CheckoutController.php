@@ -13,7 +13,6 @@
  * @subpackage Magento
  * @category Magento
  */
- 
 $modulePath = Mage::getModuleDir('', 'Mage_Checkout');
 require_once($modulePath."/controllers/OnepageController.php");
 // @codingStandardsIgnoreLine magento marketplace namespace warning

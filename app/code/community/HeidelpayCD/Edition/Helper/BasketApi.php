@@ -175,6 +175,7 @@ class HeidelpayCD_Edition_Helper_BasketApi extends HeidelpayCD_Edition_Helper_Ab
     /** Converts an euro amount into cent by multiplying it by hundred.
      *
      * @param int | float $amount
+     *
      * @return int
      */
     private function normalizeValue($amount)
